@@ -302,7 +302,7 @@
             href="#"
           >
             <ShieldCheck />
-            Admin
+            Admins
           </a>
         </li>
 
