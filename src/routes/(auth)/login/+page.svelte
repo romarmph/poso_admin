@@ -1,23 +1,23 @@
-<main class="h-full" style="background-color: #F3F6F4;">
-  <div class="dark:bg-slate-900 bg-gray-100 flex h-full items-center py-16">
-    <div class="w-full max-w-md mx-auto p-6">
+<script>
+  import primary from "$lib/assets/images/brand/1x/primary.png";
+</script>
+
+<main class="h-screen" style="background-color: #F3F6F4;">
+  <div class="flex items-center h-full py-16 bg-gray-100 dark:bg-slate-900">
+    <div class="w-full max-w-md p-6 mx-auto">
       <div
-        class="mt-7 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-gray-800 dark:border-gray-700"
+        class="bg-white border border-gray-200 shadow-sm mt-7 rounded-xl dark:bg-gray-800 dark:border-gray-700"
       >
         <div class="p-4 sm:p-7">
           <div class="text-center">
-            <!-- Image -->
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-              alt=""
-              class="mx-auto mb-4"
-            />
+            <img src={primary} alt="" class="mx-auto mb-4 w-28" />
 
-            <!-- Title -->
             <h1 class="block text-2xl font-bold text-blue-600 dark:text-white">
               Public Order and Safety Office
             </h1>
           </div>
+
+          <h2 class="my-4 text-lg font-bold text-gray-500">Sign In</h2>
 
           <div class="mt-5">
             <!-- Form -->
@@ -25,20 +25,23 @@
               <div class="grid gap-y-4">
                 <!-- Form Group -->
                 <div>
-                  <label for="email" class="block text-sm mb-2 dark:text-white"
+                  <label
+                    for="email"
+                    class="block mb-2 text-xs font-medium text-gray-500 dark:text-white"
                     >Employee ID</label
                   >
                   <div class="relative">
                     <input
                       type="text"
-                      class="py-3 px-4 block w-full border-red-500 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
-                      placeholder="This is placeholder"
+                      class="block w-full px-4 py-3 text-sm border-gray-200 rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
+                      placeholder="Type your employee ID here"
+                      required
                     />
                     <div
-                      class="hidden absolute inset-y-0 end-0 pointer-events-none pe-3"
+                      class="absolute inset-y-0 hidden pointer-events-none end-0 pe-3"
                     >
                       <svg
-                        class="size-5 text-red-500"
+                        class="text-red-500 size-5"
                         width="16"
                         height="16"
                         fill="currentColor"
@@ -51,19 +54,18 @@
                       </svg>
                     </div>
                   </div>
-                  <p class="hidden text-xs text-red-600 mt-2" id="email-error">
+                  <p class="hidden mt-2 text-xs text-red-600" id="email-error">
                     Please include a valid email address so we can get back to
                     you
                   </p>
                 </div>
-                <!-- End Form Group -->
 
-                <!-- Form Group -->
                 <div>
-                  <div class="flex justify-between items-center">
+                  <div class="flex items-center justify-between">
                     <label
                       for="password"
-                      class="block text-sm mb-2 dark:text-white">Password</label
+                      class="block mb-2 text-xs font-medium text-gray-500 dark:text-white"
+                      >Password</label
                     >
                   </div>
                   <div class="relative">
@@ -71,15 +73,16 @@
                       type="password"
                       id="password"
                       name="password"
-                      class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
+                      class="block w-full px-4 py-3 text-sm border-gray-200 rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
                       required
                       aria-describedby="password-error"
+                      placeholder="Type your password here"
                     />
                     <div
-                      class="hidden absolute inset-y-0 end-0 pointer-events-none pe-3"
+                      class="absolute inset-y-0 hidden pointer-events-none end-0 pe-3"
                     >
                       <svg
-                        class="size-5 text-red-500"
+                        class="text-red-500 size-5"
                         width="16"
                         height="16"
                         fill="currentColor"
@@ -93,7 +96,7 @@
                     </div>
                   </div>
                   <p
-                    class="hidden text-xs text-red-600 mt-2"
+                    class="hidden mt-2 text-xs text-red-600"
                     id="password-error"
                   >
                     8+ characters required
@@ -105,7 +108,7 @@
                 <div class="flex justify-center">
                   <button
                     type="submit"
-                    class="w-24 py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                    class="inline-flex items-center justify-center w-24 w-full px-4 py-3 text-sm font-semibold text-white bg-blue-600 border border-transparent rounded-lg gap-x-2 hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
                   >
                     Sign in
                   </button>

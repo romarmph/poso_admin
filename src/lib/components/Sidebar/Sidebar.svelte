@@ -8,9 +8,10 @@
     Shapes,
     Flag,
     Sticker,
+    Ticket,
   } from "lucide-svelte";
   import SidebarUrl from "./subcomponents/Sidebar-Url.svelte";
-    import SidebarDivider from "./subcomponents/Sidebar-Divider.svelte";
+  import SidebarDivider from "./subcomponents/Sidebar-Divider.svelte";
 </script>
 
 <div
@@ -25,7 +26,7 @@
     >
   </div>
   <nav
-    class="hs-accordion-group p-6 w-full flex flex-col flex-wrap"
+    class="flex flex-col flex-wrap w-full p-6 hs-accordion-group"
     data-hs-accordion-always-open
   >
     <ul class="space-y-1.5">
@@ -43,7 +44,7 @@
       </li>
       <li class="hs-accordion" id="account-accordion">
         <SidebarUrl name="Tickets" route="#">
-          <Sticker />
+          <Ticket />
         </SidebarUrl>
       </li>
       <SidebarDivider title="Employees" />
@@ -52,17 +53,16 @@
           <PersonStanding />
         </SidebarUrl>
       </li>
-      <li>  
+      <li>
         <SidebarUrl name="Admin" route="#">
           <ShieldCheck />
-        </SidebarUrl> 
+        </SidebarUrl>
       </li>
-      <SidebarDivider title="System"/>
+      <SidebarDivider title="System" />
       <li>
         <SidebarUrl name="Violations" route="#">
           <AppWindow />
         </SidebarUrl>
-
       </li>
       <li>
         <SidebarUrl name="Vehicle Types" route="#">
