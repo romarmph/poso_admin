@@ -1,4 +1,4 @@
 <script lang="ts">
 </script>
 
-<h1 class="text-2xl font-bold text-gray-700">Dashboard</h1>
+<h1 class="text-2xl font-bold text-gray-700">Tickets</h1>
