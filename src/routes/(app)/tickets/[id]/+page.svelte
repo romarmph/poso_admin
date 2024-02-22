@@ -9,8 +9,8 @@
 </header>
 
 <!-- Form -->
-<div class="grid grid-cols-7 gap-6">
-    <div class="col-span-2">
+<div class="grid grid-cols-3 gap-4">
+    <div>
         <ul class="space-y-1.5">
             <div style="border-bottom: 1px solid black; margin-bottom: 10px;">
                 <SidebarDivider title="Violator" />
@@ -92,7 +92,7 @@
             </div>
         </ul>
     </div>
-    <div class="col-span-2">
+    <div>
         <ul class="space-y-1.5">
             <div style="border-bottom: 1px solid black; margin-bottom: 10px;">
                 <SidebarDivider title="Ticket Details" />
@@ -164,7 +164,7 @@
             </div>
         </ul>
     </div>
-    <div class="col-span-2">
+    <div>
         <ul class="space-y-1.5">
             <div style="border-bottom: 1px solid black; margin-bottom: 10px;">
                 <SidebarDivider title="Violations" />
@@ -298,7 +298,7 @@
                                         </span>
                                     </button>
                                 </td>
-
+                                i
                                 <td class="size-px whitespace-nowrap">
                                     <button
                                         type="button"
