@@ -8,10 +8,9 @@
     <h1 style="font-weight: bold;">New Ticket</h1>
 </header>
 
-<div style="">
-    <!-- Form -->
-    <div style="">
-        <!-- Violator -->
+<!-- Form -->
+<div class="grid grid-cols-7 gap-6">
+    <div class="col-span-2">
         <ul class="space-y-1.5">
             <div style="border-bottom: 1px solid black; margin-bottom: 10px;">
                 <SidebarDivider title="Violator" />
@@ -66,6 +65,7 @@
                             <div>
                                 <SidebarDivider title="Birthdate" />
                                 <div class="sm:flex">
+                                    <!-- Wrap birthdate input fields in a row -->
                                     <input
                                         id="birthdate-day"
                                         type="text"
@@ -75,7 +75,7 @@
                                     <input
                                         id="birthdate-month"
                                         type="text"
-                                        class="py-2 px-3 pe-11 block w-20 mr-1 border-gray-200 shadow-sm -mt-px -ms-px sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
+                                        class="py-2 px-3 pe-4 block w-20 mr-1 border-gray-200 shadow-sm -mt-px -ms-px sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
                                         placeholder="MM"
                                     />
                                     <input
@@ -92,9 +92,7 @@
             </div>
         </ul>
     </div>
-
-    <div style="flex-basis: calc(33.33% - 1px); margin-bottom: 20px;">
-        <!-- Ticket detail -->
+    <div class="col-span-2">
         <ul class="space-y-1.5">
             <div style="border-bottom: 1px solid black; margin-bottom: 10px;">
                 <SidebarDivider title="Ticket Details" />
@@ -166,9 +164,7 @@
             </div>
         </ul>
     </div>
-
-    <div style="flex-basis: calc(33.33% - 10px); margin-bottom: 20px;">
-        <!-- Violations -->
+    <div class="col-span-2">
         <ul class="space-y-1.5">
             <div style="border-bottom: 1px solid black; margin-bottom: 10px;">
                 <SidebarDivider title="Violations" />
@@ -474,11 +470,11 @@
         >Back</button
     >
     <button
-        style="background-color: blue; color: white; padding: 5px 10px; border: none; border-radius: 5px;"
+        style="margin-right: 10px; background-color: blue; color: white; padding: 5px 10px; border: none; border-radius: 5px;"
         >Update</button
     >
     <button
-        style="background-color: green; color: white; padding: 5px 10px; border: none; border-radius: 5px;"
-        >Pay
-    </button>
+        style="margin-right: 10px; background-color: #14B8A6; color: white; border: 1px solid #ccc; padding: 5px 10px; border-radius: 5px; "
+        >Pay</button
+    >
 </footer>
