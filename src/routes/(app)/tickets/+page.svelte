@@ -1,7 +1,7 @@
 <script>
   import Tables from "$lib/components/Table/tables.svelte";
   import Button from "$lib/components/Base/Button.svelte";
-  import Input from "$lib/components/Forms/Input.svelte";
+  import Input from "$lib/components/Forms/TextInput.svelte";
 </script>
 
 <h1 style="font-weight: bold;">Tickets</h1>

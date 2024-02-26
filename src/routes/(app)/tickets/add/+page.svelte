@@ -5,8 +5,8 @@
   import Tables from "$lib/components/Table/tables.svelte";
   import Button from "$lib/components/Base/Button.svelte";
   import Label from "$lib/components/Forms/Label.svelte";
-  import Input from "$lib/components/Forms/Input.svelte";
   import Divider from "$lib/components/Base/Divider.svelte";
+  import TextInput from "$lib/components/Forms/TextInput.svelte";
 </script>
 
 <header
@@ -60,7 +60,6 @@
       </div>
       <div class="p-4 overflow-y-auto">
         <input
-          type="text"
           id="input-label"
           class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
           placeholder="Search"
@@ -97,43 +96,24 @@
     <Divider border={2} />
     <div class="my-4">
       <Label id="input-label">Last Name</Label>
-      <Input id="input-label" type="text" placeholder="Ex. Valdez" />
+      <TextInput id="input-label" placeholder="Ex. Valdez" />
     </div>
     <div class="my-4">
       <Label id="input-label">First Name</Label>
-      <Input id="input-label" type="text" placeholder="Ex. Juan" />
+      <TextInput id="input-label" placeholder="Ex. Juan" />
     </div>
     <div class="my-4">
       <Label id="input-label">Middle Name</Label>
-      <Input id="input-label" type="text" placeholder="Ex. Agapito" />
+      <TextInput id="input-label" placeholder="Ex. Agapito" />
     </div>
     <Grid columns="grid grid-cols-3" gap="gap-2">
       <GridCol>
         <Label id="input-label">Suffix</Label>
-        <Input id="input-label" type="text" placeholder="Ex. Jr" />
+        <TextInput id="input-label" placeholder="Ex. Jr" />
       </GridCol>
       <GridCol colSpan="col-span-2">
         <Label id="input-label">Birthday</Label>
-        <Grid columns="grid-cols-3" gap="gap-2">
-          <Input
-            id="input-label"
-            type="text"
-            classNames="text-center"
-            placeholder="MM"
-          />
-          <Input
-            id="input-label"
-            type="text"
-            classNames="text-center"
-            placeholder="DD"
-          />
-          <Input
-            id="input-label"
-            type="text"
-            classNames="text-center"
-            placeholder="YYY"
-          />
-        </Grid>
+        <!-- <TextInput id="input-label" type="date" /> -->
       </GridCol>
       <GridCol></GridCol>
     </Grid>
@@ -146,42 +126,20 @@
     <Divider border={2} />
     <div class="my-4">
       <Label id="input-label">Ticket Number</Label>
-      <Input id="input-label" type="text" placeholder="Ex. 123123" />
+      <TextInput id="input-label" placeholder="Ex. 123123" />
     </div>
     <div class="my-4">
       <Label id="input-label">Location</Label>
-      <Input id="input-label" type="text" placeholder="Ex. Post 1" />
+      <TextInput id="input-label" placeholder="Ex. Post 1" />
     </div>
     <div class="my-4">
       <Label id="input-label">Apprehending Officer</Label>
-      <Input id="input-label" type="text" placeholder="Ex. Agapito" />
+      <TextInput id="input-label" placeholder="Ex. Agapito" />
     </div>
-    <Grid columns="grid grid-cols-3" gap="gap-2">
-      <GridCol colSpan="col-span-2">
-        <Label id="input-label">Apprehension Date</Label>
-        <Grid columns="grid-cols-3" gap="gap-2">
-          <Input
-            id="input-label"
-            type="text"
-            classNames="text-center"
-            placeholder="MM"
-          />
-          <Input
-            id="input-label"
-            type="text"
-            classNames="text-center"
-            placeholder="DD"
-          />
-          <Input
-            id="input-label"
-            type="text"
-            classNames="text-center"
-            placeholder="YYY"
-          />
-        </Grid>
-      </GridCol>
-      <GridCol></GridCol>
-    </Grid>
+    <div class="my-4">
+      <Label id="input-label">Apprehension Date</Label>
+      <!-- <TextInput id="input-label" type="date" /> -->
+    </div>
   </GridCol>
   <!-- Ticket Details End -->
 
@@ -191,7 +149,6 @@
     <Label id="input-label" classNames="mt-3">Violations</Label>
     <Divider border={2} />
   </GridCol>
-  <!-- Violations End -->
 </Grid>
 
 <!-- Table -->
