@@ -140,7 +140,7 @@
 <!-- Table -->
 <!-- Table Section -->
 <Tables />
-<footer style="display: flex; justify-content: flex-end; padding: 10px;">
-  <Button buttonname="Cancel" marginright={10} bgcolor="white" />
-  <Button buttonname="Save" marginright={10} bgcolor="blue" color="white" />
+<footer class="flex justify-end gap-4">
+  <Button style="soft" color="gray">Cancel</Button>
+  <Button>Add</Button>
 </footer>
