@@ -1,11 +1,11 @@
 <script>
   import { ArrowLeft } from "lucide-svelte";
-  import Colheader from "$lib/components/tickets/columnHeader/Colheader.svelte";
-  import Grid from "$lib/components/tickets/Grid/Grid.svelte";
-  import Tables from "$lib/components/tickets/tables/tables.svelte";
-  import Input from "$lib/components/tickets/input/input.svelte";
-  import Smallbox from "$lib/components/tickets/input/Smallbox.svelte";
-  import Button from "$lib/components/tickets/Button/Button.svelte";
+  import Colheader from "$lib/components/Layout/Colheader.svelte";
+  import Grid from "$lib/components/Layout/Grid.svelte";
+  import Tables from "$lib/components/Table/tables.svelte";
+  import Input from "$lib/components/tickets/Input/LabeledInput.svelte";
+  import Smallbox from "$lib/components/tickets/Input/Smallbox.svelte";
+  import Button from "$lib/components/Base/Button.svelte";
 </script>
 
 <header style="display: flex; align-items: center;">
