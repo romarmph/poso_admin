@@ -1,12 +1,16 @@
 <script>
   import { ArrowLeft } from "lucide-svelte";
-  import Grid from "$lib/components/Layout/Grid.svelte";
-  import GridCol from "$lib/components/Layout/GridCol.svelte";
+
   import Tables from "$lib/components/Table/tables.svelte";
-  import Button from "$lib/components/Base/Button.svelte";
-  import Label from "$lib/components/Forms/Label.svelte";
-  import Divider from "$lib/components/Base/Divider.svelte";
-  import TextInput from "$lib/components/Forms/TextInput.svelte";
+
+  import {
+    Button,
+    Divider,
+    TextInput,
+    Label,
+    Grid,
+    GridCol,
+  } from "$lib/Components";
 </script>
 
 <header
