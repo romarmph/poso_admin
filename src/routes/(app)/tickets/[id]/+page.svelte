@@ -17,34 +17,34 @@
 <!--Modal-->
 
 <Grid columns="grid-cols-6" gap="gap-4">
-    <GridCol colSpan="col-span-2">
-        <Label id="input-label" classNames="mt-3">Violator</Label>
-        <Divider border={2} />
-        <div class="my-4">
-            <Label id="input-label">Last Name</Label>
-            <TextInput id="input-label" placeholder="Ex. Valdez" />
-        </div>
-        <div class="my-4">
-            <Label id="input-label">First Name</Label>
-            <TextInput id="input-label" placeholder="Ex. Juan" />
-        </div>
-        <div class="my-4">
-            <Label id="input-label">Middle Name</Label>
-            <TextInput id="input-label" placeholder="Ex. Agapito" />
-        </div>
-        <Grid columns="grid grid-cols-3" gap="gap-2">
-            <GridCol>
-                <Label id="input-label">Suffix</Label>
-                <TextInput id="input-label" placeholder="Ex. Jr" />
-            </GridCol>
-            <GridCol colSpan="col-span-2">
-                <Label id="birthday">Birthday</Label>
-                <DatePicker id="birthday" />
-            </GridCol>
-            <GridCol></GridCol>
-        </Grid>
-    </GridCol>
-    <!-- Violator Details End -->
+  <GridCol colSpan="col-span-2">
+    <Label id="input-label" classNames="mt-3">Violdddddator</Label>
+    <Divider border={2} />
+    <div class="my-4">
+      <Label id="input-label">Last Name</Label>
+      <TextInput id="input-label" placeholder="Ex. Valdez" />
+    </div>
+    <div class="my-4">
+      <Label id="input-label">First Name</Label>
+      <TextInput id="input-label" placeholder="Ex. Juan" />
+    </div>
+    <div class="my-4">
+      <Label id="input-label">Middle Name</Label>
+      <TextInput id="input-label" placeholder="Ex. Agapito" />
+    </div>
+    <Grid columns="grid grid-cols-3" gap="gap-2">
+      <GridCol>
+        <Label id="input-label">Suffix</Label>
+        <TextInput id="input-label" placeholder="Ex. Jr" />
+      </GridCol>
+      <GridCol colSpan="col-span-2">
+        <Label id="birthday">Birthday</Label>
+        <DatePicker id="birthday" />
+      </GridCol>
+      <GridCol></GridCol>
+    </Grid>
+  </GridCol>
+  <!-- Violator Details End -->
 
     <!-- Ticket Details -->
     <GridCol colSpan="col-span-2">
