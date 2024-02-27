@@ -5,6 +5,7 @@
  */
 export { default as Button } from "$lib/components/Base/Button.svelte";
 export { default as Divider } from "$lib/components/Base/Divider.svelte";
+export { default as IconButton } from "$lib/components/Base/IconButton.svelte";
 
 
 /**
