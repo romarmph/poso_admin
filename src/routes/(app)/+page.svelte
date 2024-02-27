@@ -6,6 +6,8 @@
     ModalHeader,
   } from "$lib/components/Modal/Modal";
 
+  import TicketStatus from "$lib/components/Base/TicketStatus.svelte";
+
   import { Button } from "$lib/Components";
 </script>
 
@@ -21,3 +23,8 @@
 
   <ModalFooter slot="footer"></ModalFooter>
 </Modal>
+
+<TicketStatus status="paid" />
+<TicketStatus status="unpaid" />
+<TicketStatus status="overdue" />
+<TicketStatus status="transferred" />
