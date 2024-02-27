@@ -4,6 +4,9 @@ export default {
     "./src/**/*.{html,js,svelte,ts}",
     "./node_modules/preline/preline.js",
   ],
+  options: {
+    safelist: [],
+  },
   theme: {
     extend: {},
   },
