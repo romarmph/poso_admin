@@ -1,7 +1,7 @@
 <script>
     import TextInput from "$lib/components/Forms/TextInput.svelte";
     import Label from "$lib/components/Forms/Label.svelte";
-    import PasswordInput from "$lib/components/Forms/PasswordInput.svelte"
+    import PasswordInput from "$lib/components/Forms/PasswordInput.svelte";
     import {
         Modal,
         ModalBody,
@@ -195,16 +195,16 @@
             <Label id="input-label">First Name</Label>
 
             <TextInput
-            id="input-Label"
-            placeholder="Type enforcer first name here"
-        />
+                id="input-Label"
+                placeholder="Type admin first name here"
+            />
         </div>
         <div class="p-4 overflow-y-auto">
             <Label id="input-label">Middle Name</Label>
 
             <TextInput
                 id="input-Label"
-                placeholder="Type enforcer middle name here"
+                placeholder="Type admin middle name here"
             />
         </div>
         <div class="p-4 overflow-y-auto">
@@ -212,7 +212,7 @@
 
             <TextInput
                 id="input-Label"
-                placeholder="Type enforcer Last name here"
+                placeholder="Type admin last name here"
             />
         </div>
         <div class="p-4 overflow-y-auto">
@@ -220,12 +220,16 @@
 
             <TextInput
                 id="input-Label"
-                placeholder="Type enforcer Employee number here"
+                placeholder="Type employee number here"
             />
         </div>
         <div class="p-4 overflow-y-auto">
-        <PasswordInput id="hs-toggle-password-multi-toggle-np" placeholder="password" title="Password"/>
-    </div>
+            <PasswordInput
+                id="hs-toggle-password-multi-toggle-np"
+                placeholder="Password"
+                title="Password"
+            />
+        </div>
     </ModalBody>
 
     <ModalFooter></ModalFooter>
@@ -240,16 +244,16 @@
             <Label id="input-label">First Name</Label>
 
             <TextInput
-            id="input-Label"
-            placeholder="Type enforcer first name here"
-        />
+                id="input-Label"
+                placeholder="Type admin first name here"
+            />
         </div>
         <div class="p-4 overflow-y-auto">
             <Label id="input-label">Middle Name</Label>
 
             <TextInput
                 id="input-Label"
-                placeholder="Type enforcer middle name here"
+                placeholder="Type admin middle name here"
             />
         </div>
         <div class="p-4 overflow-y-auto">
@@ -257,7 +261,7 @@
 
             <TextInput
                 id="input-Label"
-                placeholder="Type enforcer Last name here"
+                placeholder="Type admin last name here"
             />
         </div>
         <div class="p-4 overflow-y-auto">
@@ -265,15 +269,23 @@
 
             <TextInput
                 id="input-Label"
-                placeholder="Type enforcer Employee number here"
+                placeholder="Type employee number here"
             />
         </div>
         <div class="p-4 overflow-y-auto">
-        <PasswordInput id="hs-toggle-password-multi-toggle-np" placeholder="new password" title="New Password"/>
-    </div>
-    <div class="p-4 overflow-y-auto">
-        <PasswordInput id="hs-toggle-password-multi-toggle-np" placeholder="confirm password" title="Confirm Password"/>
-    </div>
+            <PasswordInput
+                id="hs-toggle-password-multi-toggle-np"
+                placeholder="New password"
+                title="New Password"
+            />
+        </div>
+        <div class="p-4 overflow-y-auto">
+            <PasswordInput
+                id="hs-toggle-password-multi-toggle-np"
+                placeholder="Confirm password"
+                title="Confirm Password"
+            />
+        </div>
     </ModalBody>
 
     <ModalFooter></ModalFooter>
@@ -284,7 +296,9 @@
     <ModalHeader>Delete</ModalHeader>
 
     <ModalBody>
-        <div style="font-size: 20px; text-align:center">Are you sure you want to delete this Admin?</div>
+        <div style="font-size: 20px; text-align:center">
+            Are you sure you want to delete this Admin?
+        </div>
     </ModalBody>
 
     <ModalFooter>
