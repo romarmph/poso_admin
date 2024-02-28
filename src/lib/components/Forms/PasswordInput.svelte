@@ -1,6 +1,7 @@
-<script lang="ts">
+  <script lang="ts">
   export let id: string;
-
+  export let placeholder: string;
+  export let title: string;
   const toggleTarget = `{
     "target": "#${id}"
   }`;
@@ -8,13 +9,13 @@
 
 <!-- Form Group -->
 <div class="max-w-sm">
-  <label class="block text-sm mb-2 dark:text-white" for={id}>Password</label>
+  <label class="lock text-sm font-medium mb-2 dark:text-white" for={id}>{title}</label>
   <div class="relative">
     <input
       {id}
       type="password"
       class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
-      placeholder="Enter password"
+      placeholder={placeholder}
     />
     <button
       type="button"
