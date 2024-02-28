@@ -32,45 +32,45 @@
     <ul class="space-y-1.5">
       <SidebarDivider title="Analytics" />
       <li>
-        <SidebarUrl name="Dashboard" isActive={true} route="#">
+        <SidebarUrl name="Dashboard" route="/">
           <LayoutDashboard />
         </SidebarUrl>
       </li>
       <SidebarDivider title="Tickets" />
       <li class="hs-accordion" id="users-accordion">
-        <SidebarUrl name="Payment" route="#">
+        <SidebarUrl name="Payment" route="/payment">
           <Briefcase />
         </SidebarUrl>
       </li>
       <li class="hs-accordion" id="account-accordion">
-        <SidebarUrl name="Tickets" route="#">
+        <SidebarUrl name="Tickets" route="/tickets">
           <Ticket />
         </SidebarUrl>
       </li>
       <SidebarDivider title="Employees" />
       <li class="hs-accordion" id="projects-accordion">
-        <SidebarUrl name="Enforcer" route="#">
+        <SidebarUrl name="Enforcer" route="/enforcer">
           <PersonStanding />
         </SidebarUrl>
       </li>
       <li>
-        <SidebarUrl name="Admin" route="#">
+        <SidebarUrl name="Admin" route="/admin">
           <ShieldCheck />
         </SidebarUrl>
       </li>
       <SidebarDivider title="System" />
       <li>
-        <SidebarUrl name="Violations" route="#">
+        <SidebarUrl name="Violations" route="/violations">
           <AppWindow />
         </SidebarUrl>
       </li>
       <li>
-        <SidebarUrl name="Vehicle Types" route="#">
+        <SidebarUrl name="Vehicle Types" route="/vehicle-types">
           <Shapes />
         </SidebarUrl>
       </li>
       <li>
-        <SidebarUrl name="Traffic Post" route="#">
+        <SidebarUrl name="Traffic Post" route="/traffic-post">
           <Flag />
         </SidebarUrl>
       </li>
