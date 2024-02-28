@@ -13,7 +13,7 @@
 </script>
 
 <header style="display: flex; align-items: center;">
-    <h1 style="font-weight: bold;">Enforcer</h1>
+    <h1 style="font-weight: bold;">Traffic Post</h1>
 </header>
 
 <div style="display: flex; justify-content: flex-end; padding: 10px;">
@@ -24,7 +24,7 @@
         classNames="py-3 px-3 pe-15 mr-5"
     />
 
-    <Button data-hs-overlay="#hs-add-enforcer-modal">Add Enforcer</Button>
+    <Button data-hs-overlay="#hs-add-TPost-modal">Add Traffic Post</Button>
 </div>
 
 <!--Table -->
@@ -40,8 +40,9 @@
                     <!-- Header -->
 
                     <!-- Table -->
+
                     <table
-                        class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 px-6 py-3"
+                        class="min-w-full divide-y divide-gray-200 dark:divide-gray-700"
                     >
                         <thead class="bg-gray-50 dark:bg-slate-900">
                             <tr>
@@ -50,7 +51,7 @@
                                         <span
                                             class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200"
                                         >
-                                            Employee No.
+                                            Post Name
                                         </span>
                                     </div>
                                 </th>
@@ -60,7 +61,17 @@
                                         <span
                                             class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200"
                                         >
-                                            Name
+                                            Location
+                                        </span>
+                                    </div>
+                                </th>
+
+                                <th scope="col" class="px-6 py-3 text-start">
+                                    <div class="flex items-center gap-x-2">
+                                        <span
+                                            class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200"
+                                        >
+                                            Status
                                         </span>
                                     </div>
                                 </th>
@@ -112,21 +123,7 @@
                                         <span class="block px-6 py-2">
                                             <span
                                                 class="text-sm text-gray-600 dark:text-gray-400"
-                                                >1235123</span
-                                            >
-                                        </span>
-                                    </button>
-                                </td>
-                                <td class="size-px whitespace-nowrap">
-                                    <button
-                                        type="button"
-                                        class="block"
-                                        data-hs-overlay="#hs-ai-invoice-modal"
-                                    >
-                                        <span class="block px-6 py-2">
-                                            <span
-                                                class="text-sm text-gray-600 dark:text-gray-400"
-                                                >Romar Macareg</span
+                                                >1</span
                                             >
                                         </span>
                                     </button>
@@ -141,7 +138,49 @@
                                         <span class="block px-6 py-2">
                                             <span
                                                 class="text-sm text-gray-600 dark:text-gray-400"
-                                                >John Doe</span
+                                                >12345</span
+                                            >
+                                        </span>
+                                    </button>
+                                </td>
+
+                                <td class="size-px whitespace-nowrap">
+                                    <button
+                                        type="button"
+                                        class="block"
+                                        data-hs-overlay="#hs-ai-invoice-modal"
+                                    >
+                                        <span class="block px-6 py-2">
+                                            <span
+                                                class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500"
+                                            >
+                                                <svg
+                                                    class="size-2.5"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="16"
+                                                    height="16"
+                                                    fill="currentColor"
+                                                    viewBox="0 0 16 16"
+                                                >
+                                                    <path
+                                                        d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"
+                                                    />
+                                                </svg>
+                                                Paid
+                                            </span>
+                                        </span>
+                                    </button>
+                                </td>
+                                <td class="size-px whitespace-nowrap">
+                                    <button
+                                        type="button"
+                                        class="block"
+                                        data-hs-overlay="#hs-ai-invoice-modal"
+                                    >
+                                        <span class="block px-6 py-2">
+                                            <span
+                                                class="text-sm text-gray-600 dark:text-gray-400"
+                                                >hshashasdhak</span
                                             >
                                         </span>
                                     </button>
@@ -167,12 +206,12 @@
                                         class="inline-flex rounded-lg shadow-sm"
                                     >
                                         <Button
-                                            data-hs-overlay="#hs-edit-enforcer-modal"
+                                            data-hs-overlay="#hs-edit-TPost-modal"
                                             color="teal"
                                             size="small">Edit</Button
                                         >
                                         <Button
-                                            data-hs-overlay="#hs-del-enforcer-modal"
+                                            data-hs-overlay="#hs-del-TPost-modal"
                                             color="red"
                                             size="small">Delete</Button
                                         >
@@ -187,106 +226,117 @@
     </div>
 </div>
 
-<!-- Add modal -->
-<Modal modalId="hs-add-enforcer-modal">
-    <ModalHeader>Add Enforcer</ModalHeader>
+<!-- Add Traffic Post modal -->
+<Modal modalId="hs-add-TPost-modal">
+    <ModalHeader>Add Traffic Post</ModalHeader>
 
     <ModalBody>
         <div class="p-4 overflow-y-auto">
-            <Label id="input-label">First Name</Label>
+            <Label id="input-label">Post Name</Label>
 
-            <TextInput
-                id="input-Label"
-                placeholder="Type enforcer first name here"
-            />
+            <TextInput id="input-Label" placeholder="Type Post name here" />
         </div>
         <div class="p-4 overflow-y-auto">
-            <Label id="input-label">Middle Name</Label>
+            <Label id="input-label">Location</Label>
 
-            <TextInput
-                id="input-Label"
-                placeholder="Type enforcer middle name here"
-            />
-        </div>
-        <div class="p-4 overflow-y-auto">
-            <Label id="input-label">Last Name</Label>
-
-            <TextInput
-                id="input-Label"
-                placeholder="Type enforcer Last name here"
-            />
-        </div>
-        <div class="p-4 overflow-y-auto">
-            <Label id="input-label">Employee No.</Label>
-
-            <TextInput
-                id="input-Label"
-                placeholder="Type enforcer Employee number here"
-            />
+            <TextInput id="input-Label" placeholder="Type Location here" />
         </div>
     </ModalBody>
 
     <ModalFooter>
-        <Button
-            data-hs-overlay="#hs-add-enforcer-modal"
-            style="soft"
-            color="gray">Cancel</Button
+        <Button data-hs-overlay="#hs-add-TPost-modal" style="soft" color="gray"
+            >Cancel</Button
         >
         <Button>Save</Button>
     </ModalFooter>
 </Modal>
 
-<!-- Update modal -->
-<Modal modalId="hs-edit-enforcer-modal">
-    <ModalHeader>Update Enforcer</ModalHeader>
+<!-- Update Traffic Post modal -->
+<Modal modalId="hs-edit-TPost-modal">
+    <ModalHeader>Update Traffic Post</ModalHeader>
 
     <ModalBody>
         <div class="p-4 overflow-y-auto">
-            <Label id="input-label">First Name</Label>
+            <Label id="input-label">Post Name</Label>
 
-            <TextInput
-                id="input-Label"
-                placeholder="Type enforcer first name here"
-            />
+            <TextInput id="input-Label" placeholder="Type Post name here" />
         </div>
         <div class="p-4 overflow-y-auto">
-            <Label id="input-label">Middle Name</Label>
+            <Label id="input-label">Location</Label>
 
-            <TextInput
-                id="input-Label"
-                placeholder="Type enforcer middle name here"
-            />
+            <TextInput id="input-Label" placeholder="Type Location here" />
+        </div>
+
+        <div class="grid space-y-3">
+            <div class="relative flex items-start">
+                <div class="flex items-center h-5 mt-1">
+                    <input
+                        id="hs-radio-delete"
+                        name="hs-radio-with-description"
+                        type="radio"
+                        class="border-gray-200 rounded-full text-blue-600 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+                        aria-describedby="hs-radio-delete-description"
+                        checked
+                    />
+                </div>
+                <label for="hs-radio-delete" class="ms-3">
+                    <span
+                        class="block text-sm font-semibold text-gray-800 dark:text-gray-300"
+                        >Enable</span
+                    >
+                    <span
+                        id="hs-radio-delete-description"
+                        class="block text-sm text-gray-600 dark:text-gray-500"
+                        >Enable this traffic post.</span
+                    >
+                </label>
+            </div>
+
+            <div class="relative flex items-start">
+                <div class="flex items-center h-5 mt-1">
+                    <input
+                        id="hs-radio-archive"
+                        name="hs-radio-with-description"
+                        type="radio"
+                        class="border-gray-200 rounded-full text-blue-600 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+                        aria-describedby="hs-radio-archive-description"
+                    />
+                </div>
+                <label for="hs-radio-archive" class="ms-3">
+                    <span
+                        class="block text-sm font-semibold text-gray-800 dark:text-gray-300"
+                        >Disable</span
+                    >
+                    <span
+                        id="hs-radio-archive-description"
+                        class="block text-sm text-gray-600 dark:text-gray-500"
+                        >Disable this traffic post.</span
+                    >
+                </label>
+            </div>
         </div>
         <div class="p-4 overflow-y-auto">
-            <Label id="input-label">Last Name</Label>
+            <Label id="input-label">Created by</Label>
 
-            <TextInput
-                id="input-Label"
-                placeholder="Type enforcer Last name here"
-            />
+            <TextInput id="input-Label" placeholder="Type here" />
         </div>
         <div class="p-4 overflow-y-auto">
-            <Label id="input-label">Employee No.</Label>
+            <Label id="input-label">Created at</Label>
 
-            <TextInput
-                id="input-Label"
-                placeholder="Type enforcer Employee number here"
-            />
+            <TextInput id="input-Label" placeholder="Type here" />
         </div>
     </ModalBody>
 
     <ModalFooter>
-        <Button
-            data-hs-overlay="#hs-edit-enforcer-modal"
-            style="soft"
-            color="gray">Cancel</Button
+        <Button data-hs-overlay="#hs-edit-TPost-modal" style="soft" color="gray"
+            >Cancel</Button
         >
         <Button>Save</Button>
     </ModalFooter>
 </Modal>
 
-<!-- delete modal -->
-<Modal modalId="hs-del-enforcer-modal">
+<!-- Delete Traffic Post modal -->
+<Modal modalId="hs-del-TPost-modal">
     <ModalHeader></ModalHeader>
 
     <ModalBody>
@@ -295,10 +345,8 @@
     </ModalBody>
 
     <ModalFooter>
-        <Button
-            data-hs-overlay="#hs-del-enforcer-modal"
-            style="soft"
-            color="gray">Cancel</Button
+        <Button data-hs-overlay="#hs-del-TPost-modal" style="soft" color="gray"
+            >Cancel</Button
         >
         <Button color="red">Delete</Button>
     </ModalFooter>
