@@ -23,14 +23,10 @@
         width="36"
         classNames="py-3 px-3 pe-15 mr-5"
     />
-    <button
-        type="button"
-        class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-        data-hs-overlay="#hs-add_enforcer-modal"
-    >
-        Add Enforcer
-    </button>
+
+    <Button data-hs-overlay="#hs-add-enforcer-modal">Add Enforcer</Button>
 </div>
+
 <!--Table -->
 
 <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
@@ -170,20 +166,16 @@
                                     <div
                                         class="inline-flex rounded-lg shadow-sm"
                                     >
-                                        <button
-                                            type="button"
-                                            class="py-2 px-3 inline-flex items-center gap-x-2 -ms-px first:rounded-s-lg first:ms-0 last:rounded-e-lg text-sm font-medium focus:z-10 border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                                            data-hs-overlay="#hs-edit_enforcer-modal"
+                                        <Button
+                                            data-hs-overlay="#hs-edit-enforcer-modal"
+                                            color="teal"
+                                            size="small">Edit</Button
                                         >
-                                            Edit
-                                        </button>
-                                        <button
-                                            type="button"
-                                            class="py-2 px-3 inline-flex items-center gap-x-2 -ms-px first:rounded-s-lg first:ms-0 last:rounded-e-lg text-sm font-medium focus:z-10 border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                                            data-hs-overlay="#hs-del_enforcer-modal"
+                                        <Button
+                                            data-hs-overlay="#hs-del-enforcer-modal"
+                                            color="red"
+                                            size="small">Delete</Button
                                         >
-                                            Delete
-                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -196,7 +188,7 @@
 </div>
 
 <!-- Add modal -->
-<Modal modalId="hs-add_enforcer-modal">
+<Modal modalId="hs-add-enforcer-modal">
     <ModalHeader slot="header">Add Enforcer</ModalHeader>
 
     <ModalBody slot="body">
@@ -238,7 +230,7 @@
 </Modal>
 
 <!-- Update modal -->
-<Modal modalId="hs-edit_enforcer-modal">
+<Modal modalId="hs-edit-enforcer-modal">
     <ModalHeader slot="header">Update Enforcer</ModalHeader>
 
     <ModalBody slot="body">
@@ -280,7 +272,7 @@
 </Modal>
 
 <!-- delete modal -->
-<Modal modalId="hs-del_enforcer-modal">
+<Modal modalId="hs-del-enforcer-modal">
     <ModalHeader slot="header"></ModalHeader>
 
     <ModalBody slot="body">

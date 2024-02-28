@@ -29,10 +29,10 @@
 
 <!-- Add Violations-->
 <div class="flex justify-end">
-  <Button modalId="hs-vertically-centered-modal">Add Violations</Button>
+  <Button data-hs-overlay="#hs-add-violation-modal">Add Violations</Button>
 </div>
 
-<Modal modalId="hs-vertically-centered-modal">
+<Modal modalId="hs-add-violation-modal">
   <ModalHeader slot="header">Add Violations</ModalHeader>
 
   <ModalBody slot="body">
@@ -52,7 +52,7 @@
 <Grid columns="grid-cols-6" gap="gap-4">
   <!-- Violator Details -->
   <GridCol colSpan="col-span-2">
-    <Label id="input-label" classNames="mt-3">Violator</Label>
+    <Label classNames="mt-3">Violator</Label>
     <Divider border={2} />
     <div class="my-4">
       <Label id="input-label">Last Name</Label>
