@@ -1,7 +1,7 @@
 <script>
     import TextInput from "$lib/components/Forms/TextInput.svelte";
     import Label from "$lib/components/Forms/Label.svelte";
-    import PasswordInput from "$lib/components/Forms/PasswordInput.svelte"
+    import PasswordInput from "$lib/components/Forms/PasswordInput.svelte";
     import RadioButton from "$lib/components/Forms/RadioButton.svelte";
     import {
         Modal,
@@ -23,18 +23,16 @@
         width="36"
         classNames="py-3 px-3 pe-15 mr-5"
     />
-
 </div>
 <Label id="input-label">Vehicle Type</Label>
-<div class="p-4 overflow-y-auto "style="display: flex;  padding: 10px;">
+<div class="p-4 overflow-y-auto" style="display: flex;  padding: 10px;">
     <TextInput
-    id="input-Label"
-    placeholder="Add New Vehicle Type"
-    width="60"
-    classNames="py-3 px-3 pe-15 mr-5"
-/>
-<Button>Add</Button>
-
+        id="input-Label"
+        placeholder="Add New Vehicle Type"
+        width="60"
+        classNames="py-3 px-3 pe-15 mr-5"
+    />
+    <Button>Add</Button>
 </div>
 <!--Table -->
 
@@ -189,12 +187,12 @@
                                         class="inline-flex rounded-lg shadow-sm"
                                     >
                                         <Button
-                                            data-hs-overlay="#hs-edit-admin-modal"
+                                            data-hs-overlay="#hs-edit-vType-modal"
                                             color="teal"
                                             size="small">Edit</Button
                                         >
                                         <Button
-                                            data-hs-overlay="#hs-del-admin-modal"
+                                            data-hs-overlay="#hs-del-vType-modal"
                                             color="red"
                                             size="small">Delete</Button
                                         >
@@ -209,33 +207,31 @@
     </div>
 </div>
 
-
 <!-- Update modal -->
-<Modal modalId="hs-edit-admin-modal">
+<Modal modalId="hs-edit-vType-modal">
     <ModalHeader>Update Vehicle Type</ModalHeader>
 
     <ModalBody>
         <div class="p-4 overflow-y-auto">
             <Label id="input-label">Vehicle Type</Label>
 
-            <TextInput
-            id="input-Label"
-            placeholder="Type Vehicle Type here"
-        />
+            <TextInput id="input-Label" placeholder="Type Vehicle Type here" />
         </div>
-       
-        <RadioButton/>
+
+        <RadioButton />
     </ModalBody>
 
     <ModalFooter></ModalFooter>
 </Modal>
 
 <!-- delete modal -->
-<Modal modalId="hs-del-admin-modal">
+<Modal modalId="hs-del-vType-modal">
     <ModalHeader>Delete</ModalHeader>
 
     <ModalBody>
-        <div style="font-size: 20px; text-align:center">Are you sure you want to delete this Vehicle Type?</div>
+        <div style="font-size: 20px; text-align:center">
+            Are you sure you want to delete this Vehicle Type?
+        </div>
     </ModalBody>
 
     <ModalFooter>

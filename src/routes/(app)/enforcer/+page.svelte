@@ -213,7 +213,7 @@
 
             <TextInput
                 id="input-Label"
-                placeholder="Type enforcer Last name here"
+                placeholder="Type enforcer last name here"
             />
         </div>
         <div class="p-4 overflow-y-auto">
@@ -221,7 +221,7 @@
 
             <TextInput
                 id="input-Label"
-                placeholder="Type enforcer Employee number here"
+                placeholder="Type enforcer employee number here"
             />
         </div>
     </ModalBody>
@@ -262,7 +262,7 @@
 
             <TextInput
                 id="input-Label"
-                placeholder="Type enforcer Last name here"
+                placeholder="Type enforcer last name here"
             />
         </div>
         <div class="p-4 overflow-y-auto">
@@ -270,7 +270,7 @@
 
             <TextInput
                 id="input-Label"
-                placeholder="Type enforcer Employee number here"
+                placeholder="Type enforcer employee number here"
             />
         </div>
     </ModalBody>
