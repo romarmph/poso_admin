@@ -4,8 +4,6 @@
   export let name: string;
   export let route: string;
 
-  console.log($page.url.pathname);
-
   $: isActive = $page.url.pathname === route;
 </script>
 
