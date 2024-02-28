@@ -4,7 +4,7 @@
     ModalBody,
     ModalFooter,
     ModalHeader,
-  } from "$lib/components/Modal/Modal";
+  } from "$lib/components/Overlays/Modal/Modal";
 
   import TicketStatus from "$lib/components/Base/TicketStatus.svelte";
 

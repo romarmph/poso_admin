@@ -8,7 +8,7 @@
         ModalBody,
         ModalFooter,
         ModalHeader,
-    } from "$lib/components/Modal/Modal";
+    } from "$lib/components/Overlays/Modal/Modal";
     import { Button } from "$lib/Components";
 </script>
 
