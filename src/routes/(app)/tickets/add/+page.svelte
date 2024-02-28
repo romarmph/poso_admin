@@ -8,7 +8,7 @@
     ModalHeader,
     ModalBody,
     ModalFooter,
-  } from "$lib/components/Modal/Modal";
+  } from "$lib/components/Overlays/Modal/Modal";
 
   import {
     Button,
@@ -33,9 +33,9 @@
 </div>
 
 <Modal modalId="hs-add-violation-modal">
-  <ModalHeader slot="header">Add Violations</ModalHeader>
+  <ModalHeader>Add Violations</ModalHeader>
 
-  <ModalBody slot="body">
+  <ModalBody>
     <TextInput id="search" placeholder="Add Violation" />
 
     <ListTile name="Violation 1" amount="500" />
@@ -46,7 +46,7 @@
     <ListTile name="Violation 1" amount="500" />
   </ModalBody>
 
-  <ModalFooter slot="footer"></ModalFooter>
+  <ModalFooter></ModalFooter>
 </Modal>
 
 <Grid columns="grid-cols-6" gap="gap-4">

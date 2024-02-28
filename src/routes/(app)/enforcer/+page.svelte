@@ -189,9 +189,9 @@
 
 <!-- Add modal -->
 <Modal modalId="hs-add-enforcer-modal">
-    <ModalHeader slot="header">Add Enforcer</ModalHeader>
+    <ModalHeader>Add Enforcer</ModalHeader>
 
-    <ModalBody slot="body">
+    <ModalBody>
         <div class="p-4 overflow-y-auto">
             <Label id="input-label">First Name</Label>
 
@@ -226,14 +226,14 @@
         </div>
     </ModalBody>
 
-    <ModalFooter slot="footer"></ModalFooter>
+    <ModalFooter></ModalFooter>
 </Modal>
 
 <!-- Update modal -->
 <Modal modalId="hs-edit-enforcer-modal">
-    <ModalHeader slot="header">Update Enforcer</ModalHeader>
+    <ModalHeader>Update Enforcer</ModalHeader>
 
-    <ModalBody slot="body">
+    <ModalBody>
         <div class="p-4 overflow-y-auto">
             <Label id="input-label">First Name</Label>
 
@@ -268,19 +268,19 @@
         </div>
     </ModalBody>
 
-    <ModalFooter slot="footer"></ModalFooter>
+    <ModalFooter></ModalFooter>
 </Modal>
 
 <!-- delete modal -->
 <Modal modalId="hs-del-enforcer-modal">
-    <ModalHeader slot="header"></ModalHeader>
+    <ModalHeader></ModalHeader>
 
-    <ModalBody slot="body">
+    <ModalBody>
         <div style="font-size: 35px; text-align:center">Are you sure</div>
         <div style="font-size: 20px; text-align:center">Delete this user</div>
     </ModalBody>
 
-    <ModalFooter slot="footer">
+    <ModalFooter>
         <Button style="soft" color="gray">Cancel</Button>
         <Button color="red">Delete</Button>
     </ModalFooter>

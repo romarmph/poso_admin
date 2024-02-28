@@ -14,7 +14,7 @@
     ModalHeader,
     ModalBody,
     ModalFooter,
-  } from "$lib/components/Modal/Modal";
+  } from "$lib/components/Overlays/Modal/Modal";
 </script>
 
 <header style="display: flex; align-items: center;">
@@ -103,9 +103,9 @@
 </footer>
 
 <Modal modalId="hs-pay-modal">
-  <ModalHeader slot="header">Pay Tickets</ModalHeader>
+  <ModalHeader>Pay Tickets</ModalHeader>
 
-  <ModalBody slot="body">
+  <ModalBody>
     <ListTile2 title="Ticket No." descrip="151232" />
     <ListTile2 title="Violator" descrip="Marbert Cerda" />
     <ListTile2 title="Offense" descrip="1" />
@@ -134,5 +134,5 @@
     <TextInput id="input-label" placeholder="Date Paid" classNames="mt-3" />
   </ModalBody>
 
-  <ModalFooter slot="footer"></ModalFooter>
+  <ModalFooter></ModalFooter>
 </Modal>
