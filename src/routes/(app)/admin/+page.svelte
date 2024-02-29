@@ -9,6 +9,7 @@
         ModalHeader,
     } from "$lib/components/Overlays/Modal/Modal";
     import { Button } from "$lib/Components";
+    import { Pencil, Trash2 } from "lucide-svelte";
 </script>
 
 <header style="display: flex; align-items: center;">
@@ -168,12 +169,12 @@
                                         <Button
                                             data-hs-overlay="#hs-edit-admin-modal"
                                             color="teal"
-                                            size="small">Edit</Button
+                                            size="small"><Pencil /></Button
                                         >
                                         <Button
                                             data-hs-overlay="#hs-del-admin-modal"
                                             color="red"
-                                            size="small">Delete</Button
+                                            size="small"><Trash2 /></Button
                                         >
                                     </div>
                                 </td>
