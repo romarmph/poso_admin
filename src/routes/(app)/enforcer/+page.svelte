@@ -1,6 +1,4 @@
 <script>
-    import { ArrowLeft } from "lucide-svelte";
-    import SidebarDivider from "$lib/components/Sidebar/subcomponents/Sidebar-Divider.svelte";
     import TextInput from "$lib/components/Forms/TextInput.svelte";
     import Label from "$lib/components/Forms/Label.svelte";
     import {
@@ -9,7 +7,13 @@
         ModalFooter,
         ModalHeader,
     } from "$lib/components/Overlays/Modal/Modal";
+    import Tables from "$lib/components/Table/tables.svelte";
+    import TableHead from "$lib/components/Table/TableHead.svelte";
+    import Dropdown from "$lib/components/Base/Dropdown.svelte";
+    import TableBody from "$lib/components/Table/TableBody.svelte";
     import { Button } from "$lib/Components";
+    import { MoreHorizontal, Download, ListFilter, Search } from "lucide-svelte";
+
 </script>
 
 <header style="display: flex; align-items: center;">
@@ -17,177 +21,54 @@
 </header>
 
 <div style="display: flex; justify-content: flex-end; padding: 10px;">
-    <TextInput
-        id="input-Label"
-        placeholder="Search"
-        width="36"
-        classNames="py-3 px-3 pe-15 mr-5"
-    />
-
     <Button data-hs-overlay="#hs-add-enforcer-modal">Add Enforcer</Button>
 </div>
 
 <!--Table -->
+<Tables>
+    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
 
-<div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
-    <!-- Card -->
-    <div class="flex flex-col">
-        <div class="-m-1.5 overflow-x-auto">
-            <div class="p-1.5 min-w-full inline-block align-middle">
-                <div
-                    class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden dark:bg-slate-900 dark:border-gray-700"
-                >
-                    <!-- Header -->
+    <thead class="bg-gray-50 dark:bg-slate-800">
+        <tr>
+    <TableHead name="" classes="ps-6 py-3 text-start"><input type="checkbox" class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-at-with-checkboxes-main">
+    </TableHead>
+    <TableHead name="Employee Number" classes="px-6 py-3 text-start"/>
+    <TableHead name="Name" classes="px-6 py-3 text-start"/>
+    <TableHead name="Created By:" classes="px-6 py-3 text-start"/>
+    <TableHead name="Created At:" classes="px-6 py-3 text-start"/>
 
-                    <!-- Table -->
-                    <table
-                        class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 px-6 py-3"
-                    >
-                        <thead class="bg-gray-50 dark:bg-slate-900">
-                            <tr>
-                                <th scope="col" class="px-6 py-3 text-start">
-                                    <div class="flex items-center gap-x-2">
-                                        <span
-                                            class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200"
-                                        >
-                                            Employee No.
-                                        </span>
-                                    </div>
-                                </th>
+    </tr>
+</thead>
+    <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+        <tr>
 
-                                <th scope="col" class="px-6 py-3 text-start">
-                                    <div class="flex items-center gap-x-2">
-                                        <span
-                                            class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200"
-                                        >
-                                            Name
-                                        </span>
-                                    </div>
-                                </th>
+            <TableBody classed="ps-6 py-3 text-start">
+              <input type="checkbox" class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-at-with-checkboxes-1">
 
-                                <th scope="col" class="px-6 py-3 text-start">
-                                    <div class="flex items-center gap-x-2">
-                                        <span
-                                            class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200"
-                                        >
-                                            Created by
-                                        </span>
-                                    </div>
-                                </th>
+            </TableBody>
+             <TableBody>123</TableBody>
+             <TableBody>123</TableBody>
+             <TableBody>123</TableBody>
+             <TableBody>123</TableBody>
+             <TableBody><div class="group inline-flex items-center divide-x divide-gray-300 border border-gray-300 bg-white shadow-sm rounded-lg transition-all dark:divide-gray-700 dark:bg-slate-700 dark:border-gray-700">
+              <div class="hs-tooltip inline-block">
+                <a class="hs-tooltip-toggle py-1.5 px-2 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-s-md bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                  <Download/>
+                  <span class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity inline-block absolute invisible z-10 py-1 px-2 bg-gray-900 text-xs font-medium text-white rounded shadow-sm dark:bg-slate-700" role="tooltip">
+                    Download PDF
+                  </span>
+                </a>
+              </div>
+              <Dropdown over="hs-edit-enforcer-modal" del="hs-del-enforcer-modal"><MoreHorizontal/></Dropdown>
+            </div></TableBody>
+        </tr>
 
-                                <th scope="col" class="px-6 py-3 text-start">
-                                    <div class="flex items-center gap-x-2">
-                                        <span
-                                            class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200"
-                                        >
-                                            Created at
-                                        </span>
-                                    </div>
-                                </th>
+      
+      </tbody>
+</table>
+</Tables>
 
-                                <th scope="col" class="px-6 py-3 text-start">
-                                    <div class="flex items-center gap-x-2">
-                                        <span
-                                            class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200"
-                                        >
-                                            Actions
-                                        </span>
-                                    </div>
-                                </th>
-                            </tr>
-                        </thead>
 
-                        <tbody
-                            class="divide-y divide-gray-200 dark:divide-gray-700"
-                        >
-                            <tr
-                                class="bg-white hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-800"
-                            >
-                                <td class="size-px whitespace-nowrap">
-                                    <button
-                                        type="button"
-                                        class="block"
-                                        data-hs-overlay="#hs-ai-invoice-modal"
-                                    >
-                                        <span class="block px-6 py-2">
-                                            <span
-                                                class="text-sm text-gray-600 dark:text-gray-400"
-                                                >1235123</span
-                                            >
-                                        </span>
-                                    </button>
-                                </td>
-                                <td class="size-px whitespace-nowrap">
-                                    <button
-                                        type="button"
-                                        class="block"
-                                        data-hs-overlay="#hs-ai-invoice-modal"
-                                    >
-                                        <span class="block px-6 py-2">
-                                            <span
-                                                class="text-sm text-gray-600 dark:text-gray-400"
-                                                >Romar Macareg</span
-                                            >
-                                        </span>
-                                    </button>
-                                </td>
-
-                                <td class="size-px whitespace-nowrap">
-                                    <button
-                                        type="button"
-                                        class="block"
-                                        data-hs-overlay="#hs-ai-invoice-modal"
-                                    >
-                                        <span class="block px-6 py-2">
-                                            <span
-                                                class="text-sm text-gray-600 dark:text-gray-400"
-                                                >John Doe</span
-                                            >
-                                        </span>
-                                    </button>
-                                </td>
-
-                                <td class="size-px whitespace-nowrap">
-                                    <button
-                                        type="button"
-                                        class="block"
-                                        data-hs-overlay="#hs-ai-invoice-modal"
-                                    >
-                                        <span class="block px-6 py-2">
-                                            <span
-                                                class="text-sm text-gray-600 dark:text-gray-400"
-                                                >January 12, 2024</span
-                                            >
-                                        </span>
-                                    </button>
-                                </td>
-
-                                <td class="size-px whitespace-nowrap">
-                                    <div
-                                        class="inline-flex rounded-lg shadow-sm"
-                                    >
-                                        <Button
-                                            data-hs-overlay="#hs-edit-enforcer-modal"
-                                            color="teal"
-                                            size="small">Edit</Button
-                                        >
-                                        <Button
-                                            data-hs-overlay="#hs-del-enforcer-modal"
-                                            color="red"
-                                            size="small">Delete</Button
-                                        >
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Add modal -->
 <Modal modalId="hs-add-enforcer-modal">
     <ModalHeader>Add Enforcer</ModalHeader>
 
@@ -233,73 +114,5 @@
             color="gray">Cancel</Button
         >
         <Button>Save</Button>
-    </ModalFooter>
-</Modal>
-
-<!-- Update modal -->
-<Modal modalId="hs-edit-enforcer-modal">
-    <ModalHeader>Update Enforcer</ModalHeader>
-
-    <ModalBody>
-        <div class="p-4 overflow-y-auto">
-            <Label id="input-label">First Name</Label>
-
-            <TextInput
-                id="input-Label"
-                placeholder="Type enforcer first name here"
-            />
-        </div>
-        <div class="p-4 overflow-y-auto">
-            <Label id="input-label">Middle Name</Label>
-
-            <TextInput
-                id="input-Label"
-                placeholder="Type enforcer middle name here"
-            />
-        </div>
-        <div class="p-4 overflow-y-auto">
-            <Label id="input-label">Last Name</Label>
-
-            <TextInput
-                id="input-Label"
-                placeholder="Type enforcer last name here"
-            />
-        </div>
-        <div class="p-4 overflow-y-auto">
-            <Label id="input-label">Employee No.</Label>
-
-            <TextInput
-                id="input-Label"
-                placeholder="Type enforcer employee number here"
-            />
-        </div>
-    </ModalBody>
-
-    <ModalFooter>
-        <Button
-            data-hs-overlay="#hs-edit-enforcer-modal"
-            style="soft"
-            color="gray">Cancel</Button
-        >
-        <Button>Save</Button>
-    </ModalFooter>
-</Modal>
-
-<!-- delete modal -->
-<Modal modalId="hs-del-enforcer-modal">
-    <ModalHeader></ModalHeader>
-
-    <ModalBody>
-        <div style="font-size: 35px; text-align:center">Are you sure</div>
-        <div style="font-size: 20px; text-align:center">Delete this user</div>
-    </ModalBody>
-
-    <ModalFooter>
-        <Button
-            data-hs-overlay="#hs-del-enforcer-modal"
-            style="soft"
-            color="gray">Cancel</Button
-        >
-        <Button color="red">Delete</Button>
     </ModalFooter>
 </Modal>
