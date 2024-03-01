@@ -1,5 +1,5 @@
 <script>
-    import { ArrowLeft } from "lucide-svelte";
+    import { ArrowLeft, Pencil, Trash2 } from "lucide-svelte";
     import SidebarDivider from "$lib/components/Sidebar/subcomponents/Sidebar-Divider.svelte";
     import TextInput from "$lib/components/Forms/TextInput.svelte";
     import Label from "$lib/components/Forms/Label.svelte";
@@ -169,12 +169,12 @@
                                         <Button
                                             data-hs-overlay="#hs-edit-enforcer-modal"
                                             color="teal"
-                                            size="small">Edit</Button
+                                            size="small"><Pencil /></Button
                                         >
                                         <Button
                                             data-hs-overlay="#hs-del-enforcer-modal"
                                             color="red"
-                                            size="small">Delete</Button
+                                            size="small"><Trash2 /></Button
                                         >
                                     </div>
                                 </td>
@@ -291,7 +291,9 @@
 
     <ModalBody>
         <div style="font-size: 35px; text-align:center">Are you sure</div>
-        <div style="font-size: 20px; text-align:center">Delete this user</div>
+        <div style="font-size: 20px; text-align:center">
+            Delete this enforcer
+        </div>
     </ModalBody>
 
     <ModalFooter>
