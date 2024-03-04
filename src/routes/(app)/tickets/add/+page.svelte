@@ -17,22 +17,23 @@
     IconButton,
   } from "$lib/Components";
   import ListTile from "$lib/components/Base/ListTile.svelte";
-    import Tables from "$lib/components/Table/tables.svelte";
-    import TableHead from "$lib/components/Table/TableHead.svelte";
-    import Dropdown from "$lib/components/Base/Dropdown.svelte";
-    import TableBody from "$lib/components/Table/TableBody.svelte";
-    import { MoreHorizontal, Download, ListFilter, Search } from "lucide-svelte";
+  import Tables from "$lib/components/Table/tables.svelte";
+  import TableHead from "$lib/components/Table/TableHead.svelte";
+  import Dropdown from "$lib/components/Base/Dropdown.svelte";
+  import TableBody from "$lib/components/Table/TableBody.svelte";
+  import { MoreHorizontal, Download, ListFilter, Search } from "lucide-svelte";
+  import DatePicker from "$lib/components/Forms/DatePicker.svelte";
 </script>
 
 <header style="display: flex; align-items: center;">
   <button><ArrowLeft style="margin-right: 10px;" /></button>
   <h1 style="font-weight: bold;">New Ticket</h1>
+  <div style="margin-left:auto">
+    <Button data-hs-overlay="#hs-add-violation-modal">Add Violations</Button>
+  </div>
 </header>
 
 <!-- Add Violations-->
-<div class="flex justify-end">
-  <Button data-hs-overlay="#hs-add-violation-modal">Add Violations</Button>
-</div>
 
 <Modal modalId="hs-add-violation-modal">
   <ModalHeader>Add Violations</ModalHeader>
@@ -54,7 +55,7 @@
 <Grid columns="grid-cols-6" gap="gap-4">
   <!-- Violator Details -->
   <GridCol colSpan="col-span-2">
-    <Label classNames="mt-3">Violator</Label>
+    <Label id="input-label" classNames="mt-3">Violator</Label>
     <Divider border={2} />
     <div class="my-4">
       <Label id="input-label">Last Name</Label>
@@ -74,8 +75,8 @@
         <TextInput id="input-label" placeholder="Ex. Jr" />
       </GridCol>
       <GridCol colSpan="col-span-2">
-        <Label id="input-label">Birthday</Label>
-        <!-- <TextInput id="input-label" type="date" /> -->
+        <Label id="birthday">Birthday</Label>
+        <DatePicker id="birthday" />
       </GridCol>
       <GridCol></GridCol>
     </Grid>
@@ -98,11 +99,15 @@
       <Label id="input-label">Apprehending Officer</Label>
       <TextInput id="input-label" placeholder="Ex. Agapito" />
     </div>
-    <div class="my-4">
-      <Label id="input-label">Apprehension Date</Label>
-      <!-- <TextInput id="input-label" type="date" /> -->
-    </div>
+    <Grid columns="grid grid-cols-3" gap="gap-2">
+      <GridCol colSpan="col-span-2">
+        <Label id="input-label">Apprehension Date</Label>
+        <DatePicker id="apprehensionDate" />
+      </GridCol>
+      <GridCol></GridCol>
+    </Grid>
   </GridCol>
+
   <!-- Ticket Details End -->
 
   <!-- Violations -->
@@ -116,63 +121,80 @@
 <!-- Table -->
 <Tables>
   <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-
-  <thead class="bg-gray-50 dark:bg-slate-800">
+    <thead class="bg-gray-50 dark:bg-slate-800">
       <tr>
-  <TableHead name="" classes="ps-6 py-3 text-start"><input type="checkbox" class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-at-with-checkboxes-main">
-  </TableHead>
-  <TableHead name="Offense" classes="px-6 py-3 text-start"/>
-  <TableHead name="Ticket No." classes="px-6 py-3 text-start"/>
-  <TableHead name="Identification" classes="px-6 py-3 text-start"/>
-  <TableHead name="Violator Name" classes="px-6 py-3 text-start"/>
-  <TableHead name="Location" classes="px-6 py-3 text-start"/>
-  <TableHead name="Officer" classes="px-6 py-3 text-start"/>
-  <TableHead name="Status" classes="px-6 py-3 text-start"/>
-  <TableHead name="Violation Date" classes="px-6 py-3 text-start"/>
-
-  </tr>
-</thead>
-  <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+        <TableHead name="" classes="ps-6 py-3 text-start"
+          ><input
+            type="checkbox"
+            class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+            id="hs-at-with-checkboxes-main"
+          />
+        </TableHead>
+        <TableHead name="Offense" classes="px-6 py-3 text-start" />
+        <TableHead name="Ticket No." classes="px-6 py-3 text-start" />
+        <TableHead name="Identification" classes="px-6 py-3 text-start" />
+        <TableHead name="Violator Name" classes="px-6 py-3 text-start" />
+        <TableHead name="Location" classes="px-6 py-3 text-start" />
+        <TableHead name="Officer" classes="px-6 py-3 text-start" />
+        <TableHead name="Status" classes="px-6 py-3 text-start" />
+        <TableHead name="Violation Date" classes="px-6 py-3 text-start" />
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
       <tr>
-
-          <TableBody classed="ps-6 py-3 text-start">
-            <input type="checkbox" class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-at-with-checkboxes-1">
-
-          </TableBody>
-           <TableBody>123</TableBody>
-           <TableBody>123</TableBody>
-           <TableBody>123</TableBody>
-           <TableBody>123</TableBody>
-           <TableBody>123</TableBody>
-           <TableBody> <button
-              type="button"
-              class="block"
-              data-hs-overlay="#hs-ai-invoice-modal"
+        <TableBody classed="ps-6 py-3 text-start">
+          <input
+            type="checkbox"
+            class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+            id="hs-at-with-checkboxes-1"
+          />
+        </TableBody>
+        <TableBody>123</TableBody>
+        <TableBody>123</TableBody>
+        <TableBody>123</TableBody>
+        <TableBody>123</TableBody>
+        <TableBody>123</TableBody>
+        <TableBody>
+          <button
+            type="button"
+            class="block"
+            data-hs-overlay="#hs-ai-invoice-modal"
           >
-                  <span
-                      class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500"
-                  >
-                      Enable
-                  </span>
-          </button></TableBody>
-           <TableBody>123</TableBody>
-           <TableBody>123</TableBody>
-           <TableBody><div class="group inline-flex items-center divide-x divide-gray-300 border border-gray-300 bg-white shadow-sm rounded-lg transition-all dark:divide-gray-700 dark:bg-slate-700 dark:border-gray-700">
+            <span
+              class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500"
+            >
+              Enable
+            </span>
+          </button></TableBody
+        >
+        <TableBody>123</TableBody>
+        <TableBody>123</TableBody>
+        <TableBody
+          ><div
+            class="group inline-flex items-center divide-x divide-gray-300 border border-gray-300 bg-white shadow-sm rounded-lg transition-all dark:divide-gray-700 dark:bg-slate-700 dark:border-gray-700"
+          >
             <div class="hs-tooltip inline-block">
-              <a class="hs-tooltip-toggle py-1.5 px-2 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-s-md bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
-                <Download/>
-                <span class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity inline-block absolute invisible z-10 py-1 px-2 bg-gray-900 text-xs font-medium text-white rounded shadow-sm dark:bg-slate-700" role="tooltip">
+              <a
+                class="hs-tooltip-toggle py-1.5 px-2 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-s-md bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                href="#"
+              >
+                <Download />
+                <span
+                  class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity inline-block absolute invisible z-10 py-1 px-2 bg-gray-900 text-xs font-medium text-white rounded shadow-sm dark:bg-slate-700"
+                  role="tooltip"
+                >
                   Download PDF
                 </span>
               </a>
             </div>
-            <Dropdown over="hs-edit-tickets-modal" del="hs-del-tickets-modal"><MoreHorizontal/></Dropdown>
-          </div></TableBody>
+            <Dropdown over="hs-edit-tickets-modal" del="hs-del-tickets-modal"
+              ><MoreHorizontal /></Dropdown
+            >
+          </div></TableBody
+        >
       </tr>
-
-    
     </tbody>
-</table>
+  </table>
 </Tables>
 <footer class="flex justify-end gap-4 m-11">
   <Button style="soft" color="gray">Cancel</Button>
