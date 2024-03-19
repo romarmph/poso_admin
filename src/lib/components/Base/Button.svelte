@@ -3,6 +3,7 @@
   export let size: "small" | "default" | "large" = "default";
   export let color: "blue" | "teal" | "green" | "red" | "yellow" | "gray" =
     "blue";
+  export let fullWidth: boolean = false;
 
   let buttonSize = {
     small: "py-2 px-3",
@@ -10,7 +11,7 @@
     large: "py-4 px-5",
   };
 
-  const base = `${buttonSize[size]} inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600`;
+  const base = `${buttonSize[size]} ${fullWidth ? "w-full" : ""} justify-center inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600`;
 </script>
 
 {#if style === "solid"}

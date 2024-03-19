@@ -4,6 +4,8 @@
   import TextInput from "$lib/components/Forms/TextInput.svelte";
   import Label from "$lib/components/Forms/Label.svelte";
   import { enhance } from "$app/forms";
+  import Alerts from "$lib/components/Base/Alerts.svelte";
+  export let form;
 </script>
 
 <main class="h-screen" style="background-color: #F3F6F4;">
@@ -26,11 +28,15 @@
           </header>
 
           <form method="POST" use:enhance>
+            {#if form && !form?.success}
+              <Alerts type="danger">
+                {form?.message}
+              </Alerts>
+            {/if}
             <div
-              class="block mb-2 text-xs font-medium text-gray-500 dark:text-white"
+              class="block my-2 text-xs font-medium text-gray-500 dark:text-white"
             >
               <Label id="email">Employee ID</Label>
-
               <div class="relative">
                 <TextInput
                   id="email"
@@ -40,9 +46,6 @@
                   type="email"
                 />
               </div>
-              <p class="hidden mt-2 text-xs text-red-600" id="employeeId-error">
-                Please include your employee ID so we can get back to you
-              </p>
             </div>
 
             <div>
@@ -61,13 +64,10 @@
                     required
                   />
                 </div>
-                <p class="hidden mt-2 text-xs text-red-600" id="password-error">
-                  8+ characters required
-                </p>
               </div>
 
-              <div class="text-center mt-4">
-                <Button type="submit">Log In</Button>
+              <div class="w-full my-4">
+                <Button type="submit" fullWidth={true}>Log In</Button>
               </div>
             </div>
           </form>
