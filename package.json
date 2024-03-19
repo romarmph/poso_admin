@@ -26,6 +26,8 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@supabase/ssr": "^0.1.0",
+		"@supabase/supabase-js": "^2.39.8",
 		"lucide-svelte": "^0.331.0",
 		"preline": "^2.0.3"
 	}
