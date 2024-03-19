@@ -1,15 +1,14 @@
 <script>
+
 import Card from "$lib/components/Base/Card.svelte";
 import {TrendingDown, TrendingUp, Users, Ticket, TicketCheck, TicketX } from "lucide-svelte";
 
+
 </script>
 
-
 <header style="display: flex; align-items: center;">
-    <h1 style="font-weight: bold;">Payment</h1>
-   
-  </header>
-
+  <h1 style="font-weight: bold;">Payment</h1>
+</header>
 
 <!-- Card Section -->
 <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
@@ -43,5 +42,8 @@ import {TrendingDown, TrendingUp, Users, Ticket, TicketCheck, TicketX } from "lu
       <!-- End Card -->
     </div>
     <!-- End Grid -->
+
   </div>
-  <!-- End Card Section -->
+  <!-- End Grid -->
+</div>
+<!-- End Card Section -->

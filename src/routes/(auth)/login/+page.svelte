@@ -3,6 +3,7 @@
   import Button from "$lib/components/Base/Button.svelte";
   import TextInput from "$lib/components/Forms/TextInput.svelte";
   import Label from "$lib/components/Forms/Label.svelte";
+  import { enhance } from "$app/forms";
 </script>
 
 <main class="h-screen" style="background-color: #F3F6F4;">
@@ -24,38 +25,20 @@
             LOGIN
           </header>
 
-          <!-- Form -->
-          <form>
-            <!-- Form Group -->
+          <form method="POST" use:enhance>
             <div
               class="block mb-2 text-xs font-medium text-gray-500 dark:text-white"
             >
-              <Label id="employeeId">Employee ID</Label>
+              <Label id="email">Employee ID</Label>
 
               <div class="relative">
                 <TextInput
-                  id="input-label"
+                  id="email"
                   class="block w-full px-4 py-3 text-sm border-gray-200 rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
                   placeholder="Type your employee ID here"
                   required
+                  type="email"
                 />
-
-                <div
-                  class="absolute inset-y-0 hidden pointer-events-none end-0 pe-3"
-                >
-                  <svg
-                    class="text-red-500 size-5"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    viewBox="0 0 16 16"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"
-                    />
-                  </svg>
-                </div>
               </div>
               <p class="hidden mt-2 text-xs text-red-600" id="employeeId-error">
                 Please include your employee ID so we can get back to you
@@ -77,37 +60,17 @@
                     placeholder="Type your password here"
                     required
                   />
-
-                  <div
-                    class="absolute inset-y-0 hidden pointer-events-none end-0 pe-3"
-                  >
-                    <svg
-                      class="text-red-500 size-5"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      viewBox="0 0 16 16"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"
-                      />
-                    </svg>
-                  </div>
                 </div>
                 <p class="hidden mt-2 text-xs text-red-600" id="password-error">
                   8+ characters required
                 </p>
               </div>
-              <!-- End Form Group -->
 
-              <!-- Log in Button -->
               <div class="text-center mt-4">
                 <Button type="submit">Log In</Button>
               </div>
             </div>
           </form>
-          <!-- End Form -->
         </div>
       </div>
     </div>
