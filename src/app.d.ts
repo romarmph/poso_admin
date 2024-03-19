@@ -22,4 +22,6 @@ declare global {
 	}
 }
 
+declare global
+
 export {};
