@@ -1,6 +1,6 @@
 <script>
 import Card from "$lib/components/Base/Card.svelte";
-import {TrendingDown, TrendingUp, Users } from "lucide-svelte";
+import {TrendingDown, TrendingUp, Users, Ticket, TicketCheck, TicketX } from "lucide-svelte";
 
 </script>
 
@@ -23,7 +23,7 @@ import {TrendingDown, TrendingUp, Users } from "lucide-svelte";
   
       <!-- Card -->
       <Card name="Total Tickets">
-        <TrendingUp/>
+        <TrendingDown/>
      </Card> 
 
       <!-- End Card -->
