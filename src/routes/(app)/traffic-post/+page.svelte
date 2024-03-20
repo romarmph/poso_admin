@@ -1,22 +1,15 @@
 <script>
-    import TextInput from "$lib/components/Forms/TextInput.svelte";
-    import Label from "$lib/components/Forms/Label.svelte";
     import {
         Modal,
         ModalBody,
         ModalFooter,
         ModalHeader,
     } from "$lib/components/Overlays/Modal/Modal";
-    import Tables from "$lib/components/Table/tables.svelte";
-    import TableHead from "$lib/components/Table/TableHead.svelte";
-    import Dropdown from "$lib/components/Base/Dropdown.svelte";
-    import TableBody from "$lib/components/Table/TableBody.svelte";
-    import { Button } from "$lib/Components";
+
+    import { Button, TextInput,Label,Tables,TableBody,TableHead,Dropdown } from "$lib/Components";
     import {
         MoreHorizontal,
         Download,
-        ListFilter,
-        Search,
     } from "lucide-svelte";
 </script>
 

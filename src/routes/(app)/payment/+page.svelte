@@ -1,13 +1,6 @@
 <script>
-  import Card from "$lib/components/Base/Card.svelte";
-  import {
-    TrendingDown,
-    TrendingUp,
-    Users,
-    Ticket,
-    TicketCheck,
-    TicketX,
-  } from "lucide-svelte";
+  import { Card } from "$lib/Components";
+  import { TrendingDown } from "lucide-svelte";
 </script>
 
 <header style="display: flex; align-items: center;">
