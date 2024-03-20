@@ -1,21 +1,10 @@
 <script lang="ts">
-  import {
-    Modal,
-    ModalBody,
-    ModalFooter,
-    ModalHeader,
-  } from "$lib/components/Overlays/Modal/Modal";
 
-  import TicketStatus from "$lib/components/Base/TicketStatus.svelte";
 
-  import { Button } from "$lib/Components";
-  import Card from "$lib/components/Base/Card.svelte";
-  import { Ticket, TrendingDown, TrendingUp, Users } from "lucide-svelte";
-  import { MoreHorizontal, Download, ListFilter, Search } from "lucide-svelte";
-  import Tables from "$lib/components/Table/tables.svelte";
-  import TableHead from "$lib/components/Table/TableHead.svelte";
-  import Dropdown from "$lib/components/Base/Dropdown.svelte";
-  import TableBody from "$lib/components/Table/TableBody.svelte";
+
+  import {  Card, TableBody, TableHead, Tables, Dropdown} from "$lib/Components";
+  import {  TrendingDown, TrendingUp,MoreHorizontal, Download, } from "lucide-svelte";
+
 </script>
 
 <h1 class="text-2xl font-bold text-gray-700">Dashboard</h1>

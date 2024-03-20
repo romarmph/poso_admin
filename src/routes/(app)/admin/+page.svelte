@@ -7,17 +7,12 @@
         ModalFooter,
         ModalHeader,
     } from "$lib/components/Overlays/Modal/Modal";
-    import Tables from "$lib/components/Table/tables.svelte";
-    import TableHead from "$lib/components/Table/TableHead.svelte";
-    import Dropdown from "$lib/components/Base/Dropdown.svelte";
-    import TableBody from "$lib/components/Table/TableBody.svelte";
-    import { Button } from "$lib/Components";
-    import PasswordInput from "$lib/components/Forms/PasswordInput.svelte";
+  
+    import { Button, Tables, TableBody, TableHead, Dropdown, PasswordInput} from "$lib/Components";
     import {
         MoreHorizontal,
         Download,
-        ListFilter,
-        Search,
+
     } from "lucide-svelte";
 </script>
 

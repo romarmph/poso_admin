@@ -1,10 +1,8 @@
 <script lang="ts">
-  import Dropdown from "../Base/Dropdown.svelte";
   import FilterDropdown from "../Base/FilterDropdown.svelte";
   import ExportDropdown from "../Base/ExportDropdown.svelte";
   import TextInput from "../Forms/TextInput.svelte";
-  import TableHead from "./TableHead.svelte";
-  import TableBody from "./TableBody.svelte";
+
   import { MoreHorizontal, Download, ListFilter, Search } from "lucide-svelte";
 </script>
 

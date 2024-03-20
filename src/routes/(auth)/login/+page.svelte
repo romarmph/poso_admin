@@ -1,8 +1,7 @@
 <script>
   import primary from "$lib/assets/images/brand/1x/primary.png";
-  import Button from "$lib/components/Base/Button.svelte";
-  import TextInput from "$lib/components/Forms/TextInput.svelte";
-  import Label from "$lib/components/Forms/Label.svelte";
+
+  import { Button, TextInput, Label } from "$lib/Components";
   import { enhance } from "$app/forms";
 </script>
 

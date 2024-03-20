@@ -1,7 +1,7 @@
 <script>
-  import Header from "$lib/components/Header/Header.svelte";
   import Sidebar from "$lib/components/Sidebar/Sidebar.svelte";
   import { AlignJustify } from "lucide-svelte";
+  import { Header } from "$lib/Components";
 </script>
 
 <Header />

@@ -1,5 +1,5 @@
 <script>
-  import { ArrowLeft, Plus } from "lucide-svelte";
+  import { ArrowLeft} from "lucide-svelte";
   import {
     Modal,
     ModalHeader,
@@ -14,15 +14,15 @@
     Label,
     Grid,
     GridCol,
-    IconButton,
+    DatePicker,
+    ListTile2,
+    Tables,
+    TableHead,
+    TableBody,
+    Dropdown
   } from "$lib/Components";
-  import ListTile2 from "$lib/components/Base/ListTile2.svelte";
-  import Tables from "$lib/components/Table/tables.svelte";
-  import TableHead from "$lib/components/Table/TableHead.svelte";
-  import Dropdown from "$lib/components/Base/Dropdown.svelte";
-  import TableBody from "$lib/components/Table/TableBody.svelte";
-  import { MoreHorizontal, Download, ListFilter, Search } from "lucide-svelte";
-  import DatePicker from "$lib/components/Forms/DatePicker.svelte";
+
+  import { MoreHorizontal, Download,} from "lucide-svelte";
 </script>
 
 <header style="display: flex; align-items: center;">
