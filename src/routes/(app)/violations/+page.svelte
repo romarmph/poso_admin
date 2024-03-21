@@ -16,6 +16,15 @@
     Label,
   } from "$lib/Components";
   import { MoreHorizontal, Download } from "lucide-svelte";
+
+  import { dataListStore } from "$lib/stores/dataListStore";
+  import { supabaseClient } from "$lib/Server";
+
+  const data = dataListStore(supabaseClient, "violations");
+
+  data.subscribe((data) => {
+    console.log(data);
+  });
 </script>
 
 <header style="display: flex; align-items: center;">
