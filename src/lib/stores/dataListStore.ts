@@ -47,25 +47,36 @@ export function dataListStore<T>(
           table: table,
         },
         (payload) => {
+          let updatedData = [];
+
+          if (payload.eventType === "INSERT") {
+            updatedData = [...initialData, payload.new as T];
+          }
+
           if (payload.eventType === "UPDATE") {
-            const oldRows = initialData.filter(
+            const filteredRows = initialData.filter(
               (row) => row.id !== payload.new.id
             );
-
-            const newRows = [...oldRows, payload.new as T];
-
-            newRows.sort((a, b) => {
-              if (a.id > b.id) {
-                return 1;
-              } else if (a.id < b.id) {
-                return -1;
-              } else {
-                return 0;
-              }
-            });
-
-            set(newRows);
+            updatedData = [...filteredRows, payload.new as T];
           }
+
+          if (payload.eventType === "DELETE") {
+            updatedData = initialData?.filter(
+              (row) => row.id !== payload.new.id
+            );
+          }
+
+          updatedData.sort((a, b) => {
+            if (a.id > b.id) {
+              return 1;
+            } else if (a.id < b.id) {
+              return -1;
+            } else {
+              return 0;
+            }
+          });
+
+          set(updatedData);
         }
       )
       .subscribe();

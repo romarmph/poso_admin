@@ -1,7 +1,8 @@
-import type { PageLoad } from "./$types";
-import { supabaseClient as supabase } from "$lib/Server";
+import type { PageServerLoad } from "./$types";
 
-export const load: PageLoad = async () => {
+export const load: PageServerLoad = async ({
+  locals: { supabase, getSession },
+}) => {
   const violations = await supabase
     .from("violations")
     .select()
