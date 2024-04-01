@@ -1,6 +1,7 @@
 import {
   PUBLIC_SUPABASE_URL,
   PUBLIC_SUPABASE_ANON_KEY,
+  PUBLIC_SUPABASE_SERVICE_ROLE_KEY,
 } from "$env/static/public";
 import { createServerClient } from "@supabase/ssr";
 import { type Handle, redirect, error, fail } from "@sveltejs/kit";
@@ -10,7 +11,7 @@ import { routes } from "$lib/constants/protected_routes";
 const supabase: Handle = async ({ event, resolve }) => {
   event.locals.supabase = createServerClient(
     PUBLIC_SUPABASE_URL,
-    PUBLIC_SUPABASE_ANON_KEY,
+    PUBLIC_SUPABASE_SERVICE_ROLE_KEY,
     {
       cookies: {
         get: (key) => event.cookies.get(key),
