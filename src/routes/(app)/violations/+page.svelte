@@ -18,7 +18,6 @@
     <Button data-hs-overlay="#hs-add-violation-modal">Add Violation</Button>
   </div>
 </header>
-<!--Table -->
 
 <DataList table="violations" let:data initData={data.violations ?? []}>
   {#each data as violations}
@@ -28,7 +27,6 @@
   {/each}
 </DataList>
 
-<!-- Add Traffic Post modal -->
 <Modal modalId="hs-add-violation-modal">
   <ModalHeader>Add Violation</ModalHeader>
 
@@ -52,5 +50,3 @@
     <Button>Save</Button>
   </ModalFooter>
 </Modal>
-
-<!-- Update Traffic Post modal -->
