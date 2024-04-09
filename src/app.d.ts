@@ -31,6 +31,22 @@ declare global {
     interface Data {
       id: string;
     }
+
+    interface Violation extends Data {
+      name: string;
+      fine: {
+        big: {
+          [key: string]: any,
+        },
+        small: {
+          [key: string]: any,
+        }
+      };
+      enabled: boolean;
+      created_at: string;
+      updated_at: string;
+      deleted_at: string;
+    }
   }
 }
 

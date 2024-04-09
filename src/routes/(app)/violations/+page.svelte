@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     Modal,
     ModalBody,
@@ -8,7 +8,47 @@
 
   import { Button, TableHead, Tables, TextInput, Label } from "$lib/Components";
   import DataList from "$lib/components/Supabase/DataList.svelte";
+  import type { ColumnDef } from "@tanstack/svelte-table";
+  import TanTable from "$lib/components/Table/TanTable.svelte";
 
+  const columns: ColumnDef<Types.Violation>[] = [
+    {
+      accessorKey: "name",
+      cell: (info) => info.getValue(),
+      footer: (info) => info.column.id,
+      header: "Name",
+    },
+    {
+      accessorKey: "fine",
+      cell: (info) => info.getValue(),
+      footer: (info) => info.column.id,
+      header: "Fine",
+    },
+    {
+      accessorKey: "enabled",
+      cell: (info) => info.getValue(),
+      footer: (info) => info.column.id,
+      header: "Status",
+    },
+    {
+      accessorKey: "created_at",
+      cell: (info) => info.getValue(),
+      footer: (info) => info.column.id,
+      header: "Created At",
+    },
+    {
+      accessorKey: "updated_at",
+      cell: (info) => info.getValue(),
+      footer: (info) => info.column.id,
+      header: "Updated At",
+    },
+    {
+      accessorKey: "deleted_at",
+      cell: (info) => info.getValue(),
+      footer: (info) => info.column.id,
+      header: "Deleted At",
+    },
+  ];
   export let data;
 </script>
 
@@ -20,11 +60,7 @@
 </header>
 
 <DataList table="violations" let:data initData={data.violations ?? []}>
-  {#each data as violations}
-    <tr>
-      <td>{violations.id}</td>
-    </tr>
-  {/each}
+  <TanTable {data} {columns} />
 </DataList>
 
 <Modal modalId="hs-add-violation-modal">
