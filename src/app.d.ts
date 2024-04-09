@@ -15,12 +15,23 @@ declare global {
       session: Session | null;
     }
 
-    // interface Error {}
+    interface Eq {
+      operator: string;
+      value: any;
+    }    // interface Error {}
     // interface Locals {}
     // interface PageData {}
     // interface PageState {}
     // interface Platform {}
   }
+
+
+
+  namespace Types {
+    interface Data {
+      id: string;
+    }
+  }
 }
 
-export {};
+export { };

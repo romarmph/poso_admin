@@ -1,82 +1,88 @@
-// @ts-nocheck
-
-import { RealtimeChannel, type SupabaseClient } from "@supabase/supabase-js";
-import { writable } from "svelte/store";
+import { RealtimeChannel, type SupabaseClient } from '@supabase/supabase-js';
+import { writable } from 'svelte/store';
 
 interface DataListStore<T> {
   subscribe: (cb: (value: T | []) => void) => void | (() => void);
   table: string;
 }
 
-export function dataListStore<T>(
+/**
+ * 
+ * @param supabase SupabaseClient instance
+ * @param table name to listen realtime update
+ * @param initialData to start with on SSR
+ * @param uid of the related user
+ * @param fk_name foreign key column, defaults to "user_id"
+ * @returns a store with realtime updates on the table
+ */
+export function dataListStore<T extends Types.Data>(
   supabase: SupabaseClient,
   table: string,
-  initialData: T[] | null = null,
-  page: number = 1,
-  limit: number = 10
+  initialData: T[] = [],
+  uid: string | null = null,
+  fk_name: string = 'user_id'
 ): DataListStore<T[]> {
   let channel: RealtimeChannel;
 
-  // Fallback for SSR
   if (!globalThis.window) {
-    const { subscribe } = writable(initialData ?? []);
+    const { subscribe } = writable(initialData);
     return {
       subscribe,
-      table,
+      table
     };
   }
 
-  // Fallback for missing SDK
   if (!supabase) {
-    console.warn("Supabase is not initialized.");
+    console.warn('Supabase is not initialized.');
     const { subscribe } = writable([]);
     return {
       subscribe,
-      table,
+      table
     };
   }
 
-  const { subscribe } = writable(initialData, (set) => {
+  const { subscribe } = writable(initialData, (set, update) => {
+
+    // set the initial data
+    set(initialData);
+
     channel = supabase
       .channel(`${table}-changes`)
       .on(
-        "postgres_changes",
+        'postgres_changes',
         {
-          event: "*",
-          schema: "public",
-          table: table,
+          event: '*',
+          schema: 'public',
+          table: table
         },
         (payload) => {
-          let updatedData = [];
-
-          if (payload.eventType === "INSERT") {
-            updatedData = [...initialData, payload.new as T];
-          }
-
-          if (payload.eventType === "UPDATE") {
-            const filteredRows = initialData.filter(
-              (row) => row.id !== payload.new.id
-            );
-            updatedData = [...filteredRows, payload.new as T];
-          }
-
-          if (payload.eventType === "DELETE") {
-            updatedData = initialData?.filter(
-              (row) => row.id !== payload.new.id
-            );
-          }
-
-          updatedData.sort((a, b) => {
-            if (a.id > b.id) {
-              return 1;
-            } else if (a.id < b.id) {
-              return -1;
-            } else {
-              return 0;
+          if (payload.eventType === 'INSERT') {
+            if (payload.new[fk_name] !== uid && uid) {
+              return;
             }
-          });
 
-          set(updatedData);
+            update((current) => {
+              return [...current, payload.new as T];
+            });
+          }
+
+          if (payload.eventType === 'UPDATE') {
+            if (payload.new[fk_name] !== uid && uid) {
+              return;
+            }
+
+            update((current) => {
+              const filteredRows = current.filter((row) => row.id !== payload.new.id);
+              return [...filteredRows, payload.new as T];
+            });
+          }
+
+          if (payload.eventType === 'DELETE') {
+            update((current) => {
+              const filteredRows = current.filter((row) => row.id !== payload.old.id);
+              return [...filteredRows];
+            });
+          }
         }
       )
       .subscribe();
@@ -86,6 +92,6 @@ export function dataListStore<T>(
 
   return {
     subscribe,
-    table,
+    table
   };
 }
