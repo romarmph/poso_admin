@@ -19,6 +19,7 @@
   import { rankItem } from "@tanstack/match-sorter-utils";
   import Pager from "./Pager.svelte";
   import TextInput from "../Forms/TextInput.svelte";
+  import { ChevronDown, ChevronUp } from "lucide-svelte";
 
   export let data: T[];
   export let columns: ColumnDef<T>[];
@@ -106,11 +107,11 @@
                   {#each headerGroup.headers as header}
                     <th
                       scope="col"
-                      class="text-xs text-left py-4 px-4 font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200 text-nowrap"
+                      class="text-xs text-left font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200 text-nowrap"
                     >
                       {#if !header.isPlaceholder}
                         <button
-                          class="w-full text-left"
+                          class="p-4 w-full text-left flex gap-6 hover:bg-gray-100 active:bg-gray-200"
                           class:cursor-pointer={header.column.getCanSort()}
                           class:select-none={header.column.getCanSort()}
                           on:click={header.column.getToggleSortingHandler()}
@@ -122,11 +123,11 @@
                             )}
                           />
                           {#if header.column.getIsSorted().toString() === "asc"}
-                            🔼
+                            <ChevronUp size={16} />
                           {:else if header.column
                             .getIsSorted()
                             .toString() === "desc"}
-                            🔽
+                            <ChevronDown size={16} />
                           {/if}
                         </button>
                       {/if}
