@@ -4,6 +4,13 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { User } from "@supabase/supabase-js";
 
 // for information about these interfaces
+
+declare global {
+  interface Window {
+    HSStaticMethods: IStaticMethods;
+  }
+}
+
 declare global {
   namespace App {
     interface Locals {

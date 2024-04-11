@@ -59,6 +59,8 @@
     },
   ];
   export let data;
+
+  let filter = "";
 </script>
 
 <header style="display: flex; align-items: center;">
@@ -69,7 +71,18 @@
 </header>
 
 <DataList table="violations" let:data initData={data.violations ?? []}>
-  <TanTable {data} {columns} />
+  <TanTable {data} {columns} {filter}>
+    <TextInput
+      id="search"
+      bind:value={filter}
+      placeholder="Searach Violation"
+      slot="header"
+    />
+
+    <!-- Pagination -->
+
+    <!-- End Pagination -->
+  </TanTable>
 </DataList>
 
 <Modal modalId="hs-add-violation-modal">
