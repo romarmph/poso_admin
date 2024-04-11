@@ -6,10 +6,12 @@
     ModalHeader,
   } from "$lib/components/Overlays/Modal/Modal";
 
-  import { Button, TableHead, Tables, TextInput, Label } from "$lib/Components";
+  import { Button, TextInput, Label } from "$lib/Components";
   import DataList from "$lib/components/Supabase/DataList.svelte";
-  import type { ColumnDef } from "@tanstack/svelte-table";
+  import { flexRender, type ColumnDef } from "@tanstack/svelte-table";
   import TanTable from "$lib/components/Table/TanTable.svelte";
+  import EnabledStatus from "$lib/components/Base/EnabledStatus.svelte";
+  import ViolationFines from "$lib/components/Customs/ViolationFines.svelte";
 
   const columns: ColumnDef<Types.Violation>[] = [
     {
@@ -20,13 +22,13 @@
     },
     {
       accessorKey: "fine",
-      cell: (info) => info.getValue(),
+      cell: (info) => flexRender(ViolationFines, { fine: info.getValue() }),
       footer: (info) => info.column.id,
       header: "Fine",
     },
     {
       accessorKey: "enabled",
-      cell: (info) => info.getValue(),
+      cell: (info) => flexRender(EnabledStatus, { enabled: info.getValue() }),
       footer: (info) => info.column.id,
       header: "Status",
     },
@@ -35,18 +37,25 @@
       cell: (info) => info.getValue(),
       footer: (info) => info.column.id,
       header: "Created At",
+      accessorFn: (row) => new Date(row.created_at).toDateString(),
     },
     {
       accessorKey: "updated_at",
       cell: (info) => info.getValue(),
       footer: (info) => info.column.id,
       header: "Updated At",
+      accessorFn: (row) => new Date(row.updated_at).toDateString(),
     },
     {
       accessorKey: "deleted_at",
       cell: (info) => info.getValue(),
       footer: (info) => info.column.id,
       header: "Deleted At",
+      accessorFn: (row) => {
+        if (row.deleted_at) {
+          return new Date(row.deleted_at).toDateString();
+        }
+      },
     },
   ];
   export let data;
