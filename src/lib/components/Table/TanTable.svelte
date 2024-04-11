@@ -7,11 +7,14 @@
     getCoreRowModel,
     getFilteredRowModel,
     getPaginationRowModel,
+    getSortedRowModel,
   } from "@tanstack/svelte-table";
   import type {
     ColumnDef,
     TableOptions,
     FilterFn,
+    SortingState,
+    OnChangeFn,
   } from "@tanstack/svelte-table";
   import { rankItem } from "@tanstack/match-sorter-utils";
   import Pager from "./Pager.svelte";
@@ -33,17 +36,40 @@
     };
   });
 
+  let sorting: SortingState = [];
+
+  const setSorting: OnChangeFn<SortingState> = (updater) => {
+    if (updater instanceof Function) {
+      sorting = updater(sorting);
+    } else {
+      sorting = updater;
+    }
+    options.update((old) => ({
+      ...old,
+      state: {
+        ...old.state,
+        sorting,
+      },
+    }));
+  };
+
   const options = writable<TableOptions<T>>({
     data: data,
     columns: columns,
     filterFns: {
       fuzzy: fuzzyFilter,
     },
+    state: {
+      sorting,
+    },
+    onSortingChange: setSorting,
     enableMultiRowSelection: true,
     getPaginationRowModel: getPaginationRowModel(),
     getCoreRowModel: getCoreRowModel(),
     globalFilterFn: fuzzyFilter,
     getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    debugTable: true,
   });
 
   const rerender = (updated: T[]) => {
@@ -83,12 +109,26 @@
                       class="text-xs text-left py-4 px-4 font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200 text-nowrap"
                     >
                       {#if !header.isPlaceholder}
-                        <svelte:component
-                          this={flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
-                        />
+                        <button
+                          class="w-full text-left"
+                          class:cursor-pointer={header.column.getCanSort()}
+                          class:select-none={header.column.getCanSort()}
+                          on:click={header.column.getToggleSortingHandler()}
+                        >
+                          <svelte:component
+                            this={flexRender(
+                              header.column.columnDef.header,
+                              header.getContext(),
+                            )}
+                          />
+                          {#if header.column.getIsSorted().toString() === "asc"}
+                            🔼
+                          {:else if header.column
+                            .getIsSorted()
+                            .toString() === "desc"}
+                            🔽
+                          {/if}
+                        </button>
                       {/if}
                     </th>
                   {/each}
