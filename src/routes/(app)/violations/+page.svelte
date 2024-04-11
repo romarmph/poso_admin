@@ -71,18 +71,7 @@
 </header>
 
 <DataList table="violations" let:data initData={data.violations ?? []}>
-  <TanTable {data} {columns} {filter}>
-    <TextInput
-      id="search"
-      bind:value={filter}
-      placeholder="Searach Violation"
-      slot="header"
-    />
-
-    <!-- Pagination -->
-
-    <!-- End Pagination -->
-  </TanTable>
+  <TanTable {data} {columns}></TanTable>
 </DataList>
 
 <Modal modalId="hs-add-violation-modal">

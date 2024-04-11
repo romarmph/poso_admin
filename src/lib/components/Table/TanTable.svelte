@@ -15,8 +15,8 @@
   } from "@tanstack/svelte-table";
   import { rankItem } from "@tanstack/match-sorter-utils";
   import Pager from "./Pager.svelte";
+  import TextInput from "../Forms/TextInput.svelte";
 
-  export let filter = "";
   export let data: T[];
   export let columns: ColumnDef<T>[];
 
@@ -53,9 +53,10 @@
     }));
   };
 
+  let filter = "";
+
   $: rerender(data);
   $: $table.setGlobalFilter(filter);
-  $: console.log(filter);
 
   const table = createSvelteTable(options);
 </script>
@@ -68,7 +69,7 @@
           class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden dark:bg-slate-900 dark:border-gray-700"
         >
           <div class="flex justify-between p-4">
-            <slot name="header" />
+            <TextInput id="search" placeholder="Search" bind:value={filter} />
           </div>
           <table
             class="min-w-full divide-y divide-gray-200 dark:divide-gray-700"
@@ -79,7 +80,7 @@
                   {#each headerGroup.headers as header}
                     <th
                       scope="col"
-                      class="text-xs py-4 px-4 font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200 text-nowrap"
+                      class="text-xs text-left py-4 px-4 font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200 text-nowrap"
                     >
                       {#if !header.isPlaceholder}
                         <svelte:component
