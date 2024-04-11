@@ -8,10 +8,23 @@
 
   import { Button, TextInput, Label } from "$lib/Components";
   import DataList from "$lib/components/Supabase/DataList.svelte";
-  import { flexRender, type ColumnDef } from "@tanstack/svelte-table";
+  import {
+    flexRender,
+    type ColumnDef,
+    createColumnHelper,
+  } from "@tanstack/svelte-table";
   import TanTable from "$lib/components/Table/TanTable.svelte";
   import EnabledStatus from "$lib/components/Base/EnabledStatus.svelte";
   import ViolationFines from "$lib/components/Customs/ViolationFines.svelte";
+
+  const helper = createColumnHelper<Types.Violation>();
+
+  const defaultColumns = [
+    helper.accessor("name", {
+      cell: (info) => info.getValue(),
+      header: "Name",
+    }),
+  ];
 
   const columns: ColumnDef<Types.Violation>[] = [
     {
