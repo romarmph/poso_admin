@@ -1,10 +1,17 @@
 <script lang="ts">
-
-
-
-  import {  Card, TableBody, TableHead, Tables, Dropdown} from "$lib/Components";
-  import {  TrendingDown, TrendingUp,MoreHorizontal, Download, } from "lucide-svelte";
-
+  import {
+    Card,
+    TableBody,
+    TableHead,
+    Tables,
+    Dropdown,
+  } from "$lib/Components";
+  import {
+    TrendingDown,
+    TrendingUp,
+    MoreHorizontal,
+    Download,
+  } from "lucide-svelte";
 </script>
 
 <h1 class="text-2xl font-bold text-gray-700">Dashboard</h1>
@@ -60,7 +67,10 @@
         <TableHead name="Amount Fine" classes="px-6 py-3 text-start" />
         <TableHead name="Status" classes="px-6 py-3 text-start" />
         <TableHead name="Created By:" classes="px-6 py-3 text-start" />
-        <TableHead name="Created At:" classes="px-6 py-3 text-start" />
+        <TableHead
+          name="Created At:"
+          classes="px-6 py-3 text-start text-red-500"
+        />
       </tr>
     </thead>
     <tbody class="divide-y divide-gray-200 dark:divide-gray-700">

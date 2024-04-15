@@ -4,7 +4,6 @@
   import SupabaseApp from "$lib/components/Supabase/SupabaseApp.svelte";
 
   afterNavigate(() => {
-    // @ts-ignore
     window.HSStaticMethods.autoInit();
   });
 

@@ -4,6 +4,13 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { User } from "@supabase/supabase-js";
 
 // for information about these interfaces
+
+declare global {
+  interface Window {
+    HSStaticMethods: IStaticMethods;
+  }
+}
+
 declare global {
   namespace App {
     interface Locals {
@@ -15,12 +22,39 @@ declare global {
       session: Session | null;
     }
 
-    // interface Error {}
+    interface Eq {
+      operator: string;
+      value: any;
+    }    // interface Error {}
     // interface Locals {}
     // interface PageData {}
     // interface PageState {}
     // interface Platform {}
   }
+
+
+
+  namespace Types {
+    interface Data {
+      id: string;
+    }
+
+    interface Violation extends Data {
+      name: string;
+      fine: {
+        big: {
+          [key: string]: any,
+        },
+        small: {
+          [key: string]: any,
+        }
+      };
+      enabled: boolean;
+      created_at: string;
+      updated_at: string;
+      deleted_at: string;
+    }
+  }
 }
 
-export {};
+export { };

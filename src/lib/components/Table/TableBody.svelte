@@ -4,7 +4,7 @@
 </script>
 
 <td class="size-px whitespace-nowrap">
-  <div class={classed}>
+  <div class="px-6 py-2">
     <label for="hs-at-with-checkboxes-1" class="flex">
       <slot />
       <span class="sr-only">{Name}</span>
