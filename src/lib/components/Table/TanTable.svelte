@@ -17,7 +17,7 @@
     OnChangeFn,
   } from "@tanstack/svelte-table";
   import { rankItem } from "@tanstack/match-sorter-utils";
-  import Pager from "./Pager.svelte";
+  import Pager from "./Partials/Pager.svelte";
   import TextInput from "../Forms/TextInput.svelte";
   import { ChevronDown, ChevronUp } from "lucide-svelte";
 
