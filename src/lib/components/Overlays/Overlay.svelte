@@ -2,6 +2,7 @@
 	import { X } from "lucide-svelte";
 	import { overlayStore } from "$lib/stores/overlayStore";
 	import { fade, slide } from "svelte/transition";
+	import { Button } from "$lib/Components";
 
 	const { close } = overlayStore;
 	function handleKeydown(event: { key: any }) {
@@ -12,11 +13,12 @@
 </script>
 
 <svelte:window on:keydown={handleKeydown} />
+<svelte:body style="overflow: hidden;" />
 
 {#if $overlayStore}
 	<div
 		transition:slide={{ duration: 250, axis: "x" }}
-		class={`translate-x-0 open fixed top-0 end-0 transition-all duration-300 transform h-full  z-[80] bg-white border-s dark:bg-gray-800 dark:border-gray-700`}
+		class={`translate-x-0 open fixed top-0 end-0 transition-all duration-300 transform h-full flex flex-col z-[80] bg-white border-s dark:bg-gray-800 dark:border-gray-700`}
 		tabindex="-1"
 	>
 		<div
@@ -34,11 +36,15 @@
 				<X />
 			</button>
 		</div>
-		<div class="p-4">
+		<div class="p-4 flex-1">
 			<svelte:component
 				this={$overlayStore.component}
 				{...$overlayStore.props}
 			/>
+		</div>
+		<div class="flex gap-4 px-4 pb-4 justify-end">
+			<Button style="outline" on:click={close}>Close</Button>
+			<Button on:click={() => console.log("Saved")}>Save</Button>
 		</div>
 	</div>
 	<div
