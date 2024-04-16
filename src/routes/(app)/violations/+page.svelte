@@ -1,12 +1,14 @@
 <script lang="ts">
-  import { Button, TextInput, Label } from "$lib/Components";
+  import { Button, TextInput, Label, IconButton } from "$lib/Components";
   import DataList from "$lib/components/Supabase/DataList.svelte";
   import { flexRender, type ColumnDef } from "@tanstack/svelte-table";
   import TanTable from "$lib/components/Table/TanTable.svelte";
   import EnabledStatus from "$lib/components/Base/EnabledStatus.svelte";
   import ViolationFines from "$lib/components/Customs/ViolationFines.svelte";
   import RowActions from "$lib/components/Table/Partials/RowActions.svelte";
-
+  import { overlayStore } from "$lib/stores/overlayStore";
+  import ViewViolation from "$lib/components/Overlays/Offcanvas/ViewViolation.svelte";
+  const { open } = overlayStore;
   const columns: ColumnDef<Types.Violation>[] = [
     {
       accessorKey: "name",
@@ -55,16 +57,16 @@
       accessorKey: "id",
       cell: (info) =>
         flexRender(RowActions, {
-          id: info.getValue(),
-          fireEdit: () => {
-            console.log("Edit");
-          },
+          fireEdit: () => {},
           fireView: () => {
-            console.log("View");
+            console.log(info.row.original);
+            open({
+              title: "View Violation",
+              component: ViewViolation,
+              props: info.row.original,
+            });
           },
-          fireDelete: () => {
-            console.log("Delete");
-          },
+          fireDelete: () => {},
         }),
       header: "Actions",
       enableSorting: false,
@@ -77,7 +79,6 @@
 <header style="display: flex; align-items: center;">
   <h1 style="font-weight: bold;">Violation</h1>
   <div style="margin-left:auto">
-    <!-- <Button data-hs-overlay="#hs-add-violation-modal">Add Violation</Button> -->
     <Button>Add Violation</Button>
   </div>
 </header>

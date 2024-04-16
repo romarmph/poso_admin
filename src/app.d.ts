@@ -53,9 +53,12 @@ declare global {
       created_at: string;
       updated_at: string;
       deleted_at: string | null;
+      created_by: string;
+      updated_by: string;
+      deleted_by: string | null;
     }
 
-    interface Tickets extends Data{
+    interface Tickets extends Data {
       first_name: string;
       middle_name: string;
       last_name: string;
@@ -74,7 +77,7 @@ declare global {
       deleted_by: number | null;
     }
 
-    interface VehicleTypes extends Data{
+    interface VehicleTypes extends Data {
       type: string;
       big_vehicle: boolean;
       enabled: boolean;
@@ -86,7 +89,7 @@ declare global {
       deleted_by: number | null;
 
     }
-    interface TrafficPost extends Data{
+    interface TrafficPost extends Data {
       name: string;
       address: string;
       longitude: number;
