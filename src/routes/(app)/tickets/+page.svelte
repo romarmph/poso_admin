@@ -7,7 +7,12 @@
   import ViolationFines from "$lib/components/Customs/ViolationFines.svelte";
   import RowActions from "$lib/components/Table/Partials/RowActions.svelte";
   import TicketStatus from "$lib/components/Base/TicketStatus.svelte";
-
+  import ViewTickets from "$lib/components/Overlays/Offcanvas/ViewTickets.svelte";
+  import { overlayStore } from "$lib/stores/overlayStore.js";
+  import { getSupabaseContext } from "$lib/stores/clientStore.js";
+  import ViewTrafficPost from "$lib/components/Overlays/Offcanvas/ViewTrafficPost.svelte";
+  const { open } = overlayStore;
+  const { supabase } = getSupabaseContext();
   const columns: ColumnDef<Types.Tickets>[] = [
     {
       accessorKey: "first_name",
@@ -102,16 +107,14 @@
       accessorKey: "id",
       cell: (info) =>
         flexRender(RowActions, {
-          id: info.getValue(),
-          fireEdit: () => {
-            console.log("Edit");
-          },
-          fireView: () => {
-            console.log("View");
-          },
-          fireDelete: () => {
-            console.log("Delete");
-          },
+          fireEdit: () => {},
+          fireView: () =>
+            open({
+              title: "View Tickets",
+              component: ViewTickets,
+              props: { info: info.row.original, supabase },
+            }),
+          fireDelete: () => {},
         }),
       header: "Actions",
       enableSorting: false,

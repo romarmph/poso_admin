@@ -7,8 +7,7 @@
         AlertCircle,
     } from "lucide-svelte";
 
-    export let status: "active" | "suspended" | "terminated" | "onleave" =
-        "active";
+    export let status: string = "active";
 
     const statusColor = {
         active: "bg-teal-100 text-teal-800",

@@ -62,14 +62,12 @@
       cell: (info) =>
         flexRender(RowActions, {
           fireEdit: () => {},
-          fireView: () => {
-            console.log(info.row.original);
+          fireView: () =>
             open({
               title: "View Violation",
               component: ViewViolation,
               props: { info: info.row.original, supabase },
-            });
-          },
+            }),
           fireDelete: () => {},
         }),
       header: "Actions",
