@@ -121,6 +121,8 @@
   export let data;
 </script>
 
+<svelte:head><title>Tickets</title></svelte:head>
+
 <header style="display: flex; align-items: center;">
   <h1 style="font-weight: bold;">Tickets</h1>
   <div style="margin-left:auto">

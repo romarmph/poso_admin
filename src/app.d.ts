@@ -99,6 +99,23 @@ declare global {
       updated_by: number;
       deleted_by: number | null;
     }
+
+    interface Employees extends Data{
+      first_name: string;
+      middle_name: string;
+      last_name: string;
+      suffix: string;
+      birthdate: string;
+      status: string;
+      employee_no: string;
+      role: number;
+      created_at: string;
+      updated_at: string;
+      deleted_at: string | null;
+      created_by: number;
+      updated_by: number;
+      deleted_by: number | null;
+    }
   }
 }
 

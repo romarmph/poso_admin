@@ -5,7 +5,7 @@
 
 <th
     scope="col"
-    class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200"
+    class=" {classes} text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200"
 >
+    {name}
 </th>
-

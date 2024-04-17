@@ -14,6 +14,8 @@
   } from "lucide-svelte";
 </script>
 
+<svelte:head><title>Dashboard</title></svelte:head>
+
 <h1 class="text-2xl font-bold text-gray-700">Dashboard</h1>
 
 <!-- Card Section -->
