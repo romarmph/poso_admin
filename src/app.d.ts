@@ -1,5 +1,6 @@
 // See https://kit.svelte.dev/docs/types#app
 
+import type EmployeeStatus from "$lib/enums/UserStatus";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { User } from "@supabase/supabase-js";
 
@@ -39,6 +40,24 @@ declare global {
       id: string;
     }
 
+    interface User extends Data {
+      first_name: string;
+      middle_name: string;
+      last_name: string;
+      suffix: string;
+      status: EmployeeStatus;
+      birthdate: string;
+      employee_no: string;
+      role: Record<string, any>;
+      user_id: string;
+      created_at: string;
+      created_by: string;
+      updated_at: string;
+      updated_by: string;
+      deleted_at: string | null;
+      deleted_by: string | null;
+    }
+
     interface Violation extends Data {
       name: string;
       fine: {
@@ -53,9 +72,12 @@ declare global {
       created_at: string;
       updated_at: string;
       deleted_at: string | null;
+      created_by: string;
+      updated_by: string;
+      deleted_by: string | null;
     }
 
-    interface Tickets extends Data{
+    interface Tickets extends Data {
       first_name: string;
       middle_name: string;
       last_name: string;
@@ -74,7 +96,7 @@ declare global {
       deleted_by: number | null;
     }
 
-    interface VehicleTypes extends Data{
+    interface VehicleTypes extends Data {
       type: string;
       big_vehicle: boolean;
       enabled: boolean;
@@ -86,7 +108,7 @@ declare global {
       deleted_by: number | null;
 
     }
-    interface TrafficPost extends Data{
+    interface TrafficPost extends Data {
       name: string;
       address: string;
       longitude: number;

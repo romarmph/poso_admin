@@ -1,7 +1,6 @@
 <script lang="ts">
   import { Trash, Pencil, Eye } from "lucide-svelte";
 
-  export let id: string | number;
   export let fireEdit: () => void;
   export let fireView: () => void;
   export let fireDelete: () => void;

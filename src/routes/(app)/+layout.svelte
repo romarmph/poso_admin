@@ -2,6 +2,14 @@
   import Sidebar from "$lib/components/Sidebar/Sidebar.svelte";
   import { AlignJustify } from "lucide-svelte";
   import { Header } from "$lib/Components";
+  import { onMount } from "svelte";
+  import Overlay from "$lib/components/Overlays/Overlay.svelte";
+
+  onMount(() => {
+    new Overlay({
+      target: document.body,
+    });
+  });
 </script>
 
 <Header />
