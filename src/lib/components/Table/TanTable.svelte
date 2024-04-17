@@ -82,10 +82,19 @@
 
   let filter = "";
 
+  const table = createSvelteTable(options);
+  let pageSizes = [10, 25, 50, 100];
+  let currentPageSize = pageSizes[0];
+
+  function handlePageSize(size: number) {
+    currentPageSize = size;
+    $table.setPageSize(size);
+  }
+
+  function getCurrentPageRowCount() {}
+
   $: rerender(data);
   $: $table.setGlobalFilter(filter);
-
-  const table = createSvelteTable(options);
 </script>
 
 <div class="mt-2">
@@ -158,6 +167,46 @@
             </tbody>
           </table>
           <div class="flex justify-between p-4">
+            <div
+              class="hs-dropdown relative inline-flex [--placement:top-left]"
+            >
+              <button
+                id="hs-dropup"
+                type="button"
+                class="hs-dropdown-toggle py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800"
+              >
+                {currentPageSize}
+                <svg
+                  class="hs-dropdown-open:rotate-180 size-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m18 15-6-6-6 6"></path>
+                </svg>
+              </button>
+
+              <div
+                class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden z-10 bg-white shadow-md rounded-lg p-2 dark:bg-neutral-800 dark:border dark:border-neutral-700 dark:divide-neutral-700"
+                aria-labelledby="hs-dropup"
+              >
+                {#each pageSizes as size}
+                  <button
+                    class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700"
+                    on:click={() => handlePageSize(size)}
+                  >
+                    {size}
+                  </button>
+                {/each}
+              </div>
+            </div>
+
             <Pager
               pageOptions={$table.getPageOptions()}
               goToNext={$table.nextPage}
