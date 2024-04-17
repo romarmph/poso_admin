@@ -1,5 +1,5 @@
 <script>
-  import { ArrowLeft} from "lucide-svelte";
+  import { ArrowLeft } from "lucide-svelte";
   import {
     Modal,
     ModalHeader,
@@ -19,11 +19,13 @@
     Tables,
     TableHead,
     TableBody,
-    Dropdown
+    Dropdown,
   } from "$lib/Components";
 
-  import { MoreHorizontal, Download,} from "lucide-svelte";
+  import { MoreHorizontal, Download } from "lucide-svelte";
 </script>
+
+<svelte:head><title>View Ticket</title></svelte:head>
 
 <header style="display: flex; align-items: center;">
   <button><ArrowLeft style="margin-right: 10px;" /></button>

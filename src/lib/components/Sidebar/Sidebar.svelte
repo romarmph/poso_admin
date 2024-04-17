@@ -7,8 +7,8 @@
     AppWindow,
     Shapes,
     Flag,
-    Sticker,
     Ticket,
+    HandCoins,
   } from "lucide-svelte";
   import SidebarUrl from "./subcomponents/Sidebar-Url.svelte";
   import SidebarDivider from "./subcomponents/Sidebar-Divider.svelte";
@@ -45,6 +45,11 @@
       <li class="hs-accordion" id="account-accordion">
         <SidebarUrl name="Tickets" route="/tickets">
           <Ticket />
+        </SidebarUrl>
+      </li>
+      <li class="hs-accordion" id="account-accordion">
+        <SidebarUrl name="Incentives" route="/incentives">
+          <HandCoins />
         </SidebarUrl>
       </li>
       <SidebarDivider title="Employees" />

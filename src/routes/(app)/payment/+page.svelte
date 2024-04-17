@@ -3,6 +3,8 @@
   import { TrendingDown } from "lucide-svelte";
 </script>
 
+<svelte:head><title>Payment</title></svelte:head>
+
 <header style="display: flex; align-items: center;">
   <h1 style="font-weight: bold;">Payment</h1>
 </header>

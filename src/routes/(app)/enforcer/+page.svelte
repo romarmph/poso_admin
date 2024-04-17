@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import {
         Modal,
         ModalBody,
@@ -6,13 +6,110 @@
         ModalHeader,
     } from "$lib/components/Overlays/Modal/Modal";
 
-    import { Button, Tables, TableBody, TableHead, Dropdown, TextInput, Label} from "$lib/Components";
-    import {
-        MoreHorizontal,
-        Download,
+    import { Button, TextInput, Label } from "$lib/Components";
+    import DataList from "$lib/components/Supabase/DataList.svelte";
+    import { flexRender, type ColumnDef } from "@tanstack/svelte-table";
+    import TanTable from "$lib/components/Table/TanTable.svelte";
+    import RowActions from "$lib/components/Table/Partials/RowActions.svelte";
+    import EmployeeStatus from "$lib/components/Base/EmployeeStatus.svelte";
 
-    } from "lucide-svelte";
+    const columns: ColumnDef<Types.Employees>[] = [
+        {
+            accessorKey: "first_name",
+            cell: (info) => info.getValue(),
+            footer: (info) => info.column.id,
+            header: "First Name",
+        },
+        {
+            accessorKey: "middle_name",
+            cell: (info) => info.getValue(),
+            footer: (info) => info.column.id,
+            header: "Middle Name",
+        },
+        {
+            accessorKey: "last_name",
+            cell: (info) => info.getValue(),
+            footer: (info) => info.column.id,
+            header: "Last Name",
+        },
+        {
+            accessorKey: "suffix",
+            cell: (info) => info.getValue(),
+            footer: (info) => info.column.id,
+            header: "Suffix",
+        },
+        {
+            accessorKey: "birthdate",
+            cell: (info) => info.getValue(),
+            footer: (info) => info.column.id,
+            header: "Birth Date",
+            accessorFn: (row) => new Date(row.birthdate).toDateString(),
+        },
+        {
+            accessorKey: "status",
+            cell: (info) =>
+                flexRender(EmployeeStatus, { status: info.getValue() }),
+            footer: (info) => info.column.id,
+            header: "Status",
+            enableSorting: false,
+        },
+        {
+            accessorKey: "employee_no",
+            cell: (info) => info.getValue(),
+            footer: (info) => info.column.id,
+            header: "Employee No.",
+        },
+
+        {
+            accessorKey: "created_at",
+            cell: (info) => info.getValue(),
+            footer: (info) => info.column.id,
+            header: "Created At",
+            accessorFn: (row) => new Date(row.created_at).toDateString(),
+        },
+        {
+            accessorKey: "created_by",
+            cell: (info) => info.getValue(),
+            footer: (info) => info.column.id,
+            header: "Created By",
+        },
+        {
+            accessorKey: "updated_at",
+            cell: (info) => info.getValue(),
+            footer: (info) => info.column.id,
+            header: "Updated At",
+            accessorFn: (row) => new Date(row.updated_at).toDateString(),
+        },
+        {
+            accessorKey: "updated_by",
+            cell: (info) => info.getValue(),
+            footer: (info) => info.column.id,
+            header: "Updated By",
+        },
+        {
+            accessorKey: "id",
+            cell: (info) =>
+                flexRender(RowActions, {
+                    id: info.getValue(),
+                    fireEdit: () => {
+                        console.log("Edit");
+                    },
+                    fireView: () => {
+                        console.log("View");
+                    },
+                    fireDelete: () => {
+                        console.log("Delete");
+                    },
+                }),
+            header: "Actions",
+            enableSorting: false,
+        },
+    ];
+
+    export let data;
 </script>
+
+<svelte:head><title>Enforcer</title></svelte:head>
 
 <header style="display: flex; align-items: center;">
     <h1 style="font-weight: bold;">Enforcer</h1>
@@ -22,68 +119,14 @@
 </header>
 
 <!--Table -->
-<Tables>
-    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-        <thead class="bg-gray-50 dark:bg-slate-800">
-            <tr>
-                <TableHead name="" classes="ps-6 py-3 text-start"
-                    ><input
-                        type="checkbox"
-                        class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-                        id="hs-at-with-checkboxes-main"
-                    />
-                </TableHead>
-                <TableHead
-                    name="Employee Number"
-                    classes="px-6 py-3 text-start"
-                />
-                <TableHead name="Name" classes="px-6 py-3 text-start" />
-                <TableHead name="Created By:" classes="px-6 py-3 text-start" />
-                <TableHead name="Created At:" classes="px-6 py-3 text-start" />
-            </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-            <tr>
-                <TableBody classed="ps-6 py-3 text-start">
-                    <input
-                        type="checkbox"
-                        class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-                        id="hs-at-with-checkboxes-1"
-                    />
-                </TableBody>
-                <TableBody>123</TableBody>
-                <TableBody>123</TableBody>
-                <TableBody>123</TableBody>
-                <TableBody>123</TableBody>
-                <TableBody
-                    ><div
-                        class="group inline-flex items-center divide-x divide-gray-300 border border-gray-300 bg-white shadow-sm rounded-lg transition-all dark:divide-gray-700 dark:bg-slate-700 dark:border-gray-700"
-                    >
-                        <div class="hs-tooltip inline-block">
-                            <a
-                                class="hs-tooltip-toggle py-1.5 px-2 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-s-md bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                                href="#"
-                            >
-                                <Download />
-                                <span
-                                    class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity inline-block absolute invisible z-10 py-1 px-2 bg-gray-900 text-xs font-medium text-white rounded shadow-sm dark:bg-slate-700"
-                                    role="tooltip"
-                                >
-                                    Download PDF
-                                </span>
-                            </a>
-                        </div>
-                        <Dropdown
-                            over="hs-edit-enforcer-modal"
-                            del="hs-del-enforcer-modal"
-                            ><MoreHorizontal /></Dropdown
-                        >
-                    </div></TableBody
-                >
-            </tr>
-        </tbody>
-    </table>
-</Tables>
+<DataList
+    table="employees"
+    let:data
+    initData={data.employees ?? []}
+    eq={{ operator: "role", value: 1 }}
+>
+    <TanTable {data} {columns}></TanTable>
+</DataList>
 
 <Modal modalId="hs-add-enforcer-modal">
     <ModalHeader>Add Enforcer</ModalHeader>

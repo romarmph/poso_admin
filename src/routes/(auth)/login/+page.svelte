@@ -7,6 +7,8 @@
   export let form;
 </script>
 
+<svelte:head><title>Login</title></svelte:head>
+
 <main class="h-screen" style="background-color: #F3F6F4;">
   <div class="flex items-center h-full py-16 bg-gray-100 dark:bg-slate-900">
     <div class="w-full max-w-md p-1 mx-auto">

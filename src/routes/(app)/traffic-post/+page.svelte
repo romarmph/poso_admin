@@ -80,6 +80,8 @@
     export let data;
 </script>
 
+<svelte:head><title>Traffic Post</title></svelte:head>
+
 <header style="display: flex; align-items: center;">
     <h1 style="font-weight: bold;">Traffic Post</h1>
     <div style="margin-left:auto">

@@ -16,8 +16,16 @@
 
   onMount(async () => {
     if (initData.length === 0) {
-      let { data, error } = await supabase.from(table).select(select);
-      store = dataListStore(supabase, table, (data as []) ?? [], uid);
+      if (eq) {
+        let { data, error } = await supabase.from(table).select(select);
+        store = dataListStore(supabase, table, (data as []) ?? [], uid);
+      } else {
+        let { data, error } = await supabase
+          .from(table)
+          .select(select)
+          .eq(eq!.operator, eq!.value);
+        store = dataListStore(supabase, table, (data as []) ?? [], uid);
+      }
     }
   });
 
