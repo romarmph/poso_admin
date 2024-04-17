@@ -40,11 +40,8 @@
 			<svelte:component
 				this={$overlayStore.component}
 				{...$overlayStore.props}
+				on:close={close}
 			/>
-		</div>
-		<div class="flex gap-4 px-4 pb-4 justify-end">
-			<Button style="outline" on:click={close}>Close</Button>
-			<Button on:click={() => console.log("Saved")}>Save</Button>
 		</div>
 	</div>
 	<div
