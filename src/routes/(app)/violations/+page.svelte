@@ -9,6 +9,7 @@
   import { overlayStore } from "$lib/stores/overlayStore";
   import ViewViolation from "$lib/components/Overlays/Offcanvas/ViewViolation.svelte";
   import { getSupabaseContext } from "$lib/stores/clientStore.js";
+  import ViolationAdd from "$lib/components/Overlays/Offcanvas/ViolationAdd.svelte";
   const { open } = overlayStore;
 
   const { supabase } = getSupabaseContext();
@@ -85,7 +86,14 @@
 <header style="display: flex; align-items: center;">
   <h1 style="font-weight: bold;">Violation</h1>
   <div style="margin-left:auto">
-    <Button>Add Violation</Button>
+    <Button
+      on:click={() =>
+        open({
+          title: "Add Violation",
+          props: {},
+          component: ViolationAdd,
+        })}>Add Violation</Button
+    >
   </div>
 </header>
 
