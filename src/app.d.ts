@@ -106,8 +106,8 @@ declare global {
       created_by: number;
       updated_by: number;
       deleted_by: number | null;
-
     }
+    
     interface TrafficPost extends Data {
       name: string;
       address: string;

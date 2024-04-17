@@ -2,7 +2,6 @@
   import { getSupabaseContext } from "$lib/stores/clientStore";
   import { dataListStore } from "$lib/stores/dataListStore.js";
   import { onMount } from "svelte";
-  import SupabaseApp from "./SupabaseApp.svelte";
 
   export let initData: any[] = [];
   export let table: string;
@@ -17,13 +16,13 @@
   onMount(async () => {
     if (initData.length === 0) {
       if (eq) {
-        let { data, error } = await supabase.from(table).select(select);
-        store = dataListStore(supabase, table, (data as []) ?? [], uid);
-      } else {
-        let { data, error } = await supabase
+        let { data } = await supabase
           .from(table)
           .select(select)
           .eq(eq!.operator, eq!.value);
+        store = dataListStore(supabase, table, (data as []) ?? [], uid);
+      } else {
+        let { data } = await supabase.from(table).select(select);
         store = dataListStore(supabase, table, (data as []) ?? [], uid);
       }
     }

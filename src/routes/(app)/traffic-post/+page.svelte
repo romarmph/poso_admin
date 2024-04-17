@@ -10,9 +10,12 @@
     import DataList from "$lib/components/Supabase/DataList.svelte";
     import { flexRender, type ColumnDef } from "@tanstack/svelte-table";
     import TanTable from "$lib/components/Table/TanTable.svelte";
-    import EnabledStatus from "$lib/components/Base/EnabledStatus.svelte";
-    import ViolationFines from "$lib/components/Customs/ViolationFines.svelte";
     import RowActions from "$lib/components/Table/Partials/RowActions.svelte";
+    import { overlayStore } from "$lib/stores/overlayStore.js";
+    import { getSupabaseContext } from "$lib/stores/clientStore.js";
+    import ViewTrafficPost from "$lib/components/Overlays/Offcanvas/ViewTrafficPost.svelte";
+    const { open } = overlayStore;
+    const { supabase } = getSupabaseContext();
 
     const columns: ColumnDef<Types.TrafficPost>[] = [
         {
@@ -61,16 +64,14 @@
             accessorKey: "id",
             cell: (info) =>
                 flexRender(RowActions, {
-                    id: info.getValue(),
-                    fireEdit: () => {
-                        console.log("Edit");
-                    },
-                    fireView: () => {
-                        console.log("View");
-                    },
-                    fireDelete: () => {
-                        console.log("Delete");
-                    },
+                    fireEdit: () => {},
+                    fireView: () =>
+                        open({
+                            title: "View Vehicle Type",
+                            component: ViewTrafficPost,
+                            props: { info: info.row.original, supabase },
+                        }),
+                    fireDelete: () => {},
                 }),
             header: "Actions",
             enableSorting: false,

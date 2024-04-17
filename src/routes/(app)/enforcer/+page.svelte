@@ -12,6 +12,12 @@
     import TanTable from "$lib/components/Table/TanTable.svelte";
     import RowActions from "$lib/components/Table/Partials/RowActions.svelte";
     import EmployeeStatus from "$lib/components/Base/EmployeeStatus.svelte";
+    import ViewEnforcer from "$lib/components/Overlays/Offcanvas/ViewEnforcer.svelte";
+    import { overlayStore } from "$lib/stores/overlayStore.js";
+    import { getSupabaseContext } from "$lib/stores/clientStore.js";
+    import ViewAdmin from "$lib/components/Overlays/Offcanvas/ViewAdmin.svelte";
+    const { open } = overlayStore;
+    const { supabase } = getSupabaseContext();
 
     const columns: ColumnDef<Types.Employees>[] = [
         {
@@ -90,16 +96,14 @@
             accessorKey: "id",
             cell: (info) =>
                 flexRender(RowActions, {
-                    id: info.getValue(),
-                    fireEdit: () => {
-                        console.log("Edit");
-                    },
-                    fireView: () => {
-                        console.log("View");
-                    },
-                    fireDelete: () => {
-                        console.log("Delete");
-                    },
+                    fireEdit: () => {},
+                    fireView: () =>
+                        open({
+                            title: "View Enforcer",
+                            component: ViewEnforcer,
+                            props: { info: info.row.original, supabase },
+                        }),
+                    fireDelete: () => {},
                 }),
             header: "Actions",
             enableSorting: false,
