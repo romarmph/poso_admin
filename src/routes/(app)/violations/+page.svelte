@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Button, TextInput, Label, IconButton } from "$lib/Components";
+  import { Button } from "$lib/Components";
   import DataList from "$lib/components/Supabase/DataList.svelte";
   import { flexRender, type ColumnDef } from "@tanstack/svelte-table";
   import TanTable from "$lib/components/Table/TanTable.svelte";
@@ -8,7 +8,11 @@
   import RowActions from "$lib/components/Table/Partials/RowActions.svelte";
   import { overlayStore } from "$lib/stores/overlayStore";
   import ViewViolation from "$lib/components/Overlays/Offcanvas/ViewViolation.svelte";
+  import { getSupabaseContext } from "$lib/stores/clientStore.js";
   const { open } = overlayStore;
+
+  const { supabase } = getSupabaseContext();
+
   const columns: ColumnDef<Types.Violation>[] = [
     {
       accessorKey: "name",
@@ -63,7 +67,7 @@
             open({
               title: "View Violation",
               component: ViewViolation,
-              props: info.row.original,
+              props: { info: info.row.original, supabase },
             });
           },
           fireDelete: () => {},
