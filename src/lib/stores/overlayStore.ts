@@ -1,24 +1,22 @@
 
 import { writable } from "svelte/store";
-import type { ComponentType } from "svelte";
 
-interface OverlayStore {
-  title: string;
-  component: ComponentType;
-  props?: Record<string, any>;
+interface OverlayStore<T> {
+  props?: T;
+  id: string;
 }
 
-function createOverlayStore() {
-  const { subscribe, set } = writable<OverlayStore | null>(null);
+function createOverlayStore<T>() {
+  const { subscribe, set } = writable<OverlayStore<T> | null>(null);
 
-  const open: (params: OverlayStore) => Promise<void> = async ({ title, component, props = {} }) => {
-    set({ title, component, props });
+  const open: (params: OverlayStore<T>) => void = ({ props, id }) => {
+    set({ props, id });
   };
 
   return {
     subscribe,
     open,
-    close: async () => {
+    close: () => {
       set(null);
     }
   };

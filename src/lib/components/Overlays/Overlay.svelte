@@ -2,21 +2,19 @@
 	import { X } from "lucide-svelte";
 	import { overlayStore } from "$lib/stores/overlayStore";
 	import { fade, slide } from "svelte/transition";
-	import { Button } from "$lib/Components";
 
 	const { close } = overlayStore;
-	function handleKeydown(event: { key: any }) {
-		if (event.key === "Escape") {
-			close();
-		}
-	}
+
+	export let title: string;
+	export let id: string;
 </script>
 
-<svelte:window on:keydown={handleKeydown} />
-<svelte:body style="overflow: hidden;" />
-
-{#if $overlayStore}
+<svelte:window
+	on:keydown={(event) => (event.key === "Escape" ? close() : {})}
+/>
+{#if $overlayStore && $overlayStore.id === id}
 	<div
+		{id}
 		transition:slide={{ duration: 250, axis: "x" }}
 		class={`translate-x-0 open fixed top-0 end-0 transition-all duration-300 transform h-full flex flex-col z-[80] bg-white border-s dark:bg-gray-800 dark:border-gray-700`}
 		tabindex="-1"
@@ -25,7 +23,7 @@
 			class="flex justify-between items-center py-3 px-4 border-b dark:border-gray-700"
 		>
 			<h3 class="font-bold text-gray-800 dark:text-white">
-				{$overlayStore.title}
+				{title}
 			</h3>
 			<button
 				type="button"
@@ -37,11 +35,7 @@
 			</button>
 		</div>
 		<div class="p-4 flex-1">
-			<svelte:component
-				this={$overlayStore.component}
-				{...$overlayStore.props}
-				on:close={close}
-			/>
+			<slot data={$overlayStore.props} />
 		</div>
 	</div>
 	<div
@@ -51,7 +45,7 @@
 		class="hs-overlay-backdrop transition duration fixed inset-0 bg-gray-900 bg-opacity-50 dark:bg-opacity-80 dark:bg-neutral-900"
 		on:click={close}
 		role="button"
-		on:keydown={handleKeydown}
+		on:keydown={(event) => (event.key === "Escape" ? close() : {})}
 		tabindex="-1"
 	></div>
 {/if}

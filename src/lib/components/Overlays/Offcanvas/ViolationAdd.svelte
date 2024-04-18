@@ -17,7 +17,7 @@
 	}
 </script>
 
-<form bind:this={form} class="w-[500px] h-full flex flex-col">
+<form method="POST" bind:this={form} class="w-[500px] h-full flex flex-col">
 	<div class="flex-1">
 		<div>
 			<label for="">Violation Name</label>

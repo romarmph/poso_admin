@@ -9,11 +9,10 @@
   import { DataList } from "$lib/components/Supabase/Supabase";
   import { flexRender, type ColumnDef } from "@tanstack/svelte-table";
   import { overlayStore } from "$lib/stores/overlayStore";
-  import {
-    ViewViolation,
-    ViolationAdd,
-  } from "$lib/components/Overlays/Overlays";
-  import { getSupabaseContext } from "$lib/stores/clientStore.js";
+  import Overlay from "$lib/components/Overlays/Overlay.svelte";
+  import ViolationAdd from "$lib/components/Overlays/Offcanvas/ViolationAdd.svelte";
+  import ViewViolation from "$lib/components/Overlays/Offcanvas/ViewViolation.svelte";
+  import { getSupabaseContext } from "$lib/stores/clientStore";
   const { open } = overlayStore;
 
   const { supabase } = getSupabaseContext();
@@ -67,12 +66,14 @@
       cell: (info) =>
         flexRender(RowActions, {
           fireEdit: () => {},
-          fireView: () =>
+          fireView: () => {
             open({
-              title: "View Violation",
-              component: ViewViolation,
-              props: { info: info.row.original, supabase },
-            }),
+              props: {
+                info: info.row.original as Types.Violation,
+              },
+              id: "viewViolation",
+            });
+          },
           fireDelete: () => {},
         }),
       header: "Actions",
@@ -91,9 +92,8 @@
     <Button
       on:click={() =>
         open({
-          title: "Add Violation",
           props: {},
-          component: ViolationAdd,
+          id: "addViolation",
         })}>Add Violation</Button
     >
   </div>
@@ -102,3 +102,11 @@
 <DataList table="violations" let:data initData={data.violations ?? []}>
   <TanTable {data} {columns}></TanTable>
 </DataList>
+
+<Overlay title="Add Violation" id="addViolation">
+  <ViolationAdd />
+</Overlay>
+
+<Overlay let:data title="View Violation" id="viewViolation">
+  <ViewViolation info={data} {supabase} />
+</Overlay>
