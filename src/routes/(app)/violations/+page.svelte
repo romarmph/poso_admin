@@ -13,7 +13,21 @@
   import ViolationAdd from "$lib/components/Overlays/Offcanvas/ViolationAdd.svelte";
   import ViewViolation from "$lib/components/Overlays/Offcanvas/ViewViolation.svelte";
   import { getSupabaseContext } from "$lib/stores/clientStore";
-  const { open } = overlayStore;
+  import SuperDebug, { superForm } from "sveltekit-superforms";
+
+  export let data;
+
+  const { open, close } = overlayStore;
+
+  const { form, errors, enhance, message } = superForm(data.form);
+
+  $: if ($message === "success") {
+    close();
+    open({
+      id: "success",
+      props: {},
+    });
+  }
 
   const { supabase } = getSupabaseContext();
 
@@ -80,8 +94,6 @@
       enableSorting: false,
     },
   ];
-
-  export let data;
 </script>
 
 <svelte:head><title>Violations</title></svelte:head>
@@ -104,9 +116,20 @@
 </DataList>
 
 <Overlay title="Add Violation" id="addViolation">
-  <ViolationAdd />
+  <form
+    method="POST"
+    class="w-[500px] h-full flex flex-col"
+    action="?/add"
+    use:enhance
+  >
+    <ViolationAdd superForm={form} {errors} on:close={close} />
+  </form>
 </Overlay>
 
 <Overlay let:data title="View Violation" id="viewViolation">
   <ViewViolation info={data} {supabase} />
+</Overlay>
+
+<Overlay let:data title="Success" id="success" type="modal">
+  <h3>SUCCESS</h3>
 </Overlay>
