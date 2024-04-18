@@ -1,16 +1,10 @@
 <script lang="ts">
-  import { Button } from "$lib/Components";
-  import DataList from "$lib/components/Supabase/DataList.svelte";
+  import { Button, TicketStatus, TanTable, RowActions } from "$lib/Components";
+  import { DataList } from "$lib/components/Supabase/Supabase";
   import { flexRender, type ColumnDef } from "@tanstack/svelte-table";
-  import TanTable from "$lib/components/Table/TanTable.svelte";
-  import EnabledStatus from "$lib/components/Base/EnabledStatus.svelte";
-  import ViolationFines from "$lib/components/Customs/ViolationFines.svelte";
-  import RowActions from "$lib/components/Table/Partials/RowActions.svelte";
-  import TicketStatus from "$lib/components/Base/TicketStatus.svelte";
-  import ViewTickets from "$lib/components/Overlays/Offcanvas/ViewTickets.svelte";
+  import { ViewTickets } from "$lib/components/Overlays/Overlays";
   import { overlayStore } from "$lib/stores/overlayStore.js";
   import { getSupabaseContext } from "$lib/stores/clientStore.js";
-  import ViewTrafficPost from "$lib/components/Overlays/Offcanvas/ViewTrafficPost.svelte";
   const { open } = overlayStore;
   const { supabase } = getSupabaseContext();
   const columns: ColumnDef<Types.Tickets>[] = [

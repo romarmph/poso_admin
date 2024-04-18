@@ -6,7 +6,7 @@
     FolderInput,
   } from "lucide-svelte";
 
-  export let status: "paid" | "unpaid" | "overdue" | "transferred" = "unpaid";
+  export let status: string = "unpaid";
 
   const statusColor = {
     paid: "bg-teal-100 text-teal-800",
