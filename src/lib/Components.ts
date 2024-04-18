@@ -14,6 +14,17 @@ export { default as FilterDropdown } from "$lib/components/Base/FilterDropdown.s
 export { default as ListTile } from "$lib/components/Base/ListTile.svelte";
 export { default as ListTile2 } from "$lib/components/Base/ListTile2.svelte";
 export { default as TicketStatus } from "$lib/components/Base/TicketStatus.svelte";
+export { default as EmployeeStatus } from "$lib/components/Base/EmployeeStatus.svelte";
+export { default as EnabledStatus } from "$lib/components/Base/EnabledStatus.svelte";
+export { default as VehicleSize } from "$lib/components/Base/VehicleSize.svelte";
+export { default as ComboInput } from "$lib/components/Base/ComboInput.svelte";
+
+/**
+ * 
+ * Customs components
+ * 
+ */
+export { default as ViolationFines } from "$lib/components/Customs/ViolationFines.svelte";
 
 
 /**
@@ -58,5 +69,8 @@ export { default as GridCol } from "$lib/components/Layout/GridCol.svelte";
 export { default as TableBody } from "$lib/components/Table/TableBody.svelte";
 export { default as TableHead } from "$lib/components/Table/TableHead.svelte";
 export { default as Tables} from "$lib/components/Table/tables.svelte";
-
+export { default as TanTable } from "$lib/components/Table/TanTable.svelte";
+export { default as ViolationAddModal } from "$lib/components/Table/Actions/ViolationsAddModal.svelte";
+export { default as Pager } from "$lib/components/Table/Partials/Pager.svelte";
+export { default as RowActions } from "$lib/components/Table/Partials/RowActions.svelte";
 

@@ -3,6 +3,7 @@
     import type { SupabaseClient } from "@supabase/supabase-js";
     import fetchUser from "$lib/utils/fetchUser";
     import EmployeeStatus from "$lib/components/Base/EmployeeStatus.svelte";
+    import TicketStatus from "$lib/components/Base/TicketStatus.svelte";
     export let info: Types.Tickets;
     export let supabase: SupabaseClient;
 </script>
@@ -61,7 +62,7 @@
     <div class="mb-3">
         <label for="" class="p-1 text-gray-500 text-xl">Status</label>
         <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-200">
-            <EmployeeStatus status={info.status} />
+            <TicketStatus status={info.status} />
         </div>
     </div>
 
