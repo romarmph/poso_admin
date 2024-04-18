@@ -6,14 +6,18 @@
         ModalHeader,
     } from "$lib/components/Overlays/Modal/Modal";
 
-    import { Button, TextInput, Label } from "$lib/Components";
-    import DataList from "$lib/components/Supabase/DataList.svelte";
+    import {
+        Button,
+        TextInput,
+        Label,
+        TanTable,
+        RowActions,
+    } from "$lib/Components";
+    import { DataList } from "$lib/components/Supabase/Supabase";
     import { flexRender, type ColumnDef } from "@tanstack/svelte-table";
-    import TanTable from "$lib/components/Table/TanTable.svelte";
-    import RowActions from "$lib/components/Table/Partials/RowActions.svelte";
     import { overlayStore } from "$lib/stores/overlayStore.js";
     import { getSupabaseContext } from "$lib/stores/clientStore.js";
-    import ViewTrafficPost from "$lib/components/Overlays/Offcanvas/ViewTrafficPost.svelte";
+    import { ViewTrafficPost } from "$lib/components/Overlays/Overlays";
     const { open } = overlayStore;
     const { supabase } = getSupabaseContext();
 

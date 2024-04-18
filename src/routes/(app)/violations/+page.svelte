@@ -1,15 +1,19 @@
 <script lang="ts">
-  import { Button } from "$lib/Components";
-  import DataList from "$lib/components/Supabase/DataList.svelte";
+  import {
+    Button,
+    TanTable,
+    EnabledStatus,
+    RowActions,
+    ViolationFines,
+  } from "$lib/Components";
+  import { DataList } from "$lib/components/Supabase/Supabase";
   import { flexRender, type ColumnDef } from "@tanstack/svelte-table";
-  import TanTable from "$lib/components/Table/TanTable.svelte";
-  import EnabledStatus from "$lib/components/Base/EnabledStatus.svelte";
-  import ViolationFines from "$lib/components/Customs/ViolationFines.svelte";
-  import RowActions from "$lib/components/Table/Partials/RowActions.svelte";
   import { overlayStore } from "$lib/stores/overlayStore";
-  import ViewViolation from "$lib/components/Overlays/Offcanvas/ViewViolation.svelte";
+  import {
+    ViewViolation,
+    ViolationAdd,
+  } from "$lib/components/Overlays/Overlays";
   import { getSupabaseContext } from "$lib/stores/clientStore.js";
-  import ViolationAdd from "$lib/components/Overlays/Offcanvas/ViolationAdd.svelte";
   const { open } = overlayStore;
 
   const { supabase } = getSupabaseContext();

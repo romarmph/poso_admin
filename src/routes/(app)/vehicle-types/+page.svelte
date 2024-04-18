@@ -1,13 +1,15 @@
 <script lang="ts">
-    import { Button, TextInput } from "$lib/Components";
-    import DataList from "$lib/components/Supabase/DataList.svelte";
+    import {
+        Button,
+        TextInput,
+        TanTable,
+        EnabledStatus,
+        RowActions,
+        VehicleSize,
+    } from "$lib/Components";
+    import { DataList } from "$lib/components/Supabase/Supabase";
     import { flexRender, type ColumnDef } from "@tanstack/svelte-table";
-    import TanTable from "$lib/components/Table/TanTable.svelte";
-    import EnabledStatus from "$lib/components/Base/EnabledStatus.svelte";
-    import ViolationFines from "$lib/components/Customs/ViolationFines.svelte";
-    import RowActions from "$lib/components/Table/Partials/RowActions.svelte";
-    import VehicleSize from "$lib/components/Base/VehicleSize.svelte";
-    import ViewVehicleTypes from "$lib/components/Overlays/Offcanvas/ViewVehicleTypes.svelte";
+    import { ViewVehicleTypes } from "$lib/components/Overlays/Overlays";
     import { overlayStore } from "$lib/stores/overlayStore.js";
     import { getSupabaseContext } from "$lib/stores/clientStore.js";
     const { open } = overlayStore;
