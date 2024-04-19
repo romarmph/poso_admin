@@ -130,6 +130,6 @@
   <ViewViolation info={data} {supabase} />
 </Overlay>
 
-<Overlay let:data title="Success" id="success" type="modal">
+<Overlay title="Success" id="success" type="modal">
   <h3>SUCCESS</h3>
 </Overlay>
