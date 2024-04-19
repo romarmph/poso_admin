@@ -4,10 +4,19 @@
 	import TextInput from "$lib/components/Forms/TextInput.svelte";
 	import { createEventDispatcher } from "svelte";
 
+	export let initData: any | null;
 	export let superForm;
 	export let errors;
 
 	const dispatch = createEventDispatcher();
+
+	if (Object.keys(initData).length > 0) {
+		$superForm = {
+			...initData.info.fine,
+			name: initData.info.name,
+			id: initData.info.id,
+		};
+	}
 
 	function handleClose() {
 		dispatch("close");
@@ -29,7 +38,7 @@
 				placeholder="0"
 				bind:value={$superForm.big.a}
 			/>
-			{#if $errors.big}
+			{#if $errors.big && $errors.big.a}
 				<span class="text-red-500 text-sm">
 					{$errors.big.a}
 				</span>
@@ -43,7 +52,7 @@
 				placeholder="0"
 				bind:value={$superForm.big.b}
 			/>
-			{#if $errors.big}
+			{#if $errors.big && $errors.big.b}
 				<span class="text-red-500 text-sm">
 					{$errors.big.b}
 				</span>
@@ -57,7 +66,7 @@
 				placeholder="0"
 				bind:value={$superForm.big.c}
 			/>
-			{#if $errors.big}
+			{#if $errors.big && $errors.big.c}
 				<span class="text-red-500 text-sm">
 					{$errors.big.c}
 				</span>
@@ -74,7 +83,7 @@
 				placeholder="0"
 				bind:value={$superForm.small.a}
 			/>
-			{#if $errors.small}
+			{#if $errors.small && $errors.small.a}
 				<span class="text-red-500 text-sm">
 					{$errors.small.a}
 				</span>
@@ -88,7 +97,7 @@
 				placeholder="0"
 				bind:value={$superForm.small.b}
 			/>
-			{#if $errors.small}
+			{#if $errors.small && $errors.small.b}
 				<span class="text-red-500 text-sm">
 					{$errors.small.b}
 				</span>
@@ -102,7 +111,7 @@
 				placeholder="0"
 				bind:value={$superForm.small.c}
 			/>
-			{#if $errors.small}
+			{#if $errors.small && $errors.small.c}
 				<span class="text-red-500 text-sm">
 					{$errors.small.c}
 				</span>

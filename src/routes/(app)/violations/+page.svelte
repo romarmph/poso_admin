@@ -81,7 +81,13 @@
       accessorKey: "id",
       cell: (info) =>
         flexRender(RowActions, {
-          fireEdit: () => {},
+          fireEdit: () =>
+            open({
+              id: "addViolation",
+              props: {
+                info: info.row.original as Types.Violation,
+              },
+            }),
           fireView: () => {
             open({
               props: {
@@ -117,15 +123,14 @@
   <TanTable {data} {columns}></TanTable>
 </DataList>
 
-<Overlay title="Add Violation" id="addViolation">
-  <!-- <SuperDebug data={$form} /> -->
+<Overlay title="Add Violation" id="addViolation" let:data>
   <form
     method="POST"
     class="w-[500px] h-full flex flex-col"
     action="?/add"
     use:enhance
   >
-    <ViolationAdd superForm={form} {errors} on:close={close} />
+    <ViolationAdd superForm={form} {errors} on:close={close} initData={data} />
   </form>
 </Overlay>
 

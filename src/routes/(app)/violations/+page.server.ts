@@ -19,6 +19,8 @@ export const load: PageServerLoad = async ({
 export const actions: Actions = {
   add: async ({ request, locals: { supabase, getSession, getCurrentUser } }) => {
     const form = await superValidate(request, zod(violationSchema));
+
+    console.log(form);
     if (!form.valid) {
       return message(form, 'Invalid form');
     }
@@ -44,12 +46,27 @@ export const actions: Actions = {
       deleted_by: null,
     }
 
-    const { error } = await supabase.from("violations").insert(violation);
+    if (!form.data.id) {
+      const { error } = await supabase.from("violations").insert(violation);
+      if (error) {
+        return message(form, 'Error adding violation');
+      }
+    } else {
+      const updatedViolation = {
+        ...violation,
+        updated_at: new Date(),
+        updated_by: user!.id,
+      }
 
-    if (error) {
-      console.log(error);
-      return message(form, 'Error adding violation');
+      console.log(updatedViolation);
+      const { error } = await supabase.from("violations").update(updatedViolation).eq("id", form.data.id);
+
+      if (error) {
+        console.log(error);
+        return message(form, 'Error adding violation');
+      }
     }
+
 
     return message(
       form,
