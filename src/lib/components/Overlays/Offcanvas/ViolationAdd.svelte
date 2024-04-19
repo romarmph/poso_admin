@@ -27,12 +27,13 @@
 				type="number"
 				label="1st Offense"
 				placeholder="0"
-				bind:value={$superForm.big_1}
+				bind:value={$superForm.big.a}
 			/>
-
-			{#if $errors.big_1}<span class="text-red-500 text-sm"
-					>{$errors.big_1}</span
-				>{/if}
+			{#if $errors.big}
+				<span class="text-red-500 text-sm">
+					{$errors.big.a}
+				</span>
+			{/if}
 		</li>
 		<li class="mb-3">
 			<ComboInput
@@ -40,8 +41,13 @@
 				type="number"
 				label="2nd Offense"
 				placeholder="0"
-				bind:value={$superForm.big_2}
+				bind:value={$superForm.big.b}
 			/>
+			{#if $errors.big}
+				<span class="text-red-500 text-sm">
+					{$errors.big.b}
+				</span>
+			{/if}
 		</li>
 		<li class="mb-3">
 			<ComboInput
@@ -49,8 +55,13 @@
 				type="number"
 				label="3rd Offense"
 				placeholder="0"
-				bind:value={$superForm.big_3}
+				bind:value={$superForm.big.c}
 			/>
+			{#if $errors.big}
+				<span class="text-red-500 text-sm">
+					{$errors.big.c}
+				</span>
+			{/if}
 		</li>
 	</ul>
 	<h3 class="my-3">Small Vehicle Offenses</h3>
@@ -61,8 +72,13 @@
 				type="number"
 				label="1st Offense"
 				placeholder="0"
-				bind:value={$superForm.small_1}
+				bind:value={$superForm.small.a}
 			/>
+			{#if $errors.small}
+				<span class="text-red-500 text-sm">
+					{$errors.small.a}
+				</span>
+			{/if}
 		</li>
 		<li class="mb-3">
 			<ComboInput
@@ -70,8 +86,13 @@
 				type="number"
 				label="2nd Offense"
 				placeholder="0"
-				bind:value={$superForm.small_2}
+				bind:value={$superForm.small.b}
 			/>
+			{#if $errors.small}
+				<span class="text-red-500 text-sm">
+					{$errors.small.b}
+				</span>
+			{/if}
 		</li>
 		<li class="mb-3">
 			<ComboInput
@@ -79,8 +100,13 @@
 				type="number"
 				label="3rd Offense"
 				placeholder="0"
-				bind:value={$superForm.small_3}
+				bind:value={$superForm.small.c}
 			/>
+			{#if $errors.small}
+				<span class="text-red-500 text-sm">
+					{$errors.small.c}
+				</span>
+			{/if}
 		</li>
 	</ul>
 </div>

@@ -19,7 +19,9 @@
 
   const { open, close } = overlayStore;
 
-  const { form, errors, enhance, message } = superForm(data.form);
+  const { form, errors, enhance, message } = superForm(data.form, {
+    dataType: "json",
+  });
 
   $: if ($message === "success") {
     close();
@@ -116,6 +118,7 @@
 </DataList>
 
 <Overlay title="Add Violation" id="addViolation">
+  <!-- <SuperDebug data={$form} /> -->
   <form
     method="POST"
     class="w-[500px] h-full flex flex-col"

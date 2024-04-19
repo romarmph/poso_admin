@@ -17,7 +17,7 @@ declare global {
     interface Locals {
       supabase: SupabaseClient<Database>;
       getSession(): Promise<Session | null>;
-      user: User;
+      getCurrentUser(): Promise<Types.Employees | null>;
     }
     interface PageData {
       session: Session | null;
@@ -69,9 +69,9 @@ declare global {
         }
       };
       enabled: boolean;
-      created_at: string;
-      updated_at: string;
-      deleted_at: string | null;
+      created_at: string | Date;
+      updated_at: string | Date;
+      deleted_at: string | Date | null;
       created_by: string;
       updated_by: string;
       deleted_by: string | null;
@@ -107,7 +107,7 @@ declare global {
       updated_by: number;
       deleted_by: number | null;
     }
-    
+
     interface TrafficPost extends Data {
       name: string;
       address: string;
@@ -122,7 +122,7 @@ declare global {
       deleted_by: number | null;
     }
 
-    interface Employees extends Data{
+    interface Employees extends Data {
       first_name: string;
       middle_name: string;
       last_name: string;
