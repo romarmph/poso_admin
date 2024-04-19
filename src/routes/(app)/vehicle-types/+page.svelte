@@ -9,11 +9,20 @@
     } from "$lib/Components";
     import { DataList } from "$lib/components/Supabase/Supabase";
     import { flexRender, type ColumnDef } from "@tanstack/svelte-table";
-    import { ViewVehicleTypes } from "$lib/components/Overlays/Overlays";
+    import {
+        Overlay,
+        ViewVehicleTypes,
+    } from "$lib/components/Overlays/Overlays";
     import { overlayStore } from "$lib/stores/overlayStore.js";
     import { getSupabaseContext } from "$lib/stores/clientStore.js";
-    const { open } = overlayStore;
+    import AddVehicleType from "$lib/components/Overlays/Offcanvas/AddVehicleType.svelte";
+    import { superForm } from "sveltekit-superforms";
     const { supabase } = getSupabaseContext();
+    export let data;
+
+    const { open, close } = overlayStore;
+
+    const { form, errors, enhance, message } = superForm(data.form);
 
     const columns: ColumnDef<Types.VehicleTypes>[] = [
         {
@@ -70,20 +79,20 @@
             cell: (info) =>
                 flexRender(RowActions, {
                     fireEdit: () => {},
-                    fireView: () =>
+                    fireView: () => {
                         open({
-                            title: "View Vehicle Type",
-                            component: ViewVehicleTypes,
-                            props: { info: info.row.original, supabase },
-                        }),
+                            props: {
+                                info: info.row.original as Types.VehicleTypes,
+                            },
+                            id: "viewVehicleType",
+                        });
+                    },
                     fireDelete: () => {},
                 }),
             header: "Actions",
             enableSorting: false,
         },
     ];
-
-    export let data;
 </script>
 
 <svelte:head><title>Vehicle Types</title></svelte:head>
@@ -98,10 +107,28 @@
             classNames="py-3 px-3 pe-10 mr-2"
         />
     </div>
-    <Button>Add</Button>
+    <Button on:click={() => open({ id: "addVehicleType" })}>Add</Button>
 </header>
 <!--Table -->
 
 <DataList table="vehicle_types" let:data initData={data.vehicleTypes ?? []}>
     <TanTable {data} {columns}></TanTable>
 </DataList>
+<Overlay title="Add Vehicle Type" id="addVehicleType">
+    <form
+        method="POST"
+        class="w-[500px] h-full flex flex-col"
+        action="?/add"
+        use:enhance
+    >
+        <AddVehicleType superForm={form} {errors} on:close={close} />
+    </form>
+</Overlay>
+
+<Overlay let:data title="View Vehicle Type" id="viewVehicleType">
+    <ViewVehicleTypes info={data} {supabase} />
+</Overlay>
+
+<Overlay title="Success" id="success" type="modal">
+    <h3>SUCCESS</h3>
+</Overlay>

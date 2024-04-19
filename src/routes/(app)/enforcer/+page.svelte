@@ -16,11 +16,18 @@
     } from "$lib/Components";
     import { flexRender, type ColumnDef } from "@tanstack/svelte-table";
     import { DataList } from "$lib/components/Supabase/Supabase";
-    import { ViewEnforcer } from "$lib/components/Overlays/Overlays";
+    import { Overlay, ViewEnforcer } from "$lib/components/Overlays/Overlays";
     import { overlayStore } from "$lib/stores/overlayStore.js";
     import { getSupabaseContext } from "$lib/stores/clientStore.js";
-    const { open } = overlayStore;
+    import AddEnforcer from "$lib/components/Overlays/Offcanvas/AddEnforcer.svelte";
+    import { superForm } from "sveltekit-superforms";
     const { supabase } = getSupabaseContext();
+
+    export let data;
+
+    const { open, close } = overlayStore;
+
+    const { form, errors, enhance, message } = superForm(data.form);
 
     const columns: ColumnDef<Types.Employees>[] = [
         {
@@ -100,20 +107,20 @@
             cell: (info) =>
                 flexRender(RowActions, {
                     fireEdit: () => {},
-                    fireView: () =>
+                    fireView: () => {
                         open({
-                            title: "View Enforcer",
-                            component: ViewEnforcer,
-                            props: { info: info.row.original, supabase },
-                        }),
+                            props: {
+                                info: info.row.original as Types.Employees,
+                            },
+                            id: "viewEnforcer",
+                        });
+                    },
                     fireDelete: () => {},
                 }),
             header: "Actions",
             enableSorting: false,
         },
     ];
-
-    export let data;
 </script>
 
 <svelte:head><title>Enforcer</title></svelte:head>
@@ -121,7 +128,7 @@
 <header style="display: flex; align-items: center;">
     <h1 style="font-weight: bold;">Enforcer</h1>
     <div style="margin-left:auto">
-        <Button data-hs-overlay="#hs-add-enforcer-modal">Add Enforcer</Button>
+        <Button on:click={() => open({ id: "addEnforcer" })}>Add</Button>
     </div>
 </header>
 
@@ -129,56 +136,27 @@
 <DataList
     table="employees"
     let:data
-    initData={data.employees ?? []}
+    initData={data.enforcer ?? []}
     eq={{ operator: "role", value: 1 }}
 >
     <TanTable {data} {columns}></TanTable>
 </DataList>
 
-<Modal modalId="hs-add-enforcer-modal">
-    <ModalHeader>Add Enforcer</ModalHeader>
+<Overlay title="Add Enforcer" id="addEnforcer">
+    <form
+        method="POST"
+        class="w-[500px] h-full flex flex-col"
+        action="?/add"
+        use:enhance
+    >
+        <AddEnforcer superForm={form} {errors} on:close={close} />
+    </form>
+</Overlay>
 
-    <ModalBody>
-        <div class="p-4 overflow-y-auto">
-            <Label id="input-label">First Name</Label>
+<Overlay let:data title="View Enforcer" id="viewEnforcer">
+    <ViewEnforcer info={data} {supabase} />
+</Overlay>
 
-            <TextInput
-                id="input-Label"
-                placeholder="Type enforcer first name here"
-            />
-        </div>
-        <div class="p-4 overflow-y-auto">
-            <Label id="input-label">Middle Name</Label>
-
-            <TextInput
-                id="input-Label"
-                placeholder="Type enforcer middle name here"
-            />
-        </div>
-        <div class="p-4 overflow-y-auto">
-            <Label id="input-label">Last Name</Label>
-
-            <TextInput
-                id="input-Label"
-                placeholder="Type enforcer last name here"
-            />
-        </div>
-        <div class="p-4 overflow-y-auto">
-            <Label id="input-label">Employee No.</Label>
-
-            <TextInput
-                id="input-Label"
-                placeholder="Type enforcer employee number here"
-            />
-        </div>
-    </ModalBody>
-
-    <ModalFooter>
-        <Button
-            data-hs-overlay="#hs-add-enforcer-modal"
-            style="soft"
-            color="gray">Cancel</Button
-        >
-        <Button>Save</Button>
-    </ModalFooter>
-</Modal>
+<Overlay title="Success" id="success" type="modal">
+    <h3>SUCCESS</h3>
+</Overlay>
