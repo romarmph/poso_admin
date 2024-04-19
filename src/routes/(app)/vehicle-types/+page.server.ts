@@ -26,36 +26,20 @@ export const actions: Actions = {
     const vehicleTypes ={
       type: form.data.type,
       big_vehicle: form.data.big_vehicle,
-
+      enabled:true,
+      created_by: user!.id,
+      updated_by: user!.id,
+      deleted_by: null,
 
     }
 
-    // const violation = {
-    //   name: form.data.name,
-    //   fine: {
-    //     big: {
-    //       a: form.data.big.a,
-    //       b: form.data.big.b,
-    //       c: form.data.big.c,
-    //     },
-    //     small: {
-    //       a: form.data.small.a,
-    //       b: form.data.small.b,
-    //       c: form.data.small.c,
-    //     }
-    //   },
-    //   enabled: true,
-    //   created_by: user!.id,
-    //   updated_by: user!.id,
-    //   deleted_by: null,
-    // }
 
-    // const { error } = await supabase.from("violations").insert(violation);
+    const { error } = await supabase.from("vehicle_types").insert(vehicleTypes);
 
-    // if (error) {
-    //   console.log(error);
-    //   return message(form, 'Error adding violation');
-    // }
+    if (error) {
+      console.log(error);
+      return message(form, 'Error adding violation');
+    }
 
     return message(
       form,

@@ -23,6 +23,13 @@
     const { open, close } = overlayStore;
 
     const { form, errors, enhance, message } = superForm(data.form);
+    $: if ($message === "success") {
+        close();
+        open({
+            id: "success",
+            props: {},
+        });
+    }
 
     const columns: ColumnDef<Types.VehicleTypes>[] = [
         {
