@@ -13,7 +13,7 @@
   import ViolationAdd from "$lib/components/Overlays/Offcanvas/ViolationAdd.svelte";
   import ViewViolation from "$lib/components/Overlays/Offcanvas/ViewViolation.svelte";
   import { getSupabaseContext } from "$lib/stores/clientStore";
-  import SuperDebug, { superForm } from "sveltekit-superforms";
+  import { superForm } from "sveltekit-superforms";
 
   export let data;
 

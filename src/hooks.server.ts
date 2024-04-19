@@ -4,7 +4,7 @@ import {
   PUBLIC_SUPABASE_SERVICE_ROLE_KEY,
 } from "$env/static/public";
 import { createServerClient } from "@supabase/ssr";
-import { type Handle, redirect, error, fail } from "@sveltejs/kit";
+import { type Handle, redirect, } from "@sveltejs/kit";
 import { sequence } from "@sveltejs/kit/hooks";
 import { routes } from "$lib/constants/protected_routes";
 
@@ -31,6 +31,24 @@ const supabase: Handle = async ({ event, resolve }) => {
     } = await event.locals.supabase.auth.getSession();
     return session;
   };
+
+  event.locals.getCurrentUser = async () => {
+    const session = await event.locals.getSession();
+    if (session) {
+      const {
+        data
+      } = await event.locals.supabase.from("employees").select().eq("user_id", session.user.id);
+
+      if (!data) {
+        return null;
+      }
+
+      return data[0]
+    }
+
+    return null;
+  }
+
 
   return resolve(event, {
     filterSerializedResponseHeaders(name: string) {
