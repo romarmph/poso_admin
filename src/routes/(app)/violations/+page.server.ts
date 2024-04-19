@@ -1,11 +1,11 @@
 import { violationSchema } from "$lib/schemas/app";
-import { fail, type Actions } from "@sveltejs/kit";
+import { type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { superValidate, message } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 
 export const load: PageServerLoad = async ({
-  locals: { supabase, getSession },
+  locals: { supabase },
 }) => {
   const form = await superValidate(zod(violationSchema));
   const violations = await supabase.from("users").select();
@@ -28,14 +28,14 @@ export const actions: Actions = {
       name: form.data.name,
       fine: {
         big: {
-          a: form.data.big_1,
-          b: form.data.big_2,
-          c: form.data.big_3,
+          a: form.data.big.a,
+          b: form.data.big.b,
+          c: form.data.big.c,
         },
         small: {
-          a: form.data.small_1,
-          b: form.data.small_2,
-          c: form.data.small_3,
+          a: form.data.small.a,
+          b: form.data.small.b,
+          c: form.data.small.c,
         }
       },
       enabled: true,
