@@ -20,7 +20,7 @@
         <TextInput id="name" bind:value={$superForm.type} required />
     </div>
     <h3 class="my-3">Vehicle Size</h3>
-    <TextInput id="name" bind:value={$superForm.type} required />
+    <TextInput id="name" bind:value={$superForm.big_vehicle} required />
 </div>
 <div class="flex justify-stretch items-center gap-4">
     <Button
