@@ -1,9 +1,9 @@
 // src/routes/login/+page.server.ts
-import { fail, redirect } from "@sveltejs/kit";
+import { fail, redirect, type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 
-export const actions = {
-  default: async ({ request, url, locals: { supabase } }) => {
+export const actions: Actions = {
+  default: async ({ request, locals: { supabase } }) => {
     const formData = await request.formData();
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;

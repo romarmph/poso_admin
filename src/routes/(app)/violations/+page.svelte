@@ -9,12 +9,27 @@
   import { DataList } from "$lib/components/Supabase/Supabase";
   import { flexRender, type ColumnDef } from "@tanstack/svelte-table";
   import { overlayStore } from "$lib/stores/overlayStore";
-  import {
-    ViewViolation,
-    ViolationAdd,
-  } from "$lib/components/Overlays/Overlays";
-  import { getSupabaseContext } from "$lib/stores/clientStore.js";
-  const { open } = overlayStore;
+  import Overlay from "$lib/components/Overlays/Overlay.svelte";
+  import ViolationAdd from "$lib/components/Overlays/Offcanvas/ViolationAdd.svelte";
+  import ViewViolation from "$lib/components/Overlays/Offcanvas/ViewViolation.svelte";
+  import { getSupabaseContext } from "$lib/stores/clientStore";
+  import SuperDebug, { superForm } from "sveltekit-superforms";
+
+  export let data;
+
+  const { open, close } = overlayStore;
+
+  const { form, errors, enhance, message } = superForm(data.form, {
+    dataType: "json",
+  });
+
+  $: if ($message === "success") {
+    close();
+    open({
+      id: "success",
+      props: {},
+    });
+  }
 
   const { supabase } = getSupabaseContext();
 
@@ -67,20 +82,20 @@
       cell: (info) =>
         flexRender(RowActions, {
           fireEdit: () => {},
-          fireView: () =>
+          fireView: () => {
             open({
-              title: "View Violation",
-              component: ViewViolation,
-              props: { info: info.row.original, supabase },
-            }),
+              props: {
+                info: info.row.original as Types.Violation,
+              },
+              id: "viewViolation",
+            });
+          },
           fireDelete: () => {},
         }),
       header: "Actions",
       enableSorting: false,
     },
   ];
-
-  export let data;
 </script>
 
 <svelte:head><title>Violations</title></svelte:head>
@@ -91,9 +106,8 @@
     <Button
       on:click={() =>
         open({
-          title: "Add Violation",
           props: {},
-          component: ViolationAdd,
+          id: "addViolation",
         })}>Add Violation</Button
     >
   </div>
@@ -102,3 +116,23 @@
 <DataList table="violations" let:data initData={data.violations ?? []}>
   <TanTable {data} {columns}></TanTable>
 </DataList>
+
+<Overlay title="Add Violation" id="addViolation">
+  <!-- <SuperDebug data={$form} /> -->
+  <form
+    method="POST"
+    class="w-[500px] h-full flex flex-col"
+    action="?/add"
+    use:enhance
+  >
+    <ViolationAdd superForm={form} {errors} on:close={close} />
+  </form>
+</Overlay>
+
+<Overlay let:data title="View Violation" id="viewViolation">
+  <ViewViolation info={data} {supabase} />
+</Overlay>
+
+<Overlay title="Success" id="success" type="modal">
+  <h3>SUCCESS</h3>
+</Overlay>

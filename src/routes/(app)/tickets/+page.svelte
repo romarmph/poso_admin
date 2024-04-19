@@ -102,12 +102,14 @@
       cell: (info) =>
         flexRender(RowActions, {
           fireEdit: () => {},
-          fireView: () =>
+          fireView: () => {
             open({
-              title: "View Tickets",
-              component: ViewTickets,
-              props: { info: info.row.original, supabase },
-            }),
+              props: {
+                info: info.row.original as Types.Tickets,
+              },
+              id: "viewViolation",
+            });
+          },
           fireDelete: () => {},
         }),
       header: "Actions",

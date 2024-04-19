@@ -2,29 +2,30 @@
     import EnabledStatus from "$lib/components/Base/EnabledStatus.svelte";
     import type { SupabaseClient } from "@supabase/supabase-js";
     import fetchUser from "$lib/utils/fetchUser";
-    export let info: Types.TrafficPost;
+    export let info;
     export let supabase: SupabaseClient;
+    const data = info.info as Types.TrafficPost;
 </script>
 
 <div class="w-[500px]">
     <div class="mb-3">
         <label for="" class="p-1 text-gray-500 text-xl">Name</label>
         <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-200">
-            {info.name}
+            {data.name}
         </div>
     </div>
     <hr class="my-2" />
     <div class="mb-3">
         <label for="" class="p-1 text-gray-500 text-xl">Address</label>
         <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-200">
-            {info.address}
+            {data.address}
         </div>
     </div>
     <hr class="my-2" />
     <div class="mb-3">
         <label for="" class="p-1 text-gray-500 text-xl">Status</label>
         <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-200">
-            <EnabledStatus enabled={info.enabled} />
+            <EnabledStatus enabled={data.enabled} />
         </div>
     </div>
 
@@ -35,11 +36,11 @@
             class="p-2 my-2 rounded-lg text-gray-800 text-lg bg-gray-200 flex justify-between"
         >
             <span class="text-gray-500">Created at</span>
-            {new Date(info.created_at).toLocaleString("en-PH", {
+            {new Date(data.created_at).toLocaleString("en-PH", {
                 timeZone: "UTC",
             })}
         </div>
-        {#await fetchUser(info.created_by, supabase)}
+        {#await fetchUser(data.created_by, supabase)}
             <p>Loading...</p>
         {:then value}
             <div
@@ -54,11 +55,11 @@
             class="p-2 my-2 rounded-lg text-gray-800 text-lg bg-gray-200 flex justify-between"
         >
             <span class="text-gray-500">Updated at</span>
-            {new Date(info.updated_at).toLocaleString("en-PH", {
+            {new Date(data.updated_at).toLocaleString("en-PH", {
                 timeZone: "UTC",
             })}
         </div>
-        {#await fetchUser(info.updated_by, supabase)}
+        {#await fetchUser(data.updated_by, supabase)}
             <p>Loading...</p>
         {:then value}
             <div

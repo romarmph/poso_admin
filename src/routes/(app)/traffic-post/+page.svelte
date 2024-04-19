@@ -17,9 +17,18 @@
     import { flexRender, type ColumnDef } from "@tanstack/svelte-table";
     import { overlayStore } from "$lib/stores/overlayStore.js";
     import { getSupabaseContext } from "$lib/stores/clientStore.js";
-    import { ViewTrafficPost } from "$lib/components/Overlays/Overlays";
-    const { open } = overlayStore;
+    import {
+        Overlay,
+        ViewTrafficPost,
+    } from "$lib/components/Overlays/Overlays";
+    import { superForm } from "sveltekit-superforms";
+    import AddTrafficPost from "$lib/components/Overlays/Offcanvas/AddTrafficPost.svelte";
     const { supabase } = getSupabaseContext();
+    export let data;
+
+    const { open, close } = overlayStore;
+
+    const { form, errors, enhance, message } = superForm(data.form);
 
     const columns: ColumnDef<Types.TrafficPost>[] = [
         {
@@ -69,20 +78,20 @@
             cell: (info) =>
                 flexRender(RowActions, {
                     fireEdit: () => {},
-                    fireView: () =>
+                    fireView: () => {
                         open({
-                            title: "View Vehicle Type",
-                            component: ViewTrafficPost,
-                            props: { info: info.row.original, supabase },
-                        }),
+                            props: {
+                                info: info.row.original as Types.TrafficPost,
+                            },
+                            id: "viewTrafficPost",
+                        });
+                    },
                     fireDelete: () => {},
                 }),
             header: "Actions",
             enableSorting: false,
         },
     ];
-
-    export let data;
 </script>
 
 <svelte:head><title>Traffic Post</title></svelte:head>
@@ -90,7 +99,7 @@
 <header style="display: flex; align-items: center;">
     <h1 style="font-weight: bold;">Traffic Post</h1>
     <div style="margin-left:auto">
-        <Button data-hs-overlay="#hs-add-TPost-modal">Add Traffic Post</Button>
+        <Button on:click={() => open({ id: "addTrafficPost" })}>Add</Button>
     </div>
 </header>
 
@@ -98,27 +107,22 @@
 <DataList table="traffic_posts" let:data initData={data.trafficPost ?? []}>
     <TanTable {data} {columns}></TanTable>
 </DataList>
-<!-- Add Traffic Post modal -->
-<Modal modalId="hs-add-TPost-modal">
-    <ModalHeader>Add Traffic Post</ModalHeader>
 
-    <ModalBody>
-        <div class="p-4 overflow-y-auto">
-            <Label id="input-label">Post Name</Label>
+<Overlay title="Add Traffic Post" id="addTrafficPost">
+    <form
+        method="POST"
+        class="w-[500px] h-full flex flex-col"
+        action="?/add"
+        use:enhance
+    >
+        <AddTrafficPost superForm={form} {errors} on:close={close} />
+    </form>
+</Overlay>
 
-            <TextInput id="input-Label" placeholder="Type post name here" />
-        </div>
-        <div class="p-4 overflow-y-auto">
-            <Label id="input-label">Location</Label>
+<Overlay let:data title="View Traffic Post" id="viewTrafficPost">
+    <ViewTrafficPost info={data} {supabase} />
+</Overlay>
 
-            <TextInput id="input-Label" placeholder="Type location here" />
-        </div>
-    </ModalBody>
-
-    <ModalFooter>
-        <Button data-hs-overlay="#hs-add-TPost-modal" style="soft" color="gray"
-            >Cancel</Button
-        >
-        <Button>Save</Button>
-    </ModalFooter>
-</Modal>
+<Overlay title="Success" id="success" type="modal">
+    <h3>SUCCESS</h3>
+</Overlay>
