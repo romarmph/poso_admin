@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Button from "$lib/components/Base/Button.svelte";
 	import ComboInput from "$lib/components/Base/ComboInput.svelte";
+	import EnabledStatus from "$lib/components/Base/EnabledStatus.svelte";
 	import TextInput from "$lib/components/Forms/TextInput.svelte";
 	import { createEventDispatcher } from "svelte";
 
@@ -16,7 +17,10 @@
 			...initData.info.fine,
 			name: initData.info.name,
 			id: initData.info.id,
+			enabled: initData.info.enabled,
 		};
+
+		console.log("Form", $form);
 	}
 </script>
 
@@ -114,6 +118,25 @@
 				</span>
 			{/if}
 		</li>
+		{#if $form.id}
+			<li class="mb-3">
+				<div class="flex">
+					<input
+						type="checkbox"
+						class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+						id="enabled"
+						name="enabled"
+						bind:checked={$form.enabled}
+					/>
+					<label
+						for="hs-default-checkbox"
+						class="text-sm text-gray-500 ms-3 dark:text-neutral-400"
+						>Enable</label
+					>
+					<pre></pre>
+				</div>
+			</li>
+		{/if}
 	</ul>
 </div>
 <div class="flex justify-stretch items-center gap-4">

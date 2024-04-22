@@ -1,5 +1,5 @@
 import { deleteSchema, violationSchema } from "$lib/schemas/app";
-import { redirect, type Actions } from "@sveltejs/kit";
+import { type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { superValidate, message, fail } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
@@ -69,7 +69,7 @@ export const actions: Actions = {
       }
     )
   },
-  update: async ({ request, url, locals: { supabase, getCurrentUser } }) => {
+  update: async ({ request, locals: { supabase, getCurrentUser } }) => {
     const form = await superValidate(request, zod(violationSchema));
 
     if (!form.valid) {
@@ -94,8 +94,7 @@ export const actions: Actions = {
           c: form.data.small.c,
         }
       },
-      enabled: true,
-      created_by: user!.id,
+      enabled: form.data.enabled,
       updated_by: user!.id,
       deleted_by: null,
     }
