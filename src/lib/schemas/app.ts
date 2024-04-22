@@ -22,11 +22,13 @@ export const violationSchema = z.object({
 })
 
 export const vehicleTypesSchema = z.object({
+	id: z.number().optional(),
 	type: z.string(),
 	big_vehicle: z.boolean().default(true),
 })
 
 export const trafficPostSchema = z.object({
+	id: z.number().optional(),
 	name: z.string(),
 	address: z.string(),
 })

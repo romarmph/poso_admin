@@ -18,7 +18,6 @@
     export let data;
 
     const { open, close } = overlayStore;
-
     const {
         form: enforcerForm,
         errors: enforcerErrors,

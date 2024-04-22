@@ -61,7 +61,6 @@ export const actions: Actions = {
       updated_by: author!.id,
       deleted_by: null,
     }
-
     const { error } = await supabase.from("employees").insert(user);
 
     if (error) {
@@ -99,3 +98,4 @@ export const actions: Actions = {
     })
   }
 }
+
