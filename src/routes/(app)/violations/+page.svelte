@@ -189,4 +189,3 @@
 <Overlay let:data title="View Violation" id="viewViolation">
   <ViewViolation info={data} {supabase} />
 </Overlay>
-<!-- TODO: Confimation, Fail, and Success modals; Fixed the modals; Figure out the injection of modals at once instead of reusing them for each pages -->
