@@ -1,26 +1,82 @@
-import { violationSchema } from "$lib/schemas/app";
-import { type Actions } from "@sveltejs/kit";
+import { deleteSchema, violationSchema } from "$lib/schemas/app";
+import { redirect, type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { superValidate, message } from "sveltekit-superforms";
+import { superValidate, message, fail } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
+import DbActions from "$lib/enums/DbActions";
+import ActionResultModals from "$lib/enums/ActionResultModals";
 
 export const load: PageServerLoad = async ({
   locals: { supabase },
 }) => {
-  const form = await superValidate(zod(violationSchema));
-  const violations = await supabase.from("users").select();
+  const violationForm = await superValidate(zod(violationSchema));
+  const deleteForm = await superValidate(zod(deleteSchema));
+  const violations = await supabase.from("violations").select().is("deleted_by", null);
 
   return {
     violations: violations.data,
-    form,
+    violationForm,
+    deleteForm,
   };
 };
 
 export const actions: Actions = {
-  add: async ({ request, locals: { supabase, getSession, getCurrentUser } }) => {
+  add: async ({ request, locals: { supabase, getCurrentUser } }) => {
+    const violationForm = await superValidate(request, zod(violationSchema));
+
+    if (!violationForm.valid) {
+      return message(violationForm, {
+        success: false,
+        action: DbActions.CREATE,
+      });
+    }
+    const user = await getCurrentUser();
+
+    const violation = {
+      name: violationForm.data.name,
+      fine: {
+        big: {
+          a: violationForm.data.big.a,
+          b: violationForm.data.big.b,
+          c: violationForm.data.big.c,
+        },
+        small: {
+          a: violationForm.data.small.a,
+          b: violationForm.data.small.b,
+          c: violationForm.data.small.c,
+        }
+      },
+      enabled: true,
+      created_by: user!.id,
+      updated_by: user!.id,
+      deleted_by: null,
+    }
+
+    const { error } = await supabase.from("violations").insert(violation);
+
+    if (error) {
+      return message(violationForm, {
+        success: false,
+        action: ActionResultModals.FailCreate,
+      });
+    }
+
+    return message(
+      violationForm,
+      {
+        success: true,
+        action: ActionResultModals.SuccessCreate,
+      }
+    )
+  },
+  update: async ({ request, url, locals: { supabase, getCurrentUser } }) => {
     const form = await superValidate(request, zod(violationSchema));
+
     if (!form.valid) {
-      return message(form, 'Invalid form');
+      return message(form, {
+        success: false,
+        action: ""
+      });
     }
     const user = await getCurrentUser();
 
@@ -44,16 +100,44 @@ export const actions: Actions = {
       deleted_by: null,
     }
 
-    const { error } = await supabase.from("violations").insert(violation);
+    const updatedViolation = {
+      ...violation,
+      updated_at: new Date(),
+      updated_by: user!.id,
+    }
+    const { error } = await supabase.from("violations").update(updatedViolation).eq("id", form.data.id);
 
     if (error) {
-      console.log(error);
-      return message(form, 'Error adding violation');
+      return message(form, {
+        success: false,
+        action: ActionResultModals.FailUpdate,
+      });
     }
 
-    return message(
-      form,
-      "success",
-    )
+    return message(form, {
+      success: true,
+      action: ActionResultModals.SuccessUpdate,
+    })
+  },
+
+  delete: async ({ request, locals: { supabase, getCurrentUser } }) => {
+    const form = await superValidate(request, zod(deleteSchema));
+    const user = await getCurrentUser();
+
+    const { error } = await supabase.from("violations").update({
+      deleted_by: user!.id,
+      deleted_at: new Date(),
+    }).eq("id", form.data.id)
+
+    if (error) {
+      return message(form, {
+        success: false,
+        action: ActionResultModals.FailDelete,
+      })
+    }
+    return message(form, {
+      success: true,
+      action: ActionResultModals.SuccessDelete,
+    })
   }
 }

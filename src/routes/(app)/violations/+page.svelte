@@ -13,21 +13,41 @@
   import ViolationAdd from "$lib/components/Overlays/Offcanvas/ViolationAdd.svelte";
   import ViewViolation from "$lib/components/Overlays/Offcanvas/ViewViolation.svelte";
   import { getSupabaseContext } from "$lib/stores/clientStore";
-  import SuperDebug, { superForm } from "sveltekit-superforms";
+  import { superForm } from "sveltekit-superforms";
+  import ConfirmDelete from "$lib/components/Overlays/Modal/Delete/ConfirmDelete.svelte";
 
   export let data;
 
   const { open, close } = overlayStore;
 
-  const { form, errors, enhance, message } = superForm(data.form, {
+  const {
+    form: violationForm,
+    errors: violationErrors,
+    enhance: violationEnhance,
+    message: violationMessage,
+  } = superForm(data.violationForm, {
     dataType: "json",
   });
 
-  $: if ($message === "success") {
+  const {
+    form: deleteForm,
+    enhance: deleteEnhance,
+    message: deleteMessage,
+  } = superForm(data.deleteForm, {
+    dataType: "json",
+  });
+
+  $: if ($violationMessage) {
     close();
     open({
-      id: "success",
-      props: {},
+      id: $violationMessage.action,
+    });
+  }
+
+  $: if ($deleteMessage) {
+    close();
+    open({
+      id: $deleteMessage.action,
     });
   }
 
@@ -67,21 +87,16 @@
       accessorFn: (row) => new Date(row.updated_at).toDateString(),
     },
     {
-      accessorKey: "deleted_at",
-      cell: (info) => info.getValue(),
-      footer: (info) => info.column.id,
-      header: "Deleted At",
-      accessorFn: (row) => {
-        if (row.deleted_at) {
-          return new Date(row.deleted_at).toDateString();
-        }
-      },
-    },
-    {
       accessorKey: "id",
       cell: (info) =>
         flexRender(RowActions, {
-          fireEdit: () => {},
+          fireEdit: () =>
+            open({
+              id: "updateViolation",
+              props: {
+                info: info.row.original as Types.Violation,
+              },
+            }),
           fireView: () => {
             open({
               props: {
@@ -90,7 +105,14 @@
               id: "viewViolation",
             });
           },
-          fireDelete: () => {},
+          fireDelete: () =>
+            open({
+              id: "deleteViolation",
+              props: {
+                info: info.row.original.id,
+                data,
+              },
+            }),
         }),
       header: "Actions",
       enableSorting: false,
@@ -117,22 +139,54 @@
   <TanTable {data} {columns}></TanTable>
 </DataList>
 
-<Overlay title="Add Violation" id="addViolation">
-  <!-- <SuperDebug data={$form} /> -->
+<Overlay title="Add Violation" id="addViolation" let:data>
   <form
     method="POST"
     class="w-[500px] h-full flex flex-col"
     action="?/add"
-    use:enhance
+    use:violationEnhance
+    on:submit={close}
   >
-    <ViolationAdd superForm={form} {errors} on:close={close} />
+    <ViolationAdd
+      form={violationForm}
+      errors={violationErrors}
+      on:close={close}
+      initData={data}
+    />
+  </form>
+</Overlay>
+
+<Overlay title="Update Violation" id="updateViolation" let:data>
+  <form
+    method="POST"
+    class="w-[500px] h-full flex flex-col"
+    action="?/update"
+    use:violationEnhance
+    on:submit={close}
+  >
+    <ViolationAdd
+      form={violationForm}
+      errors={violationErrors}
+      on:close={close}
+      initData={data}
+    />
+  </form>
+</Overlay>
+
+<Overlay let:data title="" id="deleteViolation" type="modal">
+  <form
+    action="?/delete"
+    method="POST"
+    use:deleteEnhance
+    class="flex flex-col justify-center items-center text-red-500"
+    on:submit={close}
+  >
+    <ConfirmDelete info={data} form={deleteForm} on:close={close}
+    ></ConfirmDelete>
   </form>
 </Overlay>
 
 <Overlay let:data title="View Violation" id="viewViolation">
   <ViewViolation info={data} {supabase} />
 </Overlay>
-
-<Overlay title="Success" id="success" type="modal">
-  <h3>SUCCESS</h3>
-</Overlay>
+<!-- TODO: Confimation, Fail, and Success modals; Fixed the modals; Figure out the injection of modals at once instead of reusing them for each pages -->

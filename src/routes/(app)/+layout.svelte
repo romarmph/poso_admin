@@ -2,6 +2,16 @@
   import Sidebar from "$lib/components/Sidebar/Sidebar.svelte";
   import { AlignJustify } from "lucide-svelte";
   import { Header } from "$lib/Components";
+  import Overlay from "$lib/components/Overlays/Overlay.svelte";
+  import SuccessCreate from "$lib/components/Overlays/Modal/Create/SuccessCreate.svelte";
+  import SuccessUpdate from "$lib/components/Overlays/Modal/Update/SuccessUpdate.svelte";
+  import SuccessDelete from "$lib/components/Overlays/Modal/Delete/SuccessDelete.svelte";
+  import FailCreate from "$lib/components/Overlays/Modal/Create/FailCreate.svelte";
+  import FailUpdate from "$lib/components/Overlays/Modal/Update/FailUpdate.svelte";
+  import FailDelete from "$lib/components/Overlays/Modal/Delete/FailDelete.svelte";
+  import { overlayStore } from "$lib/stores/overlayStore";
+
+  const { close } = overlayStore;
 </script>
 
 <Header />
@@ -29,3 +39,22 @@
     <slot />
   </div>
 </div>
+
+<Overlay type="modal" id="success-create" title="">
+  <SuccessCreate on:close={close} />
+</Overlay>
+<Overlay type="modal" id="success-update" title="">
+  <SuccessUpdate on:close={close} />
+</Overlay>
+<Overlay type="modal" id="success-delete" title="">
+  <SuccessDelete on:close={close} />
+</Overlay>
+<Overlay type="modal" id="fail-create" title="">
+  <FailCreate on:close={close} />
+</Overlay>
+<Overlay type="modal" id="fail-update" title="">
+  <FailUpdate on:close={close} />
+</Overlay>
+<Overlay type="modal" id="fail-delete" title="">
+  <FailDelete on:close={close} />
+</Overlay>
