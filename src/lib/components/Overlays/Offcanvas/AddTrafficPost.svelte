@@ -1,26 +1,29 @@
 <script lang="ts">
-    import Button from "$lib/components/Base/Button.svelte";
-    import ComboInput from "$lib/components/Base/ComboInput.svelte";
-    import TextInput from "$lib/components/Forms/TextInput.svelte";
+    import { TextInput, Button } from "$lib/Components";
+
     import { createEventDispatcher } from "svelte";
 
-    export let superForm;
+    export let initData: any | null;
+    export let form;
     export let errors;
 
     const dispatch = createEventDispatcher();
+    console.log(initData);
 
-    function handleClose() {
-        dispatch("close");
+    if (Object.keys(initData).length > 0) {
+        $form = {
+            ...initData.info,
+        };
     }
 </script>
 
 <div class="flex-1">
     <div>
         <label for="">Traffic Post Name</label>
-        <TextInput id="name" bind:value={$superForm.name} required />
+        <TextInput id="name" bind:value={$form.name} required />
     </div>
     <h3 class="my-3">Address</h3>
-    <TextInput id="address" bind:value={$superForm.address} required />
+    <TextInput id="address" bind:value={$form.address} required />
 </div>
 <div class="flex justify-stretch items-center gap-4">
     <Button
@@ -28,7 +31,7 @@
         style="soft"
         color="gray"
         fullWidth={true}
-        on:click={handleClose}>Close</Button
+        on:click={() => dispatch("close")}>Close</Button
     >
     <Button fullWidth={true} type="submit">Save</Button>
 </div>

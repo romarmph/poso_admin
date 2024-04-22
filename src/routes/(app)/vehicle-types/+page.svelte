@@ -16,21 +16,45 @@
     import { overlayStore } from "$lib/stores/overlayStore.js";
     import { getSupabaseContext } from "$lib/stores/clientStore.js";
     import AddVehicleType from "$lib/components/Overlays/Offcanvas/AddVehicleType.svelte";
+    import ConfirmDelete from "$lib/components/Overlays/Modal/Delete/ConfirmDelete.svelte";
+
     import { superForm } from "sveltekit-superforms";
-    const { supabase } = getSupabaseContext();
     export let data;
 
     const { open, close } = overlayStore;
 
-    const { form, errors, enhance, message } = superForm(data.form);
-    $: if ($message === "success") {
+    const {
+        form: vehicleTypeForm,
+        errors: vehicleTypeErrors,
+        enhance: vehicleTypeEnhance,
+        message: vehicleTypeMessage,
+    } = superForm(data.vehicleTypeForm, {
+        dataType: "json",
+    });
+
+    const {
+        form: deleteForm,
+        enhance: deleteEnhance,
+        message: deleteMessage,
+    } = superForm(data.deleteForm, {
+        dataType: "json",
+    });
+
+    $: if ($vehicleTypeMessage) {
         close();
         open({
-            id: "success",
-            props: {},
+            id: $vehicleTypeMessage.action,
         });
     }
 
+    $: if ($deleteMessage) {
+        close();
+        open({
+            id: $deleteMessage.action,
+        });
+    }
+
+    const { supabase } = getSupabaseContext();
     const columns: ColumnDef<Types.VehicleTypes>[] = [
         {
             accessorKey: "type",
@@ -62,12 +86,7 @@
             header: "Created At",
             accessorFn: (row) => new Date(row.created_at).toDateString(),
         },
-        {
-            accessorKey: "created_by",
-            cell: (info) => info.getValue(),
-            footer: (info) => info.column.id,
-            header: "Created By",
-        },
+
         {
             accessorKey: "updated_at",
             cell: (info) => info.getValue(),
@@ -75,17 +94,18 @@
             header: "Updated At",
             accessorFn: (row) => new Date(row.updated_at).toDateString(),
         },
-        {
-            accessorKey: "updated_by",
-            cell: (info) => info.getValue(),
-            footer: (info) => info.column.id,
-            header: "Updated By",
-        },
+
         {
             accessorKey: "id",
             cell: (info) =>
                 flexRender(RowActions, {
-                    fireEdit: () => {},
+                    fireEdit: () =>
+                        open({
+                            id: "updateVehicleType",
+                            props: {
+                                info: info.row.original as Types.VehicleTypes,
+                            },
+                        }),
                     fireView: () => {
                         open({
                             props: {
@@ -94,7 +114,14 @@
                             id: "viewVehicleType",
                         });
                     },
-                    fireDelete: () => {},
+                    fireDelete: () =>
+                        open({
+                            id: "deleteVehicleType",
+                            props: {
+                                info: info.row.original.id,
+                                data,
+                            },
+                        }),
                 }),
             header: "Actions",
             enableSorting: false,
@@ -114,28 +141,62 @@
             classNames="py-3 px-3 pe-10 mr-2"
         />
     </div>
-    <Button on:click={() => open({ id: "addVehicleType" })}>Add</Button>
+    <Button on:click={() => open({ id: "addVehicleType", props: {} })}
+        >Add</Button
+    >
 </header>
 <!--Table -->
 
-<DataList table="vehicle_types" let:data initData={data.vehicleTypes ?? []}>
+<DataList table="vehicle_types" let:data initData={data.vehicleType ?? []}>
     <TanTable {data} {columns}></TanTable>
 </DataList>
-<Overlay title="Add Vehicle Type" id="addVehicleType">
+<Overlay title="Add vehicleType" id="addVehicleType" let:data>
     <form
         method="POST"
         class="w-[500px] h-full flex flex-col"
         action="?/add"
-        use:enhance
+        use:vehicleTypeEnhance
+        on:submit={close}
     >
-        <AddVehicleType superForm={form} {errors} on:close={close} />
+        <AddVehicleType
+            form={vehicleTypeForm}
+            errors={vehicleTypeForm}
+            on:close={close}
+            initData={data}
+        />
     </form>
 </Overlay>
 
-<Overlay let:data title="View Vehicle Type" id="viewVehicleType">
-    <ViewVehicleTypes info={data} {supabase} />
+<Overlay title="Update VehicleType" id="updateVehicleType" let:data>
+    <form
+        method="POST"
+        class="w-[500px] h-full flex flex-col"
+        action="?/update"
+        use:vehicleTypeEnhance
+        on:submit={close}
+    >
+        <AddVehicleType
+            form={vehicleTypeForm}
+            errors={vehicleTypeErrors}
+            on:close={close}
+            initData={data}
+        />
+    </form>
 </Overlay>
 
-<Overlay title="Success" id="success" type="modal">
-    <h3>SUCCESS</h3>
+<Overlay let:data title="" id="deleteVehicleType" type="modal">
+    <form
+        action="?/delete"
+        method="POST"
+        use:deleteEnhance
+        class="flex flex-col justify-center items-center text-red-500"
+        on:submit={close}
+    >
+        <ConfirmDelete info={data} form={deleteForm} on:close={close}
+        ></ConfirmDelete>
+    </form>
+</Overlay>
+
+<Overlay let:data title="View VehicleType" id="viewVehicleType">
+    <ViewVehicleTypes info={data} {supabase} />
 </Overlay>

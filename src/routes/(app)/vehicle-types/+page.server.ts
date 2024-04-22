@@ -1,50 +1,121 @@
-import { vehicleTypesSchema } from "$lib/schemas/app";
-import { fail, type Actions } from "@sveltejs/kit";
+import { deleteSchema, vehicleTypesSchema, violationSchema } from "$lib/schemas/app";
+import { redirect, type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { superValidate, message } from "sveltekit-superforms";
+import { superValidate, message, fail } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
+import DbActions from "$lib/enums/DbActions";
+import ActionResultModals from "$lib/enums/ActionResultModals";
 
 export const load: PageServerLoad = async ({
-  locals: { supabase, getSession },
+  locals: { supabase },
 }) => {
-  const form = await superValidate(zod(vehicleTypesSchema));
-  const vehicleTypes = await supabase.from("vehicle_types").select();
+  const vehicleTypeForm = await superValidate(zod(vehicleTypesSchema));
+  const deleteForm = await superValidate(zod(deleteSchema));
+  const vehicleType = await supabase.from("vehicle_types").select().is("deleted_by", null);
 
   return {
-    vehicleTypes: vehicleTypes.data,
-    form,
+    vehicleType: vehicleType.data,
+    vehicleTypeForm,
+    deleteForm,
   };
 };
 
 export const actions: Actions = {
-  add: async ({ request, locals: { supabase, getSession, getCurrentUser } }) => {
-    const form = await superValidate(request, zod(vehicleTypesSchema));
-    if (!form.valid) {
-      return message(form, 'Invalid form');
+  add: async ({ request, locals: { supabase, getCurrentUser } }) => {
+    const vehicleTypeForm = await superValidate(request, zod(vehicleTypesSchema));
+
+    if (!vehicleTypeForm.valid) {
+      return message(vehicleTypeForm, {
+        success: false,
+        action: DbActions.CREATE,
+      });
     }
     const user = await getCurrentUser();
-    const vehicleTypes ={
-      type: form.data.type,
-      big_vehicle: form.data.big_vehicle,
+
+    const vehicleType = {
+      type: vehicleTypeForm.data.type,
+      big_vehicle: vehicleTypeForm.data.big_vehicle,
       enabled:true,
       created_by: user!.id,
       updated_by: user!.id,
       deleted_by: null,
-
     }
 
-
-    const { error } = await supabase.from("vehicle_types").insert(vehicleTypes);
+    const { error } = await supabase.from("vehicle_types").insert(vehicleType);
 
     if (error) {
-      console.log(error);
-      return message(form, 'Error adding violation');
+      return message(vehicleTypeForm, {
+        success: false,
+        action: ActionResultModals.FailCreate,
+      });
     }
 
     return message(
-      form,
-      "success",
+      vehicleTypeForm,
+      {
+        success: true,
+        action: ActionResultModals.SuccessCreate,
+      }
     )
+  },
+  update: async ({ request, url, locals: { supabase, getCurrentUser } }) => {
+    const form = await superValidate(request, zod(vehicleTypesSchema));
+
+    if (!form.valid) {
+      return message(form, {
+        success: false,
+        action: ""
+      });
+    }
+    const user = await getCurrentUser();
+
+    const vehicleType = {
+      type: form.data.type,
+      big_vehicle: form.data.big_vehicle,
+      enabled: true,
+      created_by: user!.id,
+      updated_by: user!.id,
+      deleted_by: null,
+    }
+
+    const updateVehicleType = {
+      ...vehicleType,
+      updated_at: new Date(),
+      updated_by: user!.id,
+    }
+    const { error } = await supabase.from("vehicle_types").update(updateVehicleType).eq("id", form.data.id);
+
+    if (error) {
+      return message(form, {
+        success: false,
+        action: ActionResultModals.FailUpdate,
+      });
+    }
+
+    return message(form, {
+      success: true,
+      action: ActionResultModals.SuccessUpdate,
+    })
+  },
+
+  delete: async ({ request, locals: { supabase, getCurrentUser } }) => {
+    const form = await superValidate(request, zod(deleteSchema));
+    const user = await getCurrentUser();
+
+    const { error } = await supabase.from("vehicle_types").update({
+      deleted_by: user!.id,
+      deleted_at: new Date(),
+    }).eq("id", form.data.id)
+
+    if (error) {
+      return message(form, {
+        success: false,
+        action: ActionResultModals.FailDelete,
+      })
+    }
+    return message(form, {
+      success: true,
+      action: ActionResultModals.SuccessDelete,
+    })
   }
 }
-

@@ -1,23 +1,25 @@
 <script lang="ts">
-    import Button from "$lib/components/Base/Button.svelte";
-    import ComboInput from "$lib/components/Base/ComboInput.svelte";
-    import TextInput from "$lib/components/Forms/TextInput.svelte";
+    import { TextInput, Button } from "$lib/Components";
+
     import { createEventDispatcher } from "svelte";
 
-    export let superForm;
+    export let initData: any | null;
+    export let form;
     export let errors;
 
     const dispatch = createEventDispatcher();
 
-    function handleClose() {
-        dispatch("close");
+    if (Object.keys(initData).length > 0) {
+        $form = {
+            ...initData.info,
+        };
     }
 </script>
 
 <div class="flex-1">
     <div>
         <label for="">Vehicle Type</label>
-        <TextInput id="type" bind:value={$superForm.type} required />
+        <TextInput id="type" bind:value={$form.type} required />
     </div>
     <h3 class="my-3">Vehicle Size</h3>
     <div class="flex gap-x-6">
@@ -27,7 +29,7 @@
                 id="big_vehicle"
                 name="big_vehicle"
                 value={true}
-                bind:group={$superForm.big_vehicle}
+                bind:group={$form.big_vehicle}
             />
             <label
                 for="hs-radio-group-1"
@@ -42,7 +44,7 @@
                 id="small_vehicle"
                 name="big_vehicle"
                 value={false}
-                bind:group={$superForm.big_vehicle}
+                bind:group={$form.big_vehicle}
             />
             <label
                 for="hs-radio-group-2"
@@ -58,7 +60,7 @@
         style="soft"
         color="gray"
         fullWidth={true}
-        on:click={handleClose}>Close</Button
+        on:click={() => dispatch("close")}>Close</Button
     >
     <Button fullWidth={true} type="submit">Save</Button>
 </div>
