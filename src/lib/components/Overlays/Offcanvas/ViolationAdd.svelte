@@ -5,28 +5,25 @@
 	import { createEventDispatcher } from "svelte";
 
 	export let initData: any | null;
-	export let superForm;
+	export let form;
 	export let errors;
 
 	const dispatch = createEventDispatcher();
 
 	if (Object.keys(initData).length > 0) {
-		$superForm = {
+		console.log(initData);
+		$form = {
 			...initData.info.fine,
 			name: initData.info.name,
 			id: initData.info.id,
 		};
-	}
-
-	function handleClose() {
-		dispatch("close");
 	}
 </script>
 
 <div class="flex-1">
 	<div>
 		<label for="">Violation Name</label>
-		<TextInput id="name" bind:value={$superForm.name} required />
+		<TextInput id="name" bind:value={$form.name} required />
 	</div>
 	<h3 class="my-3">Big Vehicle Offenses</h3>
 	<ul>
@@ -36,7 +33,7 @@
 				type="number"
 				label="1st Offense"
 				placeholder="0"
-				bind:value={$superForm.big.a}
+				bind:value={$form.big.a}
 			/>
 			{#if $errors.big && $errors.big.a}
 				<span class="text-red-500 text-sm">
@@ -50,7 +47,7 @@
 				type="number"
 				label="2nd Offense"
 				placeholder="0"
-				bind:value={$superForm.big.b}
+				bind:value={$form.big.b}
 			/>
 			{#if $errors.big && $errors.big.b}
 				<span class="text-red-500 text-sm">
@@ -64,7 +61,7 @@
 				type="number"
 				label="3rd Offense"
 				placeholder="0"
-				bind:value={$superForm.big.c}
+				bind:value={$form.big.c}
 			/>
 			{#if $errors.big && $errors.big.c}
 				<span class="text-red-500 text-sm">
@@ -81,7 +78,7 @@
 				type="number"
 				label="1st Offense"
 				placeholder="0"
-				bind:value={$superForm.small.a}
+				bind:value={$form.small.a}
 			/>
 			{#if $errors.small && $errors.small.a}
 				<span class="text-red-500 text-sm">
@@ -95,7 +92,7 @@
 				type="number"
 				label="2nd Offense"
 				placeholder="0"
-				bind:value={$superForm.small.b}
+				bind:value={$form.small.b}
 			/>
 			{#if $errors.small && $errors.small.b}
 				<span class="text-red-500 text-sm">
@@ -109,7 +106,7 @@
 				type="number"
 				label="3rd Offense"
 				placeholder="0"
-				bind:value={$superForm.small.c}
+				bind:value={$form.small.c}
 			/>
 			{#if $errors.small && $errors.small.c}
 				<span class="text-red-500 text-sm">
@@ -125,7 +122,7 @@
 		style="soft"
 		color="gray"
 		fullWidth={true}
-		on:click={handleClose}>Close</Button
+		on:click={() => dispatch("close")}>Close</Button
 	>
 	<Button fullWidth={true} type="submit">Save</Button>
 </div>

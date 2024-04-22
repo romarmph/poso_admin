@@ -1,5 +1,9 @@
 import { z } from "zod";
 
+export const deleteSchema = z.object({
+	id: z.number().or(z.string())
+});
+
 export const violationSchema = z.object({
 	id: z.number().optional(),
 	name: z.string(),

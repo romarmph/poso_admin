@@ -42,10 +42,7 @@ export function dataListStore<T extends Types.Data>(
   }
 
   const { subscribe } = writable(initialData, (set, update) => {
-
-    // set the initial data
     set(initialData);
-
     channel = supabase
       .channel(`${table}-changes`)
       .on(
@@ -71,8 +68,14 @@ export function dataListStore<T extends Types.Data>(
               return;
             }
 
+            console.log(payload.new.deleted_by)
+
             update((current) => {
               const filteredRows = current.filter((row) => row.id !== payload.new.id);
+              if (payload.new.deleted_by != null) {
+                return [...filteredRows];
+              }
+              console.log("shit")
               return [...filteredRows, payload.new as T];
             });
           }
@@ -84,9 +87,7 @@ export function dataListStore<T extends Types.Data>(
             });
           }
         }
-      )
-      .subscribe();
-
+      ).subscribe();
     return () => channel.unsubscribe();
   });
 

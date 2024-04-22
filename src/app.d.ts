@@ -3,6 +3,7 @@
 import type EmployeeStatus from "$lib/enums/UserStatus";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { User } from "@supabase/supabase-js";
+import type { SuperValidated } from "sveltekit-superforms";
 
 // for information about these interfaces
 
@@ -19,8 +20,13 @@ declare global {
       getSession(): Promise<Session | null>;
       getCurrentUser(): Promise<Types.Employees | null>;
     }
+
     interface PageData {
       session: Session | null;
+    }
+
+    interface DeleteData extends PageData {
+      deleteForm: SuperValidated;
     }
 
     interface Eq {
@@ -31,6 +37,12 @@ declare global {
     // interface PageData {}
     // interface PageState {}
     // interface Platform {}
+    //
+    namespace Superforms {
+      type Message = {
+        success: boolean, action: string
+      }
+    }
   }
 
 
