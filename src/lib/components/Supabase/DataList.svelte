@@ -1,32 +1,14 @@
 <script lang="ts">
   import { getSupabaseContext } from "$lib/stores/clientStore";
   import { dataListStore } from "$lib/stores/dataListStore.js";
-  import { onMount } from "svelte";
 
-  export let initData: any[] = [];
+  export let initData: any[];
   export let table: string;
   export let uid: string | null = null;
-  export let eq: App.Eq | null = null;
-  export let select: string = "*";
 
   const { supabase } = getSupabaseContext();
 
   let store = dataListStore(supabase, table, initData, uid);
-
-  onMount(async () => {
-    if (initData.length === 0) {
-      if (eq) {
-        let { data } = await supabase
-          .from(table)
-          .select(select)
-          .eq(eq!.operator, eq!.value);
-        store = dataListStore(supabase, table, (data as []) ?? [], uid);
-      } else {
-        let { data } = await supabase.from(table).select(select);
-        store = dataListStore(supabase, table, (data as []) ?? [], uid);
-      }
-    }
-  });
 
   $: $store.sort((a, b) => {
     if (a.id > b.id) {

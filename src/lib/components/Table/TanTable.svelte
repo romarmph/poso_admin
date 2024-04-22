@@ -128,7 +128,7 @@
                           <svelte:component
                             this={flexRender(
                               header.column.columnDef.header,
-                              header.getContext(),
+                              header.getContext()
                             )}
                           />
                           {#if header.column.getIsSorted().toString() === "asc"}
@@ -155,7 +155,7 @@
                           <svelte:component
                             this={flexRender(
                               cell.column.columnDef.cell,
-                              cell.getContext(),
+                              cell.getContext()
                             )}
                           />
                         </label>

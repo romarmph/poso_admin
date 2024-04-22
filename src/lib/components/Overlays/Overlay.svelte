@@ -53,9 +53,7 @@
 			<div
 				class="w-full max-h-full overflow-hidden flex flex-col bg-white shadow-sm rounded-xl pointer-events-auto dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70"
 			>
-				<div
-					class="flex justify-between items-center py-3 px-4 border-b dark:border-neutral-700"
-				>
+				<div class="flex justify-between items-center py-3 px-4">
 					<h3 class="font-bold text-gray-800 dark:text-white">
 						{title}
 					</h3>
@@ -69,12 +67,7 @@
 					</button>
 				</div>
 				<div class="p-4 overflow-y-auto">
-					<slot name="body" />
-				</div>
-				<div
-					class="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-neutral-700"
-				>
-					<slot name="footer" />
+					<slot data={$overlayStore.props} />
 				</div>
 			</div>
 		</div>
