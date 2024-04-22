@@ -17,14 +17,38 @@ export const load: PageServerLoad = async ({
 };
 
 export const actions: Actions = {
-  add: async ({ request }) => {
+  add: async ({ request, locals: { supabase, getSession, getCurrentUser } }) => {
     const form = await superValidate(request, zod(employeeSchema));
     if (!form.valid) {
       return message(form, 'Invalid form');
     }
+    const user = await getCurrentUser();
+    const Enforcer ={
+      first_name: form.data.first_name,
+      middle_name: form.data.middle_name,
+      last_name: form.data.last_name,
+      suffix: form.data.suffix,
+      birthdate: form.data.birthdate,
+      employee_no: form.data.employee_no,
+      role: 1,
+      created_by: user!.id,
+      updated_by: user!.id,
+      deleted_by: null,
+
+    }
+
+
+    const { error } = await supabase.from("employees").insert(Enforcer);
+
+    if (error) {
+      console.log(error);
+      return message(form, 'Error adding Employees');
+    }
+
     return message(
       form,
       "success",
     )
   }
 }
+
