@@ -27,7 +27,8 @@ export const actions: Actions = {
     if (!trafficPostForm.valid) {
       return message(trafficPostForm, {
         success: false,
-        action: DbActions.CREATE,
+        action: "",
+        
       });
     }
     const user = await getCurrentUser();
