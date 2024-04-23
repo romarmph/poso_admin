@@ -144,13 +144,15 @@
 <header style="display: flex; align-items: center;">
     <h1 style="font-weight: bold;">Enforcer</h1>
     <div style="margin-left:auto">
-        <Button on:click={() => open({ id: "addEnforcer", props: {} })}
-            >Add</Button
+        <Button
+            on:click={() => {
+                resetForm();
+                open({ id: "addEnforcer", props: {} });
+            }}>Add</Button
         >
     </div>
 </header>
 
-<!--Table -->
 <DataList table="employees" let:data initData={data.enforcer ?? []}>
     <TanTable {data} {columns}></TanTable>
 </DataList>
