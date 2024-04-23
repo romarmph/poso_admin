@@ -1,7 +1,7 @@
 import { deleteSchema, employeeSchema, } from "$lib/schemas/app";
 import { type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { superValidate, message } from "sveltekit-superforms";
+import { superValidate, message, setError } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import ActionResultModals from "$lib/enums/ActionResultModals";
 
@@ -12,8 +12,6 @@ export const load: PageServerLoad = async ({
   const deleteForm = await superValidate(zod(deleteSchema));
   const enforcer = await supabase.from("employees").select().eq('role', 1).is('deleted_by', null);
 
-  console.log(enforcer);
-
   return {
     enforcer: enforcer.data,
     enforcerForm,
@@ -22,13 +20,13 @@ export const load: PageServerLoad = async ({
 };
 
 export const actions: Actions = {
+  view: async ({ request, locals: { supabase, getCurrentUser } }) => {
+
+  },
   add: async ({ request, locals: { supabase, getCurrentUser } }) => {
     const form = await superValidate(request, zod(employeeSchema));
 
-    console.log(form);
-
     if (!form.valid) {
-      console.log(form);
       return message(form, {
         success: false,
         action: "",
@@ -37,6 +35,9 @@ export const actions: Actions = {
 
     const { data: userData, error: userError } = await supabase.auth.admin.createUser({ email: form.data.email, password: form.data.password, email_confirm: true });
     if (userError) {
+      if (userError.message.search('already been registered')) {
+        return setError(form, "email", userError.message)
+      }
       return message(form, {
         success: false,
         action: ActionResultModals.FailCreate,
@@ -74,6 +75,56 @@ export const actions: Actions = {
       form, {
       success: true,
       action: ActionResultModals.SuccessCreate,
+    }
+    )
+  },
+  update: async ({ request, locals: { supabase, getCurrentUser } }) => {
+    const form = await superValidate(request, zod(employeeSchema));
+
+    if (!form.valid) {
+      return message(form, {
+        success: false,
+        action: "",
+      });
+    }
+
+    const { error: userError } = await supabase.auth.admin.updateUserById(form.data.id!, {
+      email: form.data.email,
+      password: form.data.password,
+    });
+
+    if (userError) {
+      return message(form, {
+        success: false,
+        action: ActionResultModals.FailUpdate,
+      });
+    }
+
+    const author = await getCurrentUser();
+
+    const user = {
+      first_name: form.data.first_name,
+      middle_name: form.data.middle_name,
+      last_name: form.data.last_name,
+      suffix: form.data.suffix,
+      birthdate: form.data.birthdate,
+      employee_no: form.data.employee_no,
+      updated_at: new Date(),
+      updated_by: author!.id,
+    }
+    const { error } = await supabase.from("employees").update(user).eq("id", form.data.id!);
+
+    if (error) {
+      return message(form, {
+        success: false,
+        action: ActionResultModals.FailUpdate,
+      })
+    }
+
+    return message(
+      form, {
+      success: true,
+      action: ActionResultModals.SuccessUpdate,
     }
     )
   },

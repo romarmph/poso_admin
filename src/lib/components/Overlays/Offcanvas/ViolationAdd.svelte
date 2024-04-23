@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Button from "$lib/components/Base/Button.svelte";
 	import ComboInput from "$lib/components/Base/ComboInput.svelte";
-	import EnabledStatus from "$lib/components/Base/EnabledStatus.svelte";
 	import TextInput from "$lib/components/Forms/TextInput.svelte";
 	import { createEventDispatcher } from "svelte";
 
@@ -11,16 +10,13 @@
 
 	const dispatch = createEventDispatcher();
 
-	if (Object.keys(initData).length > 0) {
-		console.log(initData);
+	if (Object.keys(initData).length) {
 		$form = {
 			...initData.info.fine,
 			name: initData.info.name,
 			id: initData.info.id,
 			enabled: initData.info.enabled,
 		};
-
-		console.log("Form", $form);
 	}
 </script>
 

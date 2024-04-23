@@ -3,7 +3,6 @@ import { type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { superValidate, message, fail } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import DbActions from "$lib/enums/DbActions";
 import ActionResultModals from "$lib/enums/ActionResultModals";
 
 export const load: PageServerLoad = async ({
@@ -27,7 +26,7 @@ export const actions: Actions = {
     if (!violationForm.valid) {
       return message(violationForm, {
         success: false,
-        action: DbActions.CREATE,
+        action: "",
       });
     }
     const user = await getCurrentUser();
