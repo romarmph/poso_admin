@@ -98,14 +98,14 @@
 
 <div class="mt-2">
   <div class="flex flex-col">
-    <div class="-m-1.5 overflow-x-auto">
-      <div class="p-1.5 min-w-full inline-block align-middle">
-        <div
-          class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden dark:bg-slate-900 dark:border-gray-700"
-        >
-          <div class="flex justify-between p-4">
-            <TextInput id="search" placeholder="Search" bind:value={filter} />
-          </div>
+    <div class="p-1.5 min-w-full inline-block align-middle">
+      <div
+        class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden dark:bg-slate-900 dark:border-gray-700"
+      >
+        <div class="flex justify-between p-4">
+          <TextInput id="search" placeholder="Search" bind:value={filter} />
+        </div>
+        <div class="overflow-x-auto">
           <table
             class="min-w-full divide-y divide-gray-200 dark:divide-gray-700"
           >
@@ -165,58 +165,76 @@
               {/each}
             </tbody>
           </table>
-          <div class="flex justify-between p-4">
-            <div
-              class="hs-dropdown relative inline-flex [--placement:top-left]"
+        </div>
+        <div class="flex justify-between p-4">
+          <div class="hs-dropdown relative inline-flex [--placement:top-left]">
+            <button
+              id="hs-dropup"
+              type="button"
+              class="hs-dropdown-toggle py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800"
             >
-              <button
-                id="hs-dropup"
-                type="button"
-                class="hs-dropdown-toggle py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800"
+              {currentPageSize}
+              <svg
+                class="hs-dropdown-open:rotate-180 size-4"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
               >
-                {currentPageSize}
-                <svg
-                  class="hs-dropdown-open:rotate-180 size-4"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                <path d="m18 15-6-6-6 6"></path>
+              </svg>
+            </button>
+
+            <div
+              class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden z-10 bg-white shadow-md rounded-lg p-2 dark:bg-neutral-800 dark:border dark:border-neutral-700 dark:divide-neutral-700"
+              aria-labelledby="hs-dropup"
+            >
+              {#each pageSizes as size}
+                <button
+                  class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700"
+                  on:click={() => handlePageSize(size)}
                 >
-                  <path d="m18 15-6-6-6 6"></path>
-                </svg>
-              </button>
-
-              <div
-                class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden z-10 bg-white shadow-md rounded-lg p-2 dark:bg-neutral-800 dark:border dark:border-neutral-700 dark:divide-neutral-700"
-                aria-labelledby="hs-dropup"
-              >
-                {#each pageSizes as size}
-                  <button
-                    class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700"
-                    on:click={() => handlePageSize(size)}
-                  >
-                    {size}
-                  </button>
-                {/each}
-              </div>
+                  {size}
+                </button>
+              {/each}
             </div>
-
-            <Pager
-              pageOptions={$table.getPageOptions()}
-              goToNext={$table.nextPage}
-              goToPrev={$table.previousPage}
-              canGoNext={$table.getCanNextPage()}
-              canGoPrev={$table.getCanPreviousPage()}
-              setPageIndex={$table.setPageIndex}
-            />
           </div>
+
+          <Pager
+            pageOptions={$table.getPageOptions()}
+            goToNext={$table.nextPage}
+            goToPrev={$table.previousPage}
+            canGoNext={$table.getCanNextPage()}
+            canGoPrev={$table.getCanPreviousPage()}
+            setPageIndex={$table.setPageIndex}
+          />
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<style>
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 100px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #ddd;
+  }
+</style>
