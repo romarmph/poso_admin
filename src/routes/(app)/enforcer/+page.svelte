@@ -34,10 +34,14 @@
     });
 
     $: if ($enfocerMessage) {
-        close();
-        open({
-            id: $enfocerMessage.action,
-        });
+        if ($enfocerMessage.success) {
+            close();
+        }
+        if ($enfocerMessage.action.length > 0) {
+            open({
+                id: $enfocerMessage.action,
+            });
+        }
     }
 
     $: if ($deleteMessage) {

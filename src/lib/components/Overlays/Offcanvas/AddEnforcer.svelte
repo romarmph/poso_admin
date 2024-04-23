@@ -25,6 +25,11 @@
                 bind:value={$form.email}
                 required
             />
+            {#if $errors.email}
+                <span class="text-red-500 text-sm">
+                    {$errors.email}
+                </span>
+            {/if}
         </div>
         <div class="mb-6">
             <label for="">Password</label>
@@ -34,6 +39,11 @@
                 bind:value={$form.password}
                 required
             />
+            {#if $errors.password}
+                <span class="text-red-500 text-sm">
+                    {$errors.password}
+                </span>
+            {/if}
         </div>
         <label for="">Personal Details</label>
         <hr class="my-2" />
@@ -43,8 +53,12 @@
                 type="text"
                 id="first_name"
                 bind:value={$form.first_name}
-                required
             />
+            {#if $errors.first_name}
+                <span class="text-red-500 text-sm">
+                    {$errors.first_name}
+                </span>
+            {/if}
         </div>
         <div class="mb-3">
             <label for="">Middle Name</label>
@@ -53,6 +67,11 @@
                 id="middle_name"
                 bind:value={$form.middle_name}
             />
+            {#if $errors.middle_name}
+                <span class="text-red-500 text-sm">
+                    {$errors.middle_name}
+                </span>
+            {/if}
         </div>
         <div class="mb-3">
             <label for="">Last Name</label>

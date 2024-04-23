@@ -1,5 +1,4 @@
 <script lang="ts">
-    import EnabledStatus from "$lib/components/Base/EnabledStatus.svelte";
     import type { SupabaseClient } from "@supabase/supabase-js";
     import fetchUser from "$lib/utils/fetchUser";
     import EmployeeStatus from "$lib/components/Base/EmployeeStatus.svelte";
@@ -29,7 +28,7 @@
             <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
                 {data.suffix ?? "N/A"}
             </div>
-            <label for="" class="p-1 text-gray-500">BIrthdate</label>
+            <label for="" class="p-1 text-gray-500">Birthdate</label>
             <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
                 {data.birthdate}
             </div>
