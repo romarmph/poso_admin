@@ -3,6 +3,7 @@
     import TextInput from "$lib/components/Forms/TextInput.svelte";
     import { createEventDispatcher, onMount } from "svelte";
     import { getEmployeeAccount } from "$lib/utils/employeeDetails";
+    import UserStatus from "$lib/enums/UserStatus";
 
     export let initData: any | null;
     export let form;
@@ -10,15 +11,10 @@
 
     const dispatch = createEventDispatcher();
 
-    if (Object.keys(initData).length) {
-        $form = {
-            ...initData.info,
-        };
-    }
     let user: Types.Account;
 
     onMount(async () => {
-        if ($form.id) {
+        if (Object.keys(initData).length) {
             user = await getEmployeeAccount(initData.info.user_id);
         }
 
@@ -26,6 +22,8 @@
             $form = {
                 ...initData.info,
                 email: user.email,
+                id: initData.info.id,
+                user_id: user.id,
             };
         }
     });
@@ -47,7 +45,7 @@
                 </span>
             {/if}
         </div>
-        <div class="mb-6">
+        <div class="mb-3">
             <label for="">Password</label>
             <TextInput
                 type="password"
@@ -60,6 +58,34 @@
                 </span>
             {/if}
         </div>
+        {#if $form.id}
+            <input
+                type="text"
+                name="user_id"
+                bind:value={$form.user_id}
+                class="hidden"
+            />
+            <input type="text" class="hidden" name="id" bind:value={$form.id} />
+            <div class="mb-6">
+                <label for="">Status</label>
+                <select
+                    class="py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+                    name="status"
+                    bind:value={$form.status}
+                >
+                    <option selected={true}>Open this select menu</option>
+                    <option value={UserStatus.Active}>Active</option>
+                    <option value={UserStatus.OnLeave}>On Leave</option>
+                    <option value={UserStatus.Suspended}>Suspended</option>
+                    <option value={UserStatus.Terminated}>Terminated</option>
+                </select>
+                {#if $errors.status}
+                    <span class="text-red-500 text-sm">
+                        {$errors.status}
+                    </span>
+                {/if}
+            </div>
+        {/if}
         <label for="">Personal Details</label>
         <hr class="my-2" />
         <div class="mb-3">

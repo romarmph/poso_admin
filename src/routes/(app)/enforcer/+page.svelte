@@ -24,6 +24,7 @@
         errors: enforcerErrors,
         enhance: enforcerEnhance,
         message: enfocerMessage,
+        reset: resetForm,
     } = superForm(data.enforcerForm);
 
     const {
@@ -106,13 +107,15 @@
             accessorKey: "id",
             cell: (info) =>
                 flexRender(RowActions, {
-                    fireEdit: () =>
+                    fireEdit: () => {
+                        resetForm();
                         open({
-                            id: "addEnforcer",
+                            id: "updateEnforcer",
                             props: {
                                 info: info.row.original as Types.Employees,
                             },
-                        }),
+                        });
+                    },
                     fireView: () => {
                         open({
                             props: {
@@ -157,6 +160,22 @@
         method="POST"
         class="w-[500px] h-full flex flex-col"
         action="?/add"
+        use:enforcerEnhance
+    >
+        <AddEnforcer
+            form={enforcerForm}
+            errors={enforcerErrors}
+            on:close={close}
+            initData={data}
+        />
+    </form>
+</Overlay>
+
+<Overlay title="Update Enforcer" id="updateEnforcer" let:data>
+    <form
+        method="POST"
+        class="w-[500px] h-full flex flex-col"
+        action="?/update"
         use:enforcerEnhance
     >
         <AddEnforcer

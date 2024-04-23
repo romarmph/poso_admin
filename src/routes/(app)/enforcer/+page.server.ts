@@ -2,7 +2,8 @@ import { deleteSchema, employeeSchema, } from "$lib/schemas/app";
 import { type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { superValidate, message, setError } from "sveltekit-superforms";
-import { zod } from "sveltekit-superforms/adapters";
+import { zod, } from "sveltekit-superforms/adapters";
+import z from "zod";
 import ActionResultModals from "$lib/enums/ActionResultModals";
 
 export const load: PageServerLoad = async ({
@@ -92,7 +93,11 @@ export const actions: Actions = {
     )
   },
   update: async ({ request, locals: { supabase, getCurrentUser } }) => {
-    const form = await superValidate(request, zod(employeeSchema));
+    const updateSchema = employeeSchema.extend({
+      password: employeeSchema.shape.password.optional(),
+    })
+    const form = await superValidate(request, zod(updateSchema));
+
 
     if (!form.valid) {
       return message(form, {
@@ -101,16 +106,29 @@ export const actions: Actions = {
       });
     }
 
-    const { error: userError } = await supabase.auth.admin.updateUserById(form.data.id!, {
-      email: form.data.email,
-      password: form.data.password,
-    });
-
-    if (userError) {
+    const { data: userDetails, error: detailError } = await supabase.from("employees").select().eq("employee_no", form.data.employee_no);
+    if (detailError) {
       return message(form, {
         success: false,
         action: ActionResultModals.FailUpdate,
+      }
+      );
+    }
+
+    if (userDetails.length > 0) {
+      return setError(form, "employee_no", "Employee number already exists")
+    }
+
+    const { data: userData } = await supabase.auth.admin.getUserById(form.data.user_id!);
+    if (userData.user!.email !== form.data.email) {
+      const { error } = await supabase.auth.admin.updateUserById(form.data.user_id!, {
+        email: form.data.email,
       });
+
+      if (error) {
+        return setError(form, "email", "Email already exists")
+
+      }
     }
 
     const author = await getCurrentUser();
@@ -121,13 +139,17 @@ export const actions: Actions = {
       last_name: form.data.last_name,
       suffix: form.data.suffix,
       birthdate: form.data.birthdate,
+      status: form.data.status,
       employee_no: form.data.employee_no,
+      role: 1,
       updated_at: new Date(),
       updated_by: author!.id,
     }
+    console.log("user", form);
     const { error } = await supabase.from("employees").update(user).eq("id", form.data.id!);
 
     if (error) {
+      console.log(error);
       return message(form, {
         success: false,
         action: ActionResultModals.FailUpdate,

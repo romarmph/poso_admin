@@ -43,4 +43,6 @@ export const employeeSchema = z.object({
 	suffix: z.string().optional(),
 	birthdate: z.date(),
 	employee_no: z.number(),
+	status: z.string().default("active").optional(),
+	user_id: z.string().optional(),
 })
