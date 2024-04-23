@@ -1,7 +1,7 @@
 <script lang="ts">
     import EnabledStatus from "$lib/components/Base/EnabledStatus.svelte";
     import type { SupabaseClient } from "@supabase/supabase-js";
-    import fetchUser from "$lib/utils/fetchUser";
+    import { getEmployeeDetails } from "$lib/utils/employeeDetails";
     export let info;
     export let supabase: SupabaseClient;
     const data = info.info as Types.TrafficPost;
@@ -40,7 +40,7 @@
                 timeZone: "UTC",
             })}
         </div>
-        {#await fetchUser(data.created_by, supabase)}
+        {#await getEmployeeDetails(data.created_by, supabase)}
             <p>Loading...</p>
         {:then value}
             <div
@@ -59,11 +59,11 @@
                 timeZone: "UTC",
             })}
         </div>
-        {#await fetchUser(data.updated_by, supabase)}
+        {#await getEmployeeDetails(data.updated_by, supabase)}
             <p>Loading...</p>
         {:then value}
             <div
-                cass="p-2 my-2 rounded-lg text-gray-800 text-lg bg-gray-50 flex justify-between"
+                class="p-2 my-2 rounded-lg text-gray-800 text-lg bg-gray-50 flex justify-between"
             >
                 <span class="text-gray-500">Updated by</span>
                 {`${value.first_name} ${value.last_name}`}

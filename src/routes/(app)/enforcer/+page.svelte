@@ -13,6 +13,7 @@
     import AddEnforcer from "$lib/components/Overlays/Offcanvas/AddEnforcer.svelte";
     import { superForm } from "sveltekit-superforms";
     import ConfirmDelete from "$lib/components/Overlays/Modal/Delete/ConfirmDelete.svelte";
+    import EmployeeEmailColumn from "$lib/components/Customs/EmployeeEmailColumn.svelte";
     const { supabase } = getSupabaseContext();
 
     export let data;
@@ -59,29 +60,17 @@
             header: "First Name",
         },
         {
-            accessorKey: "middle_name",
-            cell: (info) => info.getValue(),
-            footer: (info) => info.column.id,
-            header: "Middle Name",
-        },
-        {
             accessorKey: "last_name",
             cell: (info) => info.getValue(),
             footer: (info) => info.column.id,
             header: "Last Name",
         },
         {
-            accessorKey: "suffix",
-            cell: (info) => info.getValue(),
+            accessorKey: "user_id",
+            cell: (info) =>
+                flexRender(EmployeeEmailColumn, { user_id: info.getValue() }),
             footer: (info) => info.column.id,
-            header: "Suffix",
-        },
-        {
-            accessorKey: "birthdate",
-            cell: (info) => info.getValue(),
-            footer: (info) => info.column.id,
-            header: "Birth Date",
-            accessorFn: (row) => new Date(row.birthdate).toDateString(),
+            header: "Email",
         },
         {
             accessorKey: "status",
@@ -92,10 +81,11 @@
             enableSorting: false,
         },
         {
-            accessorKey: "employee_no",
+            accessorKey: "birthdate",
             cell: (info) => info.getValue(),
             footer: (info) => info.column.id,
-            header: "Employee No.",
+            header: "Birth Date",
+            accessorFn: (row) => new Date(row.birthdate).toDateString(),
         },
 
         {

@@ -1,21 +1,11 @@
 <script lang="ts">
 	import EnabledStatus from "$lib/components/Base/EnabledStatus.svelte";
 	import type { SupabaseClient } from "@supabase/supabase-js";
+	import { getEmployeeDetails } from "$lib/utils/employeeDetails";
 
 	export let info;
 	export let supabase: SupabaseClient;
 	const data = info.info as Types.Violation;
-
-	async function fetchUser(id: string): Promise<Types.User> {
-		const { data, error } = await supabase
-			.from("employees")
-			.select()
-			.eq("id", id);
-		if (error) {
-			throw "Error fetching user";
-		}
-		return data[0] as Types.User;
-	}
 </script>
 
 <div class="w-[500px]">
@@ -81,7 +71,7 @@
 				timeZone: "UTC",
 			})}
 		</div>
-		{#await fetchUser(data.created_by)}
+		{#await getEmployeeDetails(data.created_by, supabase)}
 			<p>Loading...</p>
 		{:then value}
 			<div
@@ -100,7 +90,7 @@
 				timeZone: "UTC",
 			})}
 		</div>
-		{#await fetchUser(data.updated_by)}
+		{#await getEmployeeDetails(data.updated_by, supabase)}
 			<p>Loading...</p>
 		{:then value}
 			<div

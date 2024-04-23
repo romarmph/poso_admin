@@ -1,7 +1,7 @@
 import { deleteSchema, violationSchema } from "$lib/schemas/app";
 import { type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { superValidate, message, fail } from "sveltekit-superforms";
+import { superValidate, message } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import ActionResultModals from "$lib/enums/ActionResultModals";
 

@@ -1,8 +1,7 @@
 <script lang="ts">
     import EnabledStatus from "$lib/components/Base/EnabledStatus.svelte";
     import type { SupabaseClient } from "@supabase/supabase-js";
-    import fetchUser from "$lib/utils/fetchUser";
-    import EmployeeStatus from "$lib/components/Base/EmployeeStatus.svelte";
+    import { getEmployeeDetails } from "$lib/utils/employeeDetails";
     import TicketStatus from "$lib/components/Base/TicketStatus.svelte";
     export let info: Types.Tickets;
     export let supabase: SupabaseClient;
@@ -77,7 +76,7 @@
                 timeZone: "UTC",
             })}
         </div>
-        {#await fetchUser(info.created_by, supabase)}
+        {#await getEmployeeDetails(info.created_by, supabase)}
             <p>Loading...</p>
         {:then value}
             <div
@@ -96,7 +95,7 @@
                 timeZone: "UTC",
             })}
         </div>
-        {#await fetchUser(info.updated_by, supabase)}
+        {#await getEmployeeDetails(info.updated_by, supabase)}
             <p>Loading...</p>
         {:then value}
             <div
