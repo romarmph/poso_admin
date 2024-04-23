@@ -52,23 +52,14 @@ declare global {
       id: string;
     }
 
-    interface User extends Data {
-      first_name: string;
-      middle_name: string;
-      last_name: string;
-      suffix: string;
-      status: EmployeeStatus;
-      birthdate: string;
-      employee_no: string;
-      role: Record<string, any>;
-      user_id: string;
-      created_at: string;
-      created_by: string;
-      updated_at: string;
-      updated_by: string;
-      deleted_at: string | null;
-      deleted_by: string | null;
+    interface Account extends Data {
+      id: string,
+      email: string,
+      phone: string,
+      created_at: string,
+      updated_at: string
     }
+
 
     interface Violation extends Data {
       name: string;

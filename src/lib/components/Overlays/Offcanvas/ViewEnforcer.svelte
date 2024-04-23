@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { SupabaseClient } from "@supabase/supabase-js";
-    import fetchUser from "$lib/utils/fetchUser";
+    import { getEmployeeDetails } from "$lib/utils/employeeDetails";
     import EmployeeStatus from "$lib/components/Base/EmployeeStatus.svelte";
     export let info;
     export let supabase: SupabaseClient;
@@ -12,6 +12,13 @@
         <label for="" class="p-1 text-gray-500">Personal Details</label>
         <hr class="my-2" />
         <div>
+            <div class="mb-3">
+                <label for="" class="p-1 text-gray-500">Status</label>
+                <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
+                    <EmployeeStatus status={data.status} />
+                </div>
+            </div>
+
             <label for="" class="p-1 text-gray-500">First Name</label>
             <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
                 {data.first_name}
@@ -42,13 +49,6 @@
         </div>
     </div>
     <hr class="my-2" />
-    <div class="mb-3">
-        <label for="" class="p-1 text-gray-500">Status</label>
-        <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
-            <EmployeeStatus status={data.status} />
-        </div>
-    </div>
-
     <hr class="my-2" />
     <div class="mb-3">
         <label for="" class="p-1 text-gray-500 text-xl">History</label>
@@ -60,7 +60,7 @@
                 timeZone: "UTC",
             })}
         </div>
-        {#await fetchUser(data.created_by, supabase)}
+        {#await getEmployeeDetails(data.created_by, supabase)}
             <p>Loading...</p>
         {:then value}
             <div
@@ -79,7 +79,7 @@
                 timeZone: "UTC",
             })}
         </div>
-        {#await fetchUser(data.updated_by, supabase)}
+        {#await getEmployeeDetails(data.updated_by, supabase)}
             <p>Loading...</p>
         {:then value}
             <div

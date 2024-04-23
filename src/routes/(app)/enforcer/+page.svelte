@@ -13,6 +13,7 @@
     import AddEnforcer from "$lib/components/Overlays/Offcanvas/AddEnforcer.svelte";
     import { superForm } from "sveltekit-superforms";
     import ConfirmDelete from "$lib/components/Overlays/Modal/Delete/ConfirmDelete.svelte";
+    import EmployeeEmailColumn from "$lib/components/Customs/EmployeeEmailColumn.svelte";
     const { supabase } = getSupabaseContext();
 
     export let data;
@@ -23,6 +24,7 @@
         errors: enforcerErrors,
         enhance: enforcerEnhance,
         message: enfocerMessage,
+        reset: resetForm,
     } = superForm(data.enforcerForm);
 
     const {
@@ -59,29 +61,17 @@
             header: "First Name",
         },
         {
-            accessorKey: "middle_name",
-            cell: (info) => info.getValue(),
-            footer: (info) => info.column.id,
-            header: "Middle Name",
-        },
-        {
             accessorKey: "last_name",
             cell: (info) => info.getValue(),
             footer: (info) => info.column.id,
             header: "Last Name",
         },
         {
-            accessorKey: "suffix",
-            cell: (info) => info.getValue(),
+            accessorKey: "user_id",
+            cell: (info) =>
+                flexRender(EmployeeEmailColumn, { user_id: info.getValue() }),
             footer: (info) => info.column.id,
-            header: "Suffix",
-        },
-        {
-            accessorKey: "birthdate",
-            cell: (info) => info.getValue(),
-            footer: (info) => info.column.id,
-            header: "Birth Date",
-            accessorFn: (row) => new Date(row.birthdate).toDateString(),
+            header: "Email",
         },
         {
             accessorKey: "status",
@@ -92,10 +82,11 @@
             enableSorting: false,
         },
         {
-            accessorKey: "employee_no",
+            accessorKey: "birthdate",
             cell: (info) => info.getValue(),
             footer: (info) => info.column.id,
-            header: "Employee No.",
+            header: "Birth Date",
+            accessorFn: (row) => new Date(row.birthdate).toDateString(),
         },
 
         {
@@ -116,7 +107,15 @@
             accessorKey: "id",
             cell: (info) =>
                 flexRender(RowActions, {
-                    fireEdit: () => {},
+                    fireEdit: () => {
+                        resetForm();
+                        open({
+                            id: "updateEnforcer",
+                            props: {
+                                info: info.row.original as Types.Employees,
+                            },
+                        });
+                    },
                     fireView: () => {
                         open({
                             props: {
@@ -145,16 +144,20 @@
 <header style="display: flex; align-items: center;">
     <h1 style="font-weight: bold;">Enforcer</h1>
     <div style="margin-left:auto">
-        <Button on:click={() => open({ id: "addEnforcer" })}>Add</Button>
+        <Button
+            on:click={() => {
+                resetForm();
+                open({ id: "addEnforcer", props: {} });
+            }}>Add</Button
+        >
     </div>
 </header>
 
-<!--Table -->
 <DataList table="employees" let:data initData={data.enforcer ?? []}>
     <TanTable {data} {columns}></TanTable>
 </DataList>
 
-<Overlay title="Add Enforcer" id="addEnforcer">
+<Overlay title="Add Enforcer" id="addEnforcer" let:data>
     <form
         method="POST"
         class="w-[500px] h-full flex flex-col"
@@ -165,6 +168,23 @@
             form={enforcerForm}
             errors={enforcerErrors}
             on:close={close}
+            initData={data}
+        />
+    </form>
+</Overlay>
+
+<Overlay title="Update Enforcer" id="updateEnforcer" let:data>
+    <form
+        method="POST"
+        class="w-[500px] h-full flex flex-col"
+        action="?/update"
+        use:enforcerEnhance
+    >
+        <AddEnforcer
+            form={enforcerForm}
+            errors={enforcerErrors}
+            on:close={close}
+            initData={data}
         />
     </form>
 </Overlay>

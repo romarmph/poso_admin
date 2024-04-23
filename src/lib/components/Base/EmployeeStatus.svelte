@@ -13,7 +13,7 @@
         active: "bg-teal-100 text-teal-800",
         suspended: "bg-red-100 text-red-800",
         terminated: "bg-yellow-100 text-yellow-800",
-        onleave: "bg-blue-100 text-blue-800",
+        onLeave: "bg-blue-100 text-blue-800",
     }[status];
 </script>
 
@@ -26,7 +26,7 @@
         <AlertTriangle size="18px" />
     {:else if status === "terminated"}
         <UserX size="18px" />
-    {:else if status === "onleave"}
+    {:else if status === "onLeave"}
         <CalendarCheck size="18px" />
     {:else}
         <AlertCircle size="18px" />
