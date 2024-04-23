@@ -20,11 +20,10 @@ export const load: PageServerLoad = async ({
 };
 
 export const actions: Actions = {
-  view: async ({ request, locals: { supabase, getCurrentUser } }) => {
-
-  },
   add: async ({ request, locals: { supabase, getCurrentUser } }) => {
     const form = await superValidate(request, zod(employeeSchema));
+
+    console.log(form);
 
     if (!form.valid) {
       return message(form, {
@@ -33,10 +32,23 @@ export const actions: Actions = {
       });
     }
 
-    const { data: userData, error: userError } = await supabase.auth.admin.createUser({ email: form.data.email, password: form.data.password, email_confirm: true });
-    if (userError) {
-      if (userError.message.search('already been registered')) {
-        return setError(form, "email", userError.message)
+    const { data: userDetails, error: detailError } = await supabase.from("employees").select().eq("employee_no", form.data.employee_no);
+    if (detailError) {
+      return message(form, {
+        success: false,
+        action: ActionResultModals.FailCreate,
+      }
+      );
+    }
+
+    if (userDetails.length > 0) {
+      return setError(form, "employee_no", "Employee number already exists")
+    }
+
+    const { data: userData, error: emailError } = await supabase.auth.admin.createUser({ email: form.data.email, password: form.data.password, email_confirm: true });
+    if (emailError) {
+      if (emailError.message.search('already been registered')) {
+        return setError(form, "email", emailError.message)
       }
       return message(form, {
         success: false,
@@ -62,9 +74,10 @@ export const actions: Actions = {
       updated_by: author!.id,
       deleted_by: null,
     }
-    const { error } = await supabase.from("employees").insert(user);
+    const { error } = await supabase.from("employees").insert(user)
 
     if (error) {
+      await supabase.auth.admin.deleteUser(userData.user.id, false);
       return message(form, {
         success: false,
         action: ActionResultModals.FailCreate,

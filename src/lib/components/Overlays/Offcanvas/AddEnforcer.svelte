@@ -19,12 +19,7 @@
         <hr class="my-2" />
         <div class="mb-3">
             <label for="">Email</label>
-            <TextInput
-                type="email"
-                id="email"
-                bind:value={$form.email}
-                required
-            />
+            <TextInput type="email" id="email" bind:value={$form.email} />
             {#if $errors.email}
                 <span class="text-red-500 text-sm">
                     {$errors.email}
@@ -37,7 +32,6 @@
                 type="password"
                 id="password"
                 bind:value={$form.password}
-                required
             />
             {#if $errors.password}
                 <span class="text-red-500 text-sm">
@@ -79,8 +73,12 @@
                 type="text"
                 id="last_name"
                 bind:value={$form.last_name}
-                required
             />
+            {#if $errors.last_name}
+                <span class="text-red-500 text-sm">
+                    {$errors.last_name}
+                </span>
+            {/if}
         </div>
         <div class="mb-3">
             <label for="">Suffix</label>
@@ -92,17 +90,21 @@
                 type="date"
                 id="birthdate"
                 bind:value={$form.birthdate}
-                required
             />
+            {#if $errors.birthdate}
+                <span class="text-red-500 text-sm">
+                    {$errors.birthdate}
+                </span>
+            {/if}
         </div>
     </div>
     <h3 class="my-3">Employee No.</h3>
-    <TextInput
-        type="text"
-        id="employee_no"
-        bind:value={$form.employee_no}
-        required
-    />
+    <TextInput type="text" id="employee_no" bind:value={$form.employee_no} />
+    {#if $errors.employee_no}
+        <span class="text-red-500 text-sm">
+            {$errors.employee_no}
+        </span>
+    {/if}
 </div>
 <div class="flex justify-stretch items-center gap-4">
     <Button
