@@ -106,7 +106,13 @@
             accessorKey: "id",
             cell: (info) =>
                 flexRender(RowActions, {
-                    fireEdit: () => {},
+                    fireEdit: () =>
+                        open({
+                            id: "addEnforcer",
+                            props: {
+                                info: info.row.original as Types.Employees,
+                            },
+                        }),
                     fireView: () => {
                         open({
                             props: {
@@ -135,7 +141,9 @@
 <header style="display: flex; align-items: center;">
     <h1 style="font-weight: bold;">Enforcer</h1>
     <div style="margin-left:auto">
-        <Button on:click={() => open({ id: "addEnforcer" })}>Add</Button>
+        <Button on:click={() => open({ id: "addEnforcer", props: {} })}
+            >Add</Button
+        >
     </div>
 </header>
 
@@ -144,7 +152,7 @@
     <TanTable {data} {columns}></TanTable>
 </DataList>
 
-<Overlay title="Add Enforcer" id="addEnforcer">
+<Overlay title="Add Enforcer" id="addEnforcer" let:data>
     <form
         method="POST"
         class="w-[500px] h-full flex flex-col"
@@ -155,6 +163,7 @@
             form={enforcerForm}
             errors={enforcerErrors}
             on:close={close}
+            initData={data}
         />
     </form>
 </Overlay>

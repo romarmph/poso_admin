@@ -1,13 +1,34 @@
 <script lang="ts">
     import Button from "$lib/components/Base/Button.svelte";
     import TextInput from "$lib/components/Forms/TextInput.svelte";
-    import { createEventDispatcher } from "svelte";
+    import { createEventDispatcher, onMount } from "svelte";
+    import { getEmployeeAccount } from "$lib/utils/employeeDetails";
 
+    export let initData: any | null;
     export let form;
     export let errors;
 
     const dispatch = createEventDispatcher();
 
+    if (Object.keys(initData).length) {
+        $form = {
+            ...initData.info,
+        };
+    }
+    let user: Types.Account;
+
+    onMount(async () => {
+        if ($form.id) {
+            user = await getEmployeeAccount(initData.info.user_id);
+        }
+
+        if (user) {
+            $form = {
+                ...initData.info,
+                email: user.email,
+            };
+        }
+    });
     function handleClose() {
         dispatch("close");
     }
