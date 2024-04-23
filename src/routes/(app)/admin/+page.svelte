@@ -26,18 +26,43 @@
     import AddEnforcer from "$lib/components/Overlays/Offcanvas/AddEnforcer.svelte";
     import { superForm } from "sveltekit-superforms";
     import AddAdmin from "$lib/components/Overlays/Offcanvas/AddAdmin.svelte";
+    import ConfirmDelete from "$lib/components/Overlays/Modal/Delete/ConfirmDelete.svelte";
     const { supabase } = getSupabaseContext();
 
     export let data;
 
     const { open, close } = overlayStore;
+    const {
+        form: adminForm,
+        errors: adminErrors,
+        enhance: adminEnhance,
+        message: adminMessage,
+        reset: resetForm,
+    } = superForm(data.adminForm);
 
-    const { form, errors, enhance, message } = superForm(data.form);
-    $: if ($message === "success") {
+    const {
+        form: deleteForm,
+        enhance: deleteEnhance,
+        message: deleteMessage,
+    } = superForm(data.deleteForm, {
+        dataType: "json",
+    });
+
+    $: if ($adminMessage) {
+        if ($adminMessage.success) {
+            close();
+        }
+        if ($adminMessage.action.length > 0) {
+            open({
+                id: $adminMessage.action,
+            });
+        }
+    }
+
+    $: if ($deleteMessage) {
         close();
         open({
-            id: "success",
-            props: {},
+            id: $deleteMessage.action,
         });
     }
     const columns: ColumnDef<Types.Employees>[] = [
@@ -117,7 +142,15 @@
             accessorKey: "id",
             cell: (info) =>
                 flexRender(RowActions, {
-                    fireEdit: () => {},
+                    fireEdit: () => {
+                        resetForm();
+                        open({
+                            id: "updateAdmin",
+                            props: {
+                                info: info.row.original as Types.Employees,
+                            },
+                        });
+                    },
                     fireView: () => {
                         open({
                             props: {
@@ -126,7 +159,14 @@
                             id: "viewAdmin",
                         });
                     },
-                    fireDelete: () => {},
+                    fireDelete: () =>
+                        open({
+                            id: "deleteEnforcer",
+                            props: {
+                                info: info.row.original.id,
+                                data,
+                            },
+                        }),
                 }),
             header: "Actions",
             enableSorting: false,
@@ -139,35 +179,64 @@
 <header style="display: flex; align-items: center;">
     <h1 style="font-weight: bold;">Admin</h1>
     <div style="margin-left:auto">
-        <Button on:click={() => open({ id: "addAdmin" })}>Add</Button>
+        <Button
+            on:click={() => {
+                resetForm();
+                open({ id: "addEnforcer", props: {} });
+            }}>Add</Button
+        >
     </div>
 </header>
 
 <!--Table -->
-<DataList
-    table="employees"
-    let:data
-    initData={data.admin ?? []}
-    eq={{ operator: "role", value: 2 }}
->
+<DataList table="employees" let:data initData={data.admin ?? []}>
     <TanTable {data} {columns}></TanTable>
 </DataList>
-
-<Overlay title="Add Admin" id="addAdmin">
+<Overlay title="Add Enforcer" id="addEnforcer" let:data>
     <form
         method="POST"
         class="w-[500px] h-full flex flex-col"
         action="?/add"
-        use:enhance
+        use:adminEnhance
     >
-        <AddAdmin superForm={form} {errors} on:close={close} />
+        <AddAdmin
+            form={adminForm}
+            errors={adminErrors}
+            on:close={close}
+            initData={data}
+        />
     </form>
 </Overlay>
 
-<Overlay let:data title="View Admin" id="viewAdmin">
-    <ViewAdmin info={data} {supabase} />
+<Overlay title="Update Enforcer" id="updateAdmin" let:data>
+    <form
+        method="POST"
+        class="w-[500px] h-full flex flex-col"
+        action="?/update"
+        use:adminEnhance
+    >
+        <AddAdmin
+            form={adminForm}
+            errors={adminErrors}
+            on:close={close}
+            initData={data}
+        />
+    </form>
 </Overlay>
 
-<Overlay title="Success" id="success" type="modal">
-    <h3>SUCCESS</h3>
+<Overlay let:data title="" id="deleteEnforcer" type="modal">
+    <form
+        action="?/delete"
+        method="POST"
+        use:deleteEnhance
+        class="flex flex-col justify-center items-center text-red-500"
+        on:submit={close}
+    >
+        <ConfirmDelete info={data} form={deleteForm} on:close={close}
+        ></ConfirmDelete>
+    </form>
+</Overlay>
+
+<Overlay let:data title="View Enforcer" id="viewAdmin">
+    <ViewAdmin info={data} {supabase} />
 </Overlay>
