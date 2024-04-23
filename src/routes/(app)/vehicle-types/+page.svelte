@@ -28,6 +28,7 @@
         errors: vehicleTypeErrors,
         enhance: vehicleTypeEnhance,
         message: vehicleTypeMessage,
+        reset: vehicleTypeFormReset,
     } = superForm(data.vehicleTypeForm, {
         dataType: "json",
     });
@@ -41,10 +42,14 @@
     });
 
     $: if ($vehicleTypeMessage) {
-        close();
-        open({
-            id: $vehicleTypeMessage.action,
-        });
+        if ($vehicleTypeMessage.success) {
+            close();
+        }
+        if ($vehicleTypeMessage.action.length > 0) {
+            open({
+                id: $vehicleTypeMessage.action,
+            });
+        }
     }
 
     $: if ($deleteMessage) {
@@ -99,19 +104,21 @@
             accessorKey: "id",
             cell: (info) =>
                 flexRender(RowActions, {
-                    fireEdit: () =>
+                    fireEdit: () => {
+                        vehicleTypeFormReset();
                         open({
                             id: "updateVehicleType",
                             props: {
                                 info: info.row.original as Types.VehicleTypes,
                             },
-                        }),
+                        });
+                    },
                     fireView: () => {
                         open({
                             props: {
                                 info: info.row.original as Types.VehicleTypes,
                             },
-                            id: "viewVehicleType",
+                            id: "ViewVehicleType",
                         });
                     },
                     fireDelete: () =>
@@ -134,46 +141,45 @@
 <header style="display: flex; align-items: center;">
     <h1 style="font-weight: bold;">Vehicle Type</h1>
     <div style="margin-left:auto">
-        <TextInput
-            id="input-Label"
-            placeholder="Add New Vehicle Type"
-            width="60"
-            classNames="py-3 px-3 pe-10 mr-2"
-        />
+        <Button
+            on:click={() => {
+                vehicleTypeFormReset();
+                open({
+                    props: {},
+                    id: "addvehicleType",
+                });
+            }}>Add Violation</Button
+        >
     </div>
-    <Button on:click={() => open({ id: "addVehicleType", props: {} })}
-        >Add</Button
-    >
 </header>
 <!--Table -->
 
 <DataList table="vehicle_types" let:data initData={data.vehicleType ?? []}>
     <TanTable {data} {columns}></TanTable>
 </DataList>
-<Overlay title="Add vehicleType" id="addVehicleType" let:data>
+
+<Overlay title="Add Violation" id="addvehicleType" let:data>
     <form
         method="POST"
         class="w-[500px] h-full flex flex-col"
         action="?/add"
         use:vehicleTypeEnhance
-        on:submit={close}
     >
         <AddVehicleType
             form={vehicleTypeForm}
-            errors={vehicleTypeForm}
+            errors={vehicleTypeErrors}
             on:close={close}
             initData={data}
         />
     </form>
 </Overlay>
 
-<Overlay title="Update VehicleType" id="updateVehicleType" let:data>
+<Overlay title="Update Violation" id="updateVehicleType" let:data>
     <form
         method="POST"
         class="w-[500px] h-full flex flex-col"
         action="?/update"
         use:vehicleTypeEnhance
-        on:submit={close}
     >
         <AddVehicleType
             form={vehicleTypeForm}
@@ -197,6 +203,6 @@
     </form>
 </Overlay>
 
-<Overlay let:data title="View VehicleType" id="viewVehicleType">
+<Overlay let:data title="View Violation" id="ViewVehicleType">
     <ViewVehicleTypes info={data} {supabase} />
 </Overlay>

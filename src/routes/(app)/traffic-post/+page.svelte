@@ -33,6 +33,7 @@
         errors: trafficPostErrors,
         enhance: trafficPostEnhance,
         message: trafficPostMessage,
+        reset: trafficPostFormReset,
     } = superForm(data.trafficPostForm, {
         dataType: "json",
     });
@@ -46,10 +47,14 @@
     });
 
     $: if ($trafficPostMessage) {
-        close();
-        open({
-            id: $trafficPostMessage.action,
-        });
+        if ($trafficPostMessage.success) {
+            close();
+        }
+        if ($trafficPostMessage.action.length > 0) {
+            open({
+                id: $trafficPostMessage.action,
+            });
+        }
     }
 
     $: if ($deleteMessage) {
@@ -98,13 +103,15 @@
             accessorKey: "id",
             cell: (info) =>
                 flexRender(RowActions, {
-                    fireEdit: () =>
+                    fireEdit: () => {
+                        trafficPostFormReset();
                         open({
                             id: "updateTrafficPost",
                             props: {
                                 info: info.row.original as Types.TrafficPost,
                             },
-                        }),
+                        });
+                    },
                     fireView: () => {
                         open({
                             props: {
@@ -133,8 +140,14 @@
 <header style="display: flex; align-items: center;">
     <h1 style="font-weight: bold;">Traffic Post</h1>
     <div style="margin-left:auto">
-        <Button on:click={() => open({ id: "addTrafficPost", props: {} })}
-            >Add</Button
+        <Button
+            on:click={() => {
+                trafficPostFormReset();
+                open({
+                    props: {},
+                    id: "addtrafficPost",
+                });
+            }}>Add Traffic Post</Button
         >
     </div>
 </header>
@@ -144,30 +157,28 @@
     <TanTable {data} {columns}></TanTable>
 </DataList>
 
-<Overlay title="Add TrafficPost" id="addTrafficPost" let:data>
+<Overlay title="Add Violation" id="addtrafficPost" let:data>
     <form
         method="POST"
         class="w-[500px] h-full flex flex-col"
         action="?/add"
         use:trafficPostEnhance
-        on:submit={close}
     >
         <AddTrafficPost
             form={trafficPostForm}
-            errors={trafficPostForm}
+            errors={trafficPostErrors}
             on:close={close}
             initData={data}
         />
     </form>
 </Overlay>
 
-<Overlay title="Update trafficPost" id="updateTrafficPost" let:data>
+<Overlay title="Update Violation" id="updateTrafficPost" let:data>
     <form
         method="POST"
         class="w-[500px] h-full flex flex-col"
         action="?/update"
         use:trafficPostEnhance
-        on:submit={close}
     >
         <AddTrafficPost
             form={trafficPostForm}
@@ -191,6 +202,6 @@
     </form>
 </Overlay>
 
-<Overlay let:data title="View TrafficPost" id="viewTrafficPost">
+<Overlay let:data title="View Traffic Post" id="viewTrafficPost">
     <ViewTrafficPost info={data} {supabase} />
 </Overlay>
