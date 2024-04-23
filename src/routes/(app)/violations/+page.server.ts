@@ -27,7 +27,7 @@ export const actions: Actions = {
     if (!violationForm.valid) {
       return message(violationForm, {
         success: false,
-        action: DbActions.CREATE,
+        action: "",
       });
     }
     const user = await getCurrentUser();

@@ -27,7 +27,7 @@ export const actions: Actions = {
     if (!vehicleTypeForm.valid) {
       return message(vehicleTypeForm, {
         success: false,
-        action: DbActions.CREATE,
+        action: "",
       });
     }
     const user = await getCurrentUser();
@@ -119,3 +119,4 @@ export const actions: Actions = {
     })
   }
 }
+
