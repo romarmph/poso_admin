@@ -25,6 +25,7 @@
     errors: violationErrors,
     enhance: violationEnhance,
     message: violationMessage,
+    reset: violationFormReset,
   } = superForm(data.violationForm, {
     dataType: "json",
   });
@@ -38,10 +39,14 @@
   });
 
   $: if ($violationMessage) {
-    close();
-    open({
-      id: $violationMessage.action,
-    });
+    if ($violationMessage.success) {
+      close();
+    }
+    if ($violationMessage.action.length > 0) {
+      open({
+        id: $violationMessage.action,
+      });
+    }
   }
 
   $: if ($deleteMessage) {
@@ -90,13 +95,15 @@
       accessorKey: "id",
       cell: (info) =>
         flexRender(RowActions, {
-          fireEdit: () =>
+          fireEdit: () => {
+            violationFormReset();
             open({
               id: "updateViolation",
               props: {
                 info: info.row.original as Types.Violation,
               },
-            }),
+            });
+          },
           fireView: () => {
             open({
               props: {
@@ -126,11 +133,13 @@
   <h1 style="font-weight: bold;">Violation</h1>
   <div style="margin-left:auto">
     <Button
-      on:click={() =>
+      on:click={() => {
+        violationFormReset();
         open({
           props: {},
           id: "addViolation",
-        })}>Add Violation</Button
+        });
+      }}>Add Violation</Button
     >
   </div>
 </header>
@@ -145,7 +154,6 @@
     class="w-[500px] h-full flex flex-col"
     action="?/add"
     use:violationEnhance
-    on:submit={close}
   >
     <ViolationAdd
       form={violationForm}
@@ -162,7 +170,6 @@
     class="w-[500px] h-full flex flex-col"
     action="?/update"
     use:violationEnhance
-    on:submit={close}
   >
     <ViolationAdd
       form={violationForm}
@@ -189,4 +196,3 @@
 <Overlay let:data title="View Violation" id="viewViolation">
   <ViewViolation info={data} {supabase} />
 </Overlay>
-<!-- TODO: Confimation, Fail, and Success modals; Fixed the modals; Figure out the injection of modals at once instead of reusing them for each pages -->

@@ -142,6 +142,7 @@ declare global {
       birthdate: string;
       status: string;
       employee_no: string;
+      user_id: string;
       role: number;
       created_at: string;
       updated_at: string;

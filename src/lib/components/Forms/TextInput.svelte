@@ -8,7 +8,6 @@
 </script>
 
 <input
-  type="text"
   {id}
   name={id}
   {placeholder}

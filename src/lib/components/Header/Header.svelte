@@ -15,7 +15,7 @@
       <a
         class="flex-none text-xl font-semibold dark:text-white"
         href="/"
-        aria-label="Brand">Brand</a
+        aria-label="Brand">POSO</a
       >
     </div>
 
