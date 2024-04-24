@@ -19,7 +19,6 @@
     errors: ticketErrors,
     enhance: ticketEnhance,
     message: ticketMessage,
-    reset: ticketFormReset,
   } = superForm(pageData.ticketForm, {
     dataType: "json",
   });
@@ -75,6 +74,7 @@
   <Grid columns="grid-cols-2" gap="gap-8">
     <GridCol>
       <Grid columns="grid-cols-4" gap="gap-4">
+        <!-- NOTE: VIOLATOR INFORMATION -->
         <GridCol colSpan="col-span-2">
           <label class="text-gray-500" for="last_name">Last Name</label>
           <TextInput
@@ -115,7 +115,9 @@
           <label class="text-gray-500" for="birthdate">Birthdate</label>
           <TextInput id="birthdate" type="date" bind:value={$birthdateProxy} />
         </GridCol>
+        <!-- NOTE: VIOLATOR INFORMATION -->
 
+        <!-- NOTE: TICKET INFORMATION -->
         <GridCol colSpan="col-span-4">
           <Divider strokeWidth={1}>
             <h2 slot="left" class="text-gray-600 text-xl">
@@ -130,6 +132,9 @@
             type="text"
             bind:value={$ticketForm.ticket_no}
           />
+          {#if $ticketErrors.ticket_no}
+            <div class="text-red-500 text-sm">{$ticketErrors.ticket_no}</div>
+          {/if}
         </GridCol>
         <GridCol colSpan="col-span-2">
           <label class="text-gray-500" for="enforcer">Apprending Enforcer</label
@@ -230,8 +235,11 @@
             bind:value={violation_time}
           />
         </GridCol>
+        <!-- NOTE: TICKET INFORMATION -->
       </Grid>
     </GridCol>
+
+    <!-- NOTE: SELECTED VIOLATIONS -->
     <GridCol>
       <div class="flex flex-col justify-stretch items-stretch h-full gap-4">
         <div class="h-full box-border p-2 overflow-y-auto">
@@ -274,13 +282,19 @@
         </div>
       </div>
     </GridCol>
+    <!-- NOTE: SELECTED VIOLATIONS -->
+
+    <!-- NOTE: ACTION BUTTONS -->
     <div class="flex justify-end gap-4 mt-4 col-span-2 row-span-1">
       <a href="/tickets">
         <Button type="button" style="soft" color="gray">Cancel</Button>
       </a>
       <Button type="submit">Save Ticket</Button>
     </div>
+    <!-- NOTE: ACTION BUTTONS -->
   </Grid>
+
+  <!-- NOTE: VIOLATION OVERLAY -->
   <Overlay title="Select Violations" type="canvas" id="violations" let:data>
     <div class="w-[500px] h-full flex flex-col box-border pb-12">
       <div class="flex-1 overflow-y-auto pr-3">
