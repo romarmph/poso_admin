@@ -161,7 +161,7 @@
                     },
                     fireDelete: () =>
                         open({
-                            id: "deleteEnforcer",
+                            id: "deleteAdmin",
                             props: {
                                 info: info.row.original.id,
                                 data,
@@ -182,7 +182,7 @@
         <Button
             on:click={() => {
                 resetForm();
-                open({ id: "addEnforcer", props: {} });
+                open({ id: "addAdmin", props: {} });
             }}>Add</Button
         >
     </div>
@@ -192,7 +192,7 @@
 <DataList table="employees" let:data initData={data.admin ?? []}>
     <TanTable {data} {columns}></TanTable>
 </DataList>
-<Overlay title="Add Enforcer" id="addEnforcer" let:data>
+<Overlay title="Add Admin" id="addAdmin" let:data>
     <form
         method="POST"
         class="w-[500px] h-full flex flex-col"
@@ -208,7 +208,7 @@
     </form>
 </Overlay>
 
-<Overlay title="Update Enforcer" id="updateAdmin" let:data>
+<Overlay title="Update Admin" id="updateAdmin" let:data>
     <form
         method="POST"
         class="w-[500px] h-full flex flex-col"
@@ -224,7 +224,7 @@
     </form>
 </Overlay>
 
-<Overlay let:data title="" id="deleteEnforcer" type="modal">
+<Overlay let:data title="" id="deleteAdmin" type="modal">
     <form
         action="?/delete"
         method="POST"
@@ -237,6 +237,6 @@
     </form>
 </Overlay>
 
-<Overlay let:data title="View Enforcer" id="viewAdmin">
+<Overlay let:data title="View Admin" id="viewAdmin">
     <ViewAdmin info={data} {supabase} />
 </Overlay>

@@ -157,7 +157,7 @@
     <TanTable {data} {columns}></TanTable>
 </DataList>
 
-<Overlay title="Add Violation" id="addtrafficPost" let:data>
+<Overlay title="Add Traffic Post" id="addtrafficPost" let:data>
     <form
         method="POST"
         class="w-[500px] h-full flex flex-col"
@@ -173,7 +173,7 @@
     </form>
 </Overlay>
 
-<Overlay title="Update Violation" id="updateTrafficPost" let:data>
+<Overlay title="Update traffic Post" id="updateTrafficPost" let:data>
     <form
         method="POST"
         class="w-[500px] h-full flex flex-col"
