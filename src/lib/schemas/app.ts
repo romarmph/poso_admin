@@ -64,4 +64,5 @@ export const ticketSchema = z.object({
 	violations: z.array(z.number()),
 	address: z.string().optional(),
 	enforcer: z.number(),
+	offense: z.string().default('a'),
 })

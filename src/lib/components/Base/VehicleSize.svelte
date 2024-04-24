@@ -3,9 +3,13 @@
 </script>
 
 {#if big_vehicle}
-    <span class="bg-teal-500 text-white text-xs px-2 py-1 rounded-lg">Big</span>
+    <span
+        class="bg-teal-500 text-white text-xs px-2 py-1 rounded-lg self-center"
+        >Big</span
+    >
 {:else}
-    <span class="bg-blue-500 text-white text-xs px-2 py-1 rounded-lg"
+    <span
+        class="bg-blue-500 text-white text-xs px-2 py-1 rounded-lg self-center"
         >Small</span
     >
 {/if}

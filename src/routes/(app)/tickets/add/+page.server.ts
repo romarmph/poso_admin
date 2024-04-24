@@ -21,6 +21,12 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 export const actions: Actions = {
   create: async ({ request, locals: { supabase, getCurrentUser } }) => {
     const form = await superValidate(request, zod(ticketSchema));
+    const failMessage = message(form, {
+      success: false,
+      action: ActionResultModals.FailCreate,
+    });
+
+    console.log(form);
 
     if (!form.valid) {
       return message(form, {
@@ -32,10 +38,7 @@ export const actions: Actions = {
     const { data: ticket_numbers } = await supabase.from("ticket_numbers_manual").select().eq("ticket_number", form.data.ticket_no);
 
     if (!ticket_numbers) {
-      return message(form, {
-        success: false,
-        action: ActionResultModals.FailCreate,
-      })
+      return failMessage;
     }
 
     if (ticket_numbers.length) {
@@ -45,7 +48,6 @@ export const actions: Actions = {
     const formData = form.data;
     const currentUser = await getCurrentUser();
     const ticket = {
-      id: "",
       first_name: formData.first_name,
       middle_name: formData.middle_name,
       last_name: formData.last_name,
@@ -69,22 +71,54 @@ export const actions: Actions = {
     }
 
     const {
-      data: ticketData,error: ticketError
-    } = await supabase.from("tickets").insert(ticket);
-    console.log(ticketError)
-    if(ticketError){
-      return message(form,{
-        success:false, 
-        action: ActionResultModals.FailCreate,
+      data: ticketData, error: ticketError
+    } = await supabase.from("tickets").insert(ticket).select();
 
-      })
+    if (ticketError) {
+      return failMessage;
     }
-console.log(ticketData)
-    // const {
-    //   data,error
-    // } = await supabase.from("ticket_numbers_manual").insert({
-    //   // ticket_id: ticketData?.id,
-    // })
+
+    const { error: ticketNumberError } = await supabase.from("ticket_numbers_manual").insert({
+      ticket_id: ticketData![0].id,
+      ticket_number: formData.ticket_no,
+    });
+
+    console.log("ticket number insert error", ticketNumberError)
+
+    if (ticketNumberError) {
+      await supabase.from("tickets").delete().eq("id", ticketData[0].id);
+      return failMessage;
+    }
+
+    const fails: {
+      ticket_id: number,
+      violation_id: number,
+    }[] = [];
+    form.data.violations.forEach(async (violation) => {
+      const { error: ticketViolationsError } = await supabase.from("ticket_violations").insert({
+        ticket_id: ticketData[0].id,
+        violation_id: violation,
+        offense: form.data.offense,
+      });
+
+      if (ticketViolationsError) {
+        fails.push({
+          ticket_id: ticketData[0].id,
+          violation_id: violation,
+        });
+      }
+    });
+
+    if (fails.length) {
+      console.log("success", fails)
+      await supabase.from("tickets").delete().eq("id", ticketData[0].id);
+      await supabase.from("ticket_numbers_manual").delete().eq("ticket_id", ticketData[0].id);
+      fails.forEach(async (success) => {
+        await supabase.from("ticket_violations").delete().eq("ticket_id", success.ticket_id).eq("violation_id", success.violation_id);
+      })
+      return failMessage;
+    }
+
     return redirect(302, "/tickets")
   }
 }

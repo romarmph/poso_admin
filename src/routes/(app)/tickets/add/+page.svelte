@@ -7,6 +7,7 @@
   import { X } from "lucide-svelte";
   import { dateProxy, superForm } from "sveltekit-superforms";
   import TicketIdentificationType from "$lib/enums/TicketIdentificationType.js";
+  import VehicleSize from "$lib/components/Base/VehicleSize.svelte";
 
   const { open, close } = overlayStore;
 
@@ -41,8 +42,16 @@
     format: "date",
   });
   let violation_time = "12:00";
+  let offense = "a";
+  let selectedVehicleType: Types.VehicleTypes;
 
   $: $ticketForm.violation_time = violation_time;
+  $: $ticketForm.offense = offense;
+  $: if (data.vehicleTypes) {
+    selectedVehicleType = data.vehicleTypes.filter(
+      (type) => type.id == $ticketForm.vehicle_type,
+    )[0];
+  }
 </script>
 
 <svelte:head><title>Add Ticket</title></svelte:head>
@@ -51,6 +60,7 @@
   <h1 class="text-2xl font-bold text-gray-800">New Ticket</h1>
 </header>
 <form action="?/create" method="POST" class="mt-4" use:ticketEnhance>
+  <input type="text" name="offense" class="hidden" bind:value={offense} id="" />
   <Grid columns="grid-cols-2" gap="gap-8" classNames="my-2">
     <Divider strokeWidth={1}>
       <h2 slot="left" class="text-gray-600 text-xl">Violator Information</h2>
@@ -261,14 +271,25 @@
                     >{selected.name}</label
                   >
                 </div>
-
-                <button
-                  type="button"
-                  class="bg-gray-100 rounded-full p-2"
-                  on:click={() => removeViolation(index)}
-                >
-                  <X />
-                </button>
+                <div class="flex items-center gap-4">
+                  {#if selectedVehicleType}
+                    <p>
+                      {selected.fine[
+                        selectedVehicleType.big_vehicle ? "big" : "small"
+                      ][offense]}
+                    </p>
+                    <VehicleSize
+                      big_vehicle={selectedVehicleType.big_vehicle}
+                    />
+                  {/if}
+                  <button
+                    type="button"
+                    class="bg-gray-100 rounded-full p-2"
+                    on:click={() => removeViolation(index)}
+                  >
+                    <X />
+                  </button>
+                </div>
               </div>
             {/each}
           {/if}
