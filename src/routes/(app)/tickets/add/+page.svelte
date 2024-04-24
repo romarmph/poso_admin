@@ -6,7 +6,6 @@
   import { overlayStore } from "$lib/stores/overlayStore";
   import { X } from "lucide-svelte";
   import { dateProxy, superForm } from "sveltekit-superforms";
-  import { DateInput } from "date-picker-svelte";
   import TicketIdentificationType from "$lib/enums/TicketIdentificationType.js";
 
   const { open, close } = overlayStore;
