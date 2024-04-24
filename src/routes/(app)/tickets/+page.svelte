@@ -125,7 +125,9 @@
 <header style="display: flex; align-items: center;">
   <h1 style="font-weight: bold;">Tickets</h1>
   <div style="margin-left:auto">
-    <Button color="teal">Add Ticket</Button>
+    <a href="/tickets/add">
+      <Button color="teal">Add Ticket</Button>
+    </a>
   </div>
 </header>
 
