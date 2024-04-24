@@ -4,6 +4,7 @@
     import { createEventDispatcher, onMount } from "svelte";
     import { getEmployeeAccount } from "$lib/utils/employeeDetails";
     import UserStatus from "$lib/enums/UserStatus";
+    import { dateProxy } from "sveltekit-superforms";
 
     export let initData: any | null;
     export let form;
@@ -30,6 +31,7 @@
     function handleClose() {
         dispatch("close");
     }
+    const proxyDate = dateProxy(form, "birthdate", { format: "date" });
 </script>
 
 <div class="flex-1">
@@ -133,11 +135,7 @@
         </div>
         <div class="mb-3">
             <label for="">BirthDate</label>
-            <TextInput
-                type="date"
-                id="birthdate"
-                bind:value={$form.birthdate}
-            />
+            <TextInput type="date" id="birthdate" bind:value={$proxyDate} />
             {#if $errors.birthdate}
                 <span class="text-red-500 text-sm">
                     {$errors.birthdate}

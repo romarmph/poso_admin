@@ -148,7 +148,7 @@
                     props: {},
                     id: "addvehicleType",
                 });
-            }}>Add Violation</Button
+            }}>Add Vehicle Type</Button
         >
     </div>
 </header>
@@ -158,7 +158,7 @@
     <TanTable {data} {columns}></TanTable>
 </DataList>
 
-<Overlay title="Add Violation" id="addvehicleType" let:data>
+<Overlay title="Add Vehicle Type" id="addvehicleType" let:data>
     <form
         method="POST"
         class="w-[500px] h-full flex flex-col"
@@ -174,7 +174,7 @@
     </form>
 </Overlay>
 
-<Overlay title="Update Violation" id="updateVehicleType" let:data>
+<Overlay title="Update Vehicle Type" id="updateVehicleType" let:data>
     <form
         method="POST"
         class="w-[500px] h-full flex flex-col"
@@ -203,6 +203,6 @@
     </form>
 </Overlay>
 
-<Overlay let:data title="View Violation" id="ViewVehicleType">
+<Overlay let:data title="View Vehicle Type" id="ViewVehicleType">
     <ViewVehicleTypes info={data} {supabase} />
 </Overlay>
