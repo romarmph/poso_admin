@@ -35,7 +35,7 @@
 				<X />
 			</button>
 		</div>
-		<div class="p-4 flex-1">
+		<div class="p-4 h-full">
 			<slot data={$overlayStore.props} />
 		</div>
 	</div>
