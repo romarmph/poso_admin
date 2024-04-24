@@ -1,3 +1,4 @@
+import { dateProxy } from "sveltekit-superforms";
 import { z } from "zod";
 
 export const deleteSchema = z.object({
@@ -62,4 +63,5 @@ export const ticketSchema = z.object({
 	plate_no: z.string(),
 	chassis_no: z.string(),
 	engine_no: z.string(),
+	violations: z.array(z.number()),
 })
