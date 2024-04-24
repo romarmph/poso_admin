@@ -115,7 +115,7 @@ export const actions: Actions = {
       );
     }
 
-    if (userDetails.length > 0) {
+    if (userDetails.length > 0 && userDetails[0].employee_no!=form.data.employee_no) {
       return setError(form, "employee_no", "Employee number already exists")
     }
 
