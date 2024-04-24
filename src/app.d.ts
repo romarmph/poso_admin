@@ -142,6 +142,29 @@ declare global {
       updated_by: number;
       deleted_by: number | null;
     }
+
+    interface Tickets extends Data {
+      first_name: string;
+      middle_name: string;
+      last_name: string;
+      sufiex: string;
+      birtdate: string;
+      address: string;
+      status: string;
+      violation_date: string;
+      violation_time: string;
+      vehicle_type: number;
+      enforcer: number;
+      violation_location: number;
+      identification_type: string;
+      identification: string;
+      created_at: string;
+      created_by: number;
+      updated_at: string;
+      updated_by: number;
+      deleted_at: string | null;
+      deleted_by: number | null;
+    }
   }
 }
 

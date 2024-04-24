@@ -5,6 +5,9 @@ const config = {
   kit: {
     adapter: adapter()
   },
-  preprocess: vitePreprocess()
+  preprocess: vitePreprocess(),
+  optimizeDeps: {
+    exclude: ['date-picker-svelte']
+  },
 };
 export default config;

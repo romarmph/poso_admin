@@ -8,10 +8,12 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
   const ticketForm = await superValidate(zod(ticketSchema));
   const { data: violations } = await supabase.from("violations").select().is("deleted_by", null);
   const { data: vehicleTypes } = await supabase.from("vehicle_types").select().is("deleted_by", null);
+  const { data: enforcers } = await supabase.from("employees").select().is("deleted_by", null).eq("role", 1);
   return {
     ticketForm,
     violations,
     vehicleTypes,
+    enforcers,
   };
 }
 
