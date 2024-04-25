@@ -1,6 +1,7 @@
 // src/routes/login/+page.server.ts
 import { fail, redirect, type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
+import Roles from "$lib/enums/Roles";
 
 export const actions: Actions = {
   default: async ({ request, locals: { supabase } }) => {
@@ -32,9 +33,17 @@ export const actions: Actions = {
     }
 
     if (user) {
+      const { data: employees } = await supabase.from("employees").select().eq("user_id", user.id);
+      if (!employees) {
+        return fail(500, {
+          message: "Error signing in, please contact system admin",
+          success: false,
+        })
+      }
+
       if (
-        user.user_metadata.role !== "superadmin" &&
-        user.user_metadata.role !== "staff"
+        employees[0].role !== Roles.SUPERADMIN &&
+        employees[0].role !== Roles.STAFF
       ) {
         await supabase.auth.signOut();
         return fail(500, {
@@ -45,7 +54,7 @@ export const actions: Actions = {
       }
     }
 
-    return redirect(303, "/");
+    return redirect(300, "/");
   },
 };
 

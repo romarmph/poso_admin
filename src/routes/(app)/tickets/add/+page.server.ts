@@ -4,12 +4,13 @@ import { zod } from "sveltekit-superforms/adapters";
 import { message, setError, superValidate } from "sveltekit-superforms";
 import { ticketSchema } from "$lib/schemas/app";
 import ActionResultModals from "$lib/enums/ActionResultModals";
+import Roles from "$lib/enums/Roles";
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
   const form = await superValidate(zod(ticketSchema));
   const { data: violations } = await supabase.from("violations").select().is("deleted_by", null);
   const { data: vehicleTypes } = await supabase.from("vehicle_types").select().is("deleted_by", null);
-  const { data: enforcers } = await supabase.from("employees").select().is("deleted_by", null).eq("role", 1);
+  const { data: enforcers } = await supabase.from("employees").select().is("deleted_by", null).eq("role", Roles.ENFORCER);
   return {
     form,
     violations,
@@ -74,6 +75,8 @@ export const actions: Actions = {
     const {
       data: ticketData, error: ticketError
     } = await supabase.from("tickets").insert(ticket).select();
+
+    console.log(ticketError)
 
     if (ticketError) {
       return failMessage;

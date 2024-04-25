@@ -86,7 +86,6 @@
             footer: (info) => info.column.id,
             header: "Created At",
             accessorFn: (row) => {
-                console.log(row);
                 return new Date(row.created_at).toDateString();
             },
         },
