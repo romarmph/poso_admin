@@ -130,7 +130,7 @@ declare global {
       middle_name: string;
       last_name: string;
       suffix: string;
-      birtdate: string;
+      birthdate: string;
       address: string;
       status: string;
       violation_date: string;
@@ -146,6 +146,8 @@ declare global {
       updated_by: number;
       deleted_at: string | null;
       deleted_by: number | null;
+      offense: string;
+      previous_offense: number;
     }
   }
 }

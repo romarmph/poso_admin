@@ -1,6 +1,4 @@
-import { dateProxy } from "sveltekit-superforms";
 import { z } from "zod";
-
 export const deleteSchema = z.object({
 	id: z.number().or(z.string())
 });
@@ -49,20 +47,21 @@ export const employeeSchema = z.object({
 })
 
 export const ticketSchema = z.object({
-	first_name: z.string(),
+	first_name: z.string().min(1, "First name is too short"),
 	middle_name: z.string(),
-	last_name: z.string(),
-	suffix: z.string(),
-	birthdate: z.date().optional(),
-	violation_date: z.date().optional().refine(val => val, { message: "Violation Date is required" }),
+	last_name: z.string().min(1, "Last name is too short"),
+	suffix: z.string().optional(),
+	birthdate: z.date().optional().default(new Date(1900, 0, 1, 12, 0, 0)),
+	violation_date: z.date().optional().refine(val => val, { message: "Violation Date is required" }).default(new Date()),
 	violation_time: z.string().optional().refine(val => val, { message: "Violation Time is required" }),
 	vehicle_type: z.number().optional().refine(val => val, { message: "Vehicle Type is Required" }),
 	location: z.string(),
 	ticket_no: z.string().trim().refine(val => val.length, { message: "Ticket Number is required" }),
-	identification: z.string(),
-	identification_type: z.string(),
-	violations: z.array(z.number()),
+	identification: z.string().min(1, "Identication is required"),
+	identification_type: z.string().min(1, "Please choose an identification type"),
+	violations: z.array(z.number()).min(1, "Please choose a violation"),
 	address: z.string().optional(),
-	enforcer: z.number(),
+	enforcer: z.number().min(1, "Please choose an enforcer").default(0),
 	offense: z.string().default('a'),
+	previous_offense: z.number().optional(),
 })
