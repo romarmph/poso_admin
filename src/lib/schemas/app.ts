@@ -1,6 +1,4 @@
-import { dateProxy } from "sveltekit-superforms";
 import { z } from "zod";
-
 export const deleteSchema = z.object({
 	id: z.number().or(z.string())
 });
@@ -65,4 +63,5 @@ export const ticketSchema = z.object({
 	address: z.string().optional(),
 	enforcer: z.number().min(1, "Please choose an enforcer").default(0),
 	offense: z.string().default('a'),
+	previous_offense: z.number().optional(),
 })

@@ -8,22 +8,31 @@
   import { dateProxy, superForm } from "sveltekit-superforms";
   import TicketIdentificationType from "$lib/enums/TicketIdentificationType.js";
   import VehicleSize from "$lib/components/Base/VehicleSize.svelte";
-  import DataList from "$lib/components/Supabase/DataList.svelte";
   import TanTable from "$lib/components/Table/TanTable.svelte";
   import ConfirmCreate from "$lib/components/Overlays/Modal/Create/ConfirmCreate.svelte";
   import ActionResultModals from "$lib/enums/ActionResultModals.js";
   import FailCreate from "$lib/components/Overlays/Modal/Create/FailCreate.svelte";
+  import { getSupabaseContext } from "$lib/stores/clientStore.js";
+  import { relatedTicketColumn } from "$lib/table_columns/TicketColumns";
 
   const { open, close } = overlayStore;
 
   export let data;
   const pageData = data;
-
   const { form, errors, enhance, message, submit } = superForm(pageData.form, {
     dataType: "json",
   });
-
   let selectedViolations: Types.Violation[];
+  const birthdateProxy = dateProxy(form, "birthdate", { format: "date" });
+  const violationDateProxy = dateProxy(form, "violation_date", {
+    format: "date",
+  });
+  let violation_time = "12:00";
+  let offense = "a";
+  let previous_offense: number = 0;
+  let selectedVehicleType: Types.VehicleTypes;
+  let relatedTickets: Types.Ticket[] = [];
+  const { supabase } = getSupabaseContext();
 
   $: {
     selectedViolations = data.violations!.filter((val) =>
@@ -37,13 +46,50 @@
     $form.violations.splice(index, 1);
   }
 
-  const birthdateProxy = dateProxy(form, "birthdate", { format: "date" });
-  const violationDateProxy = dateProxy(form, "violation_date", {
-    format: "date",
-  });
-  let violation_time = "12:00";
-  let offense = "a";
-  let selectedVehicleType: Types.VehicleTypes;
+  async function fetchRelated() {
+    if ($form.identification_type === TicketIdentificationType.LICENSE_NO) {
+      const { data } = await supabase
+        .from("tickets")
+        .select()
+        .ilike("identification", `%${$form.identification}%`)
+        .eq("identification_type", TicketIdentificationType.LICENSE_NO);
+      if (data) {
+        relatedTickets = [...data];
+      }
+    } else {
+      const { data: name } = await supabase
+        .from("tickets")
+        .select()
+        .ilike("first_name", `%${$form.first_name}%`)
+        .ilike("last_name", `%${$form.last_name}%`);
+
+      if (name) {
+        relatedTickets = [...name];
+      }
+
+      if ($form.identification.length) {
+        const { data: identification } = await supabase
+          .from("tickets")
+          .select()
+          .ilike("identification", `%${$form.identification}%`);
+
+        if (identification) {
+          relatedTickets = [...identification];
+
+          if (name) {
+            relatedTickets = [...identification, ...name];
+          }
+        }
+      }
+    }
+
+    relatedTickets = relatedTickets.filter((value, index, self) => {
+      const find = self.findIndex((t) => t.id === value.id);
+      return index === find;
+    });
+
+    console.log(relatedTickets);
+  }
 
   $: $form.violation_time = violation_time;
   $: $form.offense = offense;
@@ -52,8 +98,6 @@
       (type) => type.id == $form.vehicle_type,
     )[0];
   }
-
-  $: console.log($errors);
 
   $: if ($message) {
     if ($message.success) {
@@ -89,6 +133,12 @@
 </header>
 <form action="?/create" method="POST" class="mt-4" use:enhance>
   <input type="text" name="offense" class="hidden" bind:value={offense} id="" />
+  <input
+    type="number"
+    name="previous_offense"
+    class="hidden"
+    bind:value={previous_offense}
+  />
   <Grid columns="grid-cols-2" gap="gap-8" classNames="my-2">
     <Divider strokeWidth={1}>
       <h2 slot="left" class="text-gray-600 text-xl">Violator Information</h2>
@@ -114,7 +164,12 @@
         <!-- NOTE: VIOLATOR INFORMATION -->
         <GridCol colSpan="col-span-2">
           <label class="text-gray-500" for="last_name">Last Name</label>
-          <TextInput id="last_name" type="text" bind:value={$form.last_name} />
+          <TextInput
+            id="last_name"
+            type="text"
+            bind:value={$form.last_name}
+            callback={fetchRelated}
+          />
           {#if $errors.last_name}
             <div class="text-red-500 text-sm">{$errors.last_name}</div>
           {/if}
@@ -125,6 +180,7 @@
             id="first_name"
             type="text"
             bind:value={$form.first_name}
+            callback={fetchRelated}
           />
           {#if $errors.first_name}
             <div class="text-red-500 text-sm">{$errors.first_name}</div>
@@ -239,6 +295,7 @@
             id="license_no"
             type="text"
             bind:value={$form.identification}
+            callback={fetchRelated}
           />
           {#if $errors.identification}
             <div class="text-red-500 text-sm">
@@ -429,9 +486,7 @@
     <h2 slot="left" class="text-gray-600 text-xl">Related Tickets</h2>
   </Divider>
 </div>
-<DataList table="tickets" initData={[]} let:data>
-  <TanTable {data} columns={[]}></TanTable>
-</DataList>
+<TanTable data={relatedTickets} columns={relatedTicketColumn}></TanTable>
 
 <Overlay id="confirmAdd" type="modal" title="Add Ticket">
   <ConfirmCreate
@@ -446,6 +501,13 @@
 <Overlay id={ActionResultModals.FailCreate} title="Ticket Fail" type="modal">
   <FailCreate on:close={close}></FailCreate>
 </Overlay>
+
+<Overlay
+  id="viewRelated"
+  title="Related Ticket"
+  type="canvas"
+  let:data
+></Overlay>
 
 <style>
   ::-webkit-scrollbar {

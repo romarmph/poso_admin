@@ -2,7 +2,7 @@
 import { writable } from "svelte/store";
 
 interface OverlayStore<T> {
-  props?: T;
+  props?: T,
   id: string;
 }
 

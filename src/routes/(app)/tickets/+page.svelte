@@ -7,7 +7,7 @@
   import { getSupabaseContext } from "$lib/stores/clientStore.js";
   const { open } = overlayStore;
   const { supabase } = getSupabaseContext();
-  const columns: ColumnDef<Types.Tickets>[] = [
+  const columns: ColumnDef<Types.Ticket>[] = [
     {
       accessorKey: "first_name",
       cell: (info) => info.getValue(),
@@ -37,7 +37,7 @@
       cell: (info) => info.getValue(),
       footer: (info) => info.column.id,
       header: "Birth Date",
-      accessorFn: (row) => new Date(row.birthdate).toDateString(),
+      accessorFn: (row) => new Date(row.birtdate).toDateString(),
     },
     {
       accessorKey: "status",
@@ -105,7 +105,7 @@
           fireView: () => {
             open({
               props: {
-                info: info.row.original as Types.Tickets,
+                info: info.row.original as Types.Ticket,
               },
               id: "viewViolation",
             });

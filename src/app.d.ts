@@ -146,6 +146,8 @@ declare global {
       updated_by: number;
       deleted_at: string | null;
       deleted_by: number | null;
+      offense: string;
+      previous_offense: number;
     }
   }
 }

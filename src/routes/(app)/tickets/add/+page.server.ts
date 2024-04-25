@@ -67,6 +67,8 @@ export const actions: Actions = {
       updated_by: currentUser?.id,
       deleted_at: null,
       deleted_by: null,
+      offense: formData.offense,
+      previous_offense: formData.previous_offense,
     }
 
     const {
@@ -81,8 +83,6 @@ export const actions: Actions = {
       ticket_id: ticketData![0].id,
       ticket_number: formData.ticket_no,
     });
-
-    console.log("ticket number insert error", ticketNumberError)
 
     if (ticketNumberError) {
       await supabase.from("tickets").delete().eq("id", ticketData[0].id);
@@ -109,7 +109,6 @@ export const actions: Actions = {
     });
 
     if (fails.length) {
-      console.log("success", fails)
       await supabase.from("tickets").delete().eq("id", ticketData[0].id);
       await supabase.from("ticket_numbers_manual").delete().eq("ticket_id", ticketData[0].id);
       fails.forEach(async (success) => {
