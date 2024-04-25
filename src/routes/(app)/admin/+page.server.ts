@@ -5,13 +5,14 @@ import { superValidate, message, setError } from "sveltekit-superforms";
 import { zod, } from "sveltekit-superforms/adapters";
 import z from "zod";
 import ActionResultModals from "$lib/enums/ActionResultModals";
+import Roles from "$lib/enums/Roles";
 
 export const load: PageServerLoad = async ({
   locals: { supabase },
 }) => {
   const adminForm = await superValidate(zod(employeeSchema));
   const deleteForm = await superValidate(zod(deleteSchema));
-  const admin = await supabase.from("employees").select().eq('role', 2).is('deleted_by', null);
+  const admin = await supabase.from("employees").select().eq('role', Roles.STAFF).is('deleted_by', null);
   console.log(admin.data)
   return {
     admin: admin.data,
@@ -67,7 +68,7 @@ export const actions: Actions = {
       birthdate: form.data.birthdate,
       employee_no: form.data.employee_no,
       user_id: userData.user.id,
-      role: 1,
+      role: Roles.STAFF,
       created_at: new Date(),
       updated_at: new Date(),
       deleted_at: null,
@@ -115,7 +116,7 @@ export const actions: Actions = {
       );
     }
     console.log()
-    if (userDetails.length > 0 && userDetails[0].employee_no!=form.data.employee_no) {
+    if (userDetails.length > 0 && userDetails[0].employee_no != form.data.employee_no) {
       return setError(form, "employee_no", "Employee number already exists")
     }
 
@@ -140,11 +141,9 @@ export const actions: Actions = {
       birthdate: form.data.birthdate,
       status: form.data.status,
       employee_no: form.data.employee_no,
-      role: 2,
       updated_at: new Date(),
       updated_by: author!.id,
     }
-    console.log("user", form);
     const { error } = await supabase.from("employees").update(user).eq("id", form.data.id!);
 
     if (error) {

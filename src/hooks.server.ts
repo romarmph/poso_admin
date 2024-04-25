@@ -72,6 +72,7 @@ const authorization: Handle = async ({ event, resolve }) => {
 
   const response = resolve(event);
 
+
   return response;
 };
 
