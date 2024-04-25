@@ -2,7 +2,7 @@
   import { Button, TicketStatus, TanTable, RowActions } from "$lib/Components";
   import { DataList } from "$lib/components/Supabase/Supabase";
   import { flexRender, type ColumnDef } from "@tanstack/svelte-table";
-  import { ViewTickets } from "$lib/components/Overlays/Overlays";
+  import { Overlay, ViewTickets } from "$lib/components/Overlays/Overlays";
   import { overlayStore } from "$lib/stores/overlayStore.js";
   import { getSupabaseContext } from "$lib/stores/clientStore.js";
   const { open } = overlayStore;
@@ -87,7 +87,7 @@
               props: {
                 info: info.row.original as Types.Ticket,
               },
-              id: "viewViolation",
+              id: "viewTicket",
             });
           },
           fireDelete: () => {},
@@ -114,3 +114,7 @@
 <DataList table="tickets" let:data initData={data.tickets ?? []}>
   <TanTable {data} {columns}></TanTable>
 </DataList>
+
+<Overlay let:data title="View Ticket" id="viewTicket">
+  <ViewTickets info={data} {supabase} />
+</Overlay>

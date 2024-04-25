@@ -14,6 +14,7 @@
   import FailCreate from "$lib/components/Overlays/Modal/Create/FailCreate.svelte";
   import { getSupabaseContext } from "$lib/stores/clientStore.js";
   import { relatedTicketColumn } from "$lib/table_columns/TicketColumns";
+  import ViewRelatedTickets from "$lib/components/Overlays/Offcanvas/ViewRelatedTickets.svelte";
 
   const { open, close } = overlayStore;
 
@@ -506,8 +507,10 @@
   <FailCreate on:close={close}></FailCreate>
 </Overlay>
 
-<Overlay id="viewRelated" title="Related Ticket" type="canvas" let:data
-></Overlay>
+
+<Overlay id="viewRelated" title="Related Ticket" type="canvas" let:data>
+  <ViewRelatedTickets info={data} {supabase} />
+</Overlay>
 
 <style>
   ::-webkit-scrollbar {
