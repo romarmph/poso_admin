@@ -3,7 +3,6 @@ import { type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { superValidate, message, setError } from "sveltekit-superforms";
 import { zod, } from "sveltekit-superforms/adapters";
-import z from "zod";
 import ActionResultModals from "$lib/enums/ActionResultModals";
 import Roles from "$lib/enums/Roles";
 
@@ -13,7 +12,6 @@ export const load: PageServerLoad = async ({
   const adminForm = await superValidate(zod(employeeSchema));
   const deleteForm = await superValidate(zod(deleteSchema));
   const admin = await supabase.from("employees").select().eq('role', Roles.STAFF).is('deleted_by', null);
-  console.log(admin.data)
   return {
     admin: admin.data,
     adminForm,
@@ -25,7 +23,6 @@ export const actions: Actions = {
   add: async ({ request, locals: { supabase, getCurrentUser } }) => {
     const form = await superValidate(request, zod(employeeSchema));
 
-    console.log(form);
 
     if (!form.valid) {
       return message(form, {
@@ -115,7 +112,6 @@ export const actions: Actions = {
       }
       );
     }
-    console.log()
     if (userDetails.length > 0 && userDetails[0].employee_no != form.data.employee_no) {
       return setError(form, "employee_no", "Employee number already exists")
     }
@@ -147,7 +143,6 @@ export const actions: Actions = {
     const { error } = await supabase.from("employees").update(user).eq("id", form.data.id!);
 
     if (error) {
-      console.log(error);
       return message(form, {
         success: false,
         action: ActionResultModals.FailUpdate,

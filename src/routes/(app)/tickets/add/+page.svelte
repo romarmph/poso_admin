@@ -28,7 +28,7 @@
     format: "date",
   });
   let violation_time = "12:00";
-  let offense = "a";
+  let offense = 1;
   let previous_offense: number = 0;
   let selectedVehicleType: Types.VehicleTypes;
   let relatedTickets: Types.Ticket[] = [];
@@ -87,8 +87,6 @@
       const find = self.findIndex((t) => t.id === value.id);
       return index === find;
     });
-
-    console.log(relatedTickets);
   }
 
   $: $form.violation_time = violation_time;
@@ -132,7 +130,13 @@
   <!-- NOTE: ACTION BUTTONS -->
 </header>
 <form action="?/create" method="POST" class="mt-4" use:enhance>
-  <input type="text" name="offense" class="hidden" bind:value={offense} id="" />
+  <input
+    type="number"
+    name="offense"
+    class="hidden"
+    bind:value={offense}
+    id=""
+  />
   <input
     type="number"
     name="previous_offense"
@@ -399,7 +403,7 @@
                     <p>
                       {selected.fine[
                         selectedVehicleType.big_vehicle ? "big" : "small"
-                      ][offense]}
+                      ][offense === 1 ? "a" : offense === 2 ? "b" : "c"]}
                     </p>
                     <VehicleSize
                       big_vehicle={selectedVehicleType.big_vehicle}
@@ -502,11 +506,7 @@
   <FailCreate on:close={close}></FailCreate>
 </Overlay>
 
-<Overlay
-  id="viewRelated"
-  title="Related Ticket"
-  type="canvas"
-  let:data
+<Overlay id="viewRelated" title="Related Ticket" type="canvas" let:data
 ></Overlay>
 
 <style>

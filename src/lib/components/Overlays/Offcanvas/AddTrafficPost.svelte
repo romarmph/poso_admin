@@ -8,7 +8,6 @@
     export let errors;
 
     const dispatch = createEventDispatcher();
-    console.log(initData);
 
     if (Object.keys(initData).length > 0) {
         $form = {

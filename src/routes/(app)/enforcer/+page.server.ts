@@ -24,7 +24,6 @@ export const actions: Actions = {
   add: async ({ request, locals: { supabase, getCurrentUser } }) => {
     const form = await superValidate(request, zod(employeeSchema));
 
-    console.log(form);
 
     if (!form.valid) {
       return message(form, {
@@ -144,11 +143,9 @@ export const actions: Actions = {
       updated_at: new Date(),
       updated_by: author!.id,
     }
-    console.log("user", form);
     const { error } = await supabase.from("employees").update(user).eq("id", form.data.id!);
 
     if (error) {
-      console.log(error);
       return message(form, {
         success: false,
         action: ActionResultModals.FailUpdate,

@@ -3,7 +3,7 @@
     import type { SupabaseClient } from "@supabase/supabase-js";
     import { getEmployeeDetails } from "$lib/utils/employeeDetails";
     import TicketStatus from "$lib/components/Base/TicketStatus.svelte";
-    export let info: Types.Tickets;
+    export let info: Types.Ticket;
     export let supabase: SupabaseClient;
 </script>
 

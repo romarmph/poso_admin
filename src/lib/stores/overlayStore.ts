@@ -10,7 +10,6 @@ function createOverlayStore<T>() {
   const { subscribe, set } = writable<OverlayStore<T> | null>(null);
 
   const open: (params: OverlayStore<T>) => void = ({ props, id }) => {
-    console.trace();
     set({ props, id });
   };
 
@@ -18,7 +17,6 @@ function createOverlayStore<T>() {
     subscribe,
     open,
     close: () => {
-      console.trace();
       set(null);
     }
   };
