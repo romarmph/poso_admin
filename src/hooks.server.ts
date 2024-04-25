@@ -1,6 +1,5 @@
 import {
   PUBLIC_SUPABASE_URL,
-  PUBLIC_SUPABASE_ANON_KEY,
   PUBLIC_SUPABASE_SERVICE_ROLE_KEY,
 } from "$env/static/public";
 import { createServerClient } from "@supabase/ssr";

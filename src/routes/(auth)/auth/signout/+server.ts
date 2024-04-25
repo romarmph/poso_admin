@@ -1,6 +1,6 @@
-import { fail, redirect } from "@sveltejs/kit";
+import { fail, redirect, type RequestHandler } from "@sveltejs/kit";
 
-export const POST = async ({ url, locals: { supabase } }) => {
+export const POST: RequestHandler = async ({ url, locals: { supabase } }) => {
   const session = await supabase.auth.getSession();
 
   if (session) {
@@ -11,5 +11,5 @@ export const POST = async ({ url, locals: { supabase } }) => {
     }
   }
 
-  throw redirect(303, "/");
+  return redirect(303, "/");
 };
