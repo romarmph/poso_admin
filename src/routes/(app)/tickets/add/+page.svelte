@@ -507,8 +507,6 @@
   <FailCreate on:close={close}></FailCreate>
 </Overlay>
 
-<Overlay id="viewRelated" title="Related Ticket" type="canvas" let:data
-></Overlay>
 <Overlay id="viewRelated" title="Related Ticket" type="canvas" let:data>
   <ViewRelatedTickets info={data} {supabase} />
 </Overlay>
