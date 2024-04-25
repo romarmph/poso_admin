@@ -14,6 +14,7 @@
   import FailCreate from "$lib/components/Overlays/Modal/Create/FailCreate.svelte";
   import { getSupabaseContext } from "$lib/stores/clientStore.js";
   import { relatedTicketColumn } from "$lib/table_columns/TicketColumns";
+  import ViewRelatedTickets from "$lib/components/Overlays/Offcanvas/ViewRelatedTickets.svelte";
 
   const { open, close } = overlayStore;
 
@@ -36,7 +37,7 @@
 
   $: {
     selectedViolations = data.violations!.filter((val) =>
-      $form.violations.includes(val.id),
+      $form.violations.includes(val.id)
     );
   }
 
@@ -93,7 +94,7 @@
   $: $form.offense = offense;
   $: if (data.vehicleTypes) {
     selectedVehicleType = data.vehicleTypes.filter(
-      (type) => type.id == $form.vehicle_type,
+      (type) => type.id == $form.vehicle_type
     )[0];
   }
 
@@ -508,6 +509,9 @@
 
 <Overlay id="viewRelated" title="Related Ticket" type="canvas" let:data
 ></Overlay>
+<Overlay id="viewRelated" title="Related Ticket" type="canvas" let:data>
+  <ViewRelatedTickets info={data} {supabase} />
+</Overlay>
 
 <style>
   ::-webkit-scrollbar {
