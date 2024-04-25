@@ -6,12 +6,12 @@ import { ticketSchema } from "$lib/schemas/app";
 import ActionResultModals from "$lib/enums/ActionResultModals";
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
-  const ticketForm = await superValidate(zod(ticketSchema));
+  const form = await superValidate(zod(ticketSchema));
   const { data: violations } = await supabase.from("violations").select().is("deleted_by", null);
   const { data: vehicleTypes } = await supabase.from("vehicle_types").select().is("deleted_by", null);
   const { data: enforcers } = await supabase.from("employees").select().is("deleted_by", null).eq("role", 1);
   return {
-    ticketForm,
+    form,
     violations,
     vehicleTypes,
     enforcers,
@@ -26,14 +26,13 @@ export const actions: Actions = {
       action: ActionResultModals.FailCreate,
     });
 
-    console.log(form);
-
     if (!form.valid) {
       return message(form, {
         success: false,
         action: "",
       });
     }
+
 
     const { data: ticket_numbers } = await supabase.from("ticket_numbers_manual").select().eq("ticket_number", form.data.ticket_no);
 
@@ -53,7 +52,7 @@ export const actions: Actions = {
       last_name: formData.last_name,
       suffix: formData.suffix,
       address: formData.address ?? "",
-      birthdate: formData.birthdate ?? null,
+      birthdate: formData.birthdate == new Date(1900, 0, 1, 12, 0, 0) ? null : formData.birthdate,
       status: "unpaid",
       violation_date: formData.violation_date,
       violation_time: formData.violation_time,

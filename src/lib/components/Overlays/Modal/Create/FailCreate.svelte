@@ -14,9 +14,8 @@
   </p>
   <Button
     type="button"
-    style="ghost"
+    style="soft"
     color="red"
-    fullWidth={true}
     on:click={() => dispatch("close")}>Okay, thanks</Button
   >
 </div>
