@@ -111,7 +111,6 @@
             footer: (info) => info.column.id,
             header: "Employee No.",
         },
-
         {
             accessorKey: "created_at",
             cell: (info) => info.getValue(),
@@ -120,23 +119,11 @@
             accessorFn: (row) => new Date(row.created_at).toDateString(),
         },
         {
-            accessorKey: "created_by",
-            cell: (info) => info.getValue(),
-            footer: (info) => info.column.id,
-            header: "Created By",
-        },
-        {
             accessorKey: "updated_at",
             cell: (info) => info.getValue(),
             footer: (info) => info.column.id,
             header: "Updated At",
             accessorFn: (row) => new Date(row.updated_at).toDateString(),
-        },
-        {
-            accessorKey: "updated_by",
-            cell: (info) => info.getValue(),
-            footer: (info) => info.column.id,
-            header: "Updated By",
         },
         {
             accessorKey: "id",

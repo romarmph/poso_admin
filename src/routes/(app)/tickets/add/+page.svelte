@@ -13,8 +13,11 @@
   import ActionResultModals from "$lib/enums/ActionResultModals.js";
   import FailCreate from "$lib/components/Overlays/Modal/Create/FailCreate.svelte";
   import { getSupabaseContext } from "$lib/stores/clientStore.js";
-  import { relatedTicketColumn } from "$lib/table_columns/TicketColumns";
   import ViewRelatedTickets from "$lib/components/Overlays/Offcanvas/ViewRelatedTickets.svelte";
+  import RelatedTicketsActionts from "$lib/components/Table/Partials/RelatedTicketsAcionts.svelte";
+  import TicketNumberColumn from "$lib/components/Customs/TicketNumberColumn.svelte";
+  import TicketStatus from "$lib/components/Base/TicketStatus.svelte";
+  import { flexRender, type ColumnDef } from "@tanstack/svelte-table";
 
   const { open, close } = overlayStore;
 
@@ -23,23 +26,115 @@
   const { form, errors, enhance, message, submit } = superForm(pageData.form, {
     dataType: "json",
   });
+
   let selectedViolations: Types.Violation[];
   const birthdateProxy = dateProxy(form, "birthdate", { format: "date" });
   const violationDateProxy = dateProxy(form, "violation_date", {
     format: "date",
   });
   let violation_time = "12:00";
-  let offense = 1;
-  let previous_offense: number = 0;
-  let selectedVehicleType: Types.VehicleTypes;
+  let offense: number = 1;
+  let selectedVehicleType: Types.VehicleTypes | null = null;
   let relatedTickets: Types.Ticket[] = [];
   const { supabase } = getSupabaseContext();
+  let relatedTicket: Types.Ticket | null = null;
 
-  $: {
-    selectedViolations = data.violations!.filter((val) =>
-      $form.violations.includes(val.id)
-    );
-  }
+  const relatedTicketColumn: ColumnDef<Types.Ticket>[] = [
+    {
+      accessorKey: "id",
+      cell: (info) => flexRender(TicketNumberColumn, { id: info.getValue() }),
+      footer: (info) => info.column.id,
+      header: "First Name",
+    },
+    {
+      accessorKey: "first_name",
+      cell: (info) => info.getValue(),
+      footer: (info) => info.column.id,
+      header: "First Name",
+    },
+    {
+      accessorKey: "middle_name",
+      cell: (info) => info.getValue(),
+      footer: (info) => info.column.id,
+      header: "Middle Name",
+    },
+    {
+      accessorKey: "last_name",
+      cell: (info) => info.getValue(),
+      footer: (info) => info.column.id,
+      header: "Last Name",
+    },
+    {
+      accessorKey: "suffix",
+      cell: (info) => info.getValue(),
+      footer: (info) => info.column.id,
+      header: "Suffix",
+    },
+    {
+      accessorKey: "birthdate",
+      cell: (info) => info.getValue(),
+      footer: (info) => info.column.id,
+      header: "Birth Date",
+      accessorFn: (row) => {
+        if (row.birthdate) {
+          return new Date(row.birthdate).toDateString();
+        }
+      },
+    },
+    {
+      accessorKey: "identification",
+      cell: (info) => info.getValue(),
+      footer: (info) => info.column.id,
+      header: "Identification",
+      accessorFn: (row) => row.identification,
+    },
+    {
+      accessorKey: "identification_type",
+      cell: (info) => info.getValue(),
+      footer: (info) => info.column.id,
+      header: "Identification Type",
+      accessorFn: (row) => row.identification_type.toUpperCase(),
+    },
+    {
+      accessorKey: "offense",
+      cell: (info) => info.getValue(),
+      footer: (info) => info.column.id,
+      header: "Offense",
+      accessorFn: (row) => row.offense,
+    },
+    {
+      accessorKey: "violation_date",
+      cell: (info) => info.getValue(),
+      footer: (info) => info.column.id,
+      header: "Violation Date",
+      accessorFn: (row) => new Date(row.violation_date).toDateString(),
+    },
+    {
+      accessorKey: "status",
+      cell: (info) => flexRender(TicketStatus, { status: info.getValue() }),
+      footer: (info) => info.column.id,
+      header: "Status",
+    },
+    {
+      accessorKey: "id",
+      cell: (info) =>
+        flexRender(RelatedTicketsActionts, {
+          fireView: () => {
+            open({
+              props: {
+                info: info.row.original as Types.Ticket,
+              },
+              id: "viewRelated",
+            });
+          },
+          fireSet: () => {
+            relatedTicket = info.row.original;
+          },
+        }),
+      header: "Actions",
+      enableSorting: false,
+    },
+  ];
 
   function removeViolation(index: number) {
     selectedViolations.splice(index, 1);
@@ -90,12 +185,65 @@
     });
   }
 
+  function getFine(
+    violation: Types.Violation,
+    offense: number,
+    type: Types.VehicleTypes,
+  ) {
+    const big = !type ? "big" : type.big_vehicle ? "big" : "small";
+    if (offense >= 3) {
+      if (violation.fine[big].c !== 0) {
+        return violation.fine[big].c;
+      }
+
+      if (violation.fine[big].b !== 0) {
+        return violation.fine[big].b;
+      }
+      return violation.fine[big].a;
+    }
+
+    if (offense === 2) {
+      if (violation.fine[big].b !== 0) {
+        return violation.fine[big].b;
+      }
+      return violation.fine[big].a;
+    }
+    return violation.fine[big].a;
+  }
+  $: {
+    selectedViolations = data.violations!.filter((val) => {
+      return $form.violations.includes(val.id);
+    });
+  }
+
   $: $form.violation_time = violation_time;
   $: $form.offense = offense;
   $: if (data.vehicleTypes) {
     selectedVehicleType = data.vehicleTypes.filter(
-      (type) => type.id == $form.vehicle_type
+      (type) => type.id == $form.vehicle_type,
     )[0];
+  }
+
+  $: if (relatedTicket) {
+    offense = relatedTicket.offense + 1;
+    $form.previous_offense = parseInt(relatedTicket.id);
+  } else {
+    offense = 1;
+  }
+
+  $: {
+    const selected: Types.Violation[] = data.violations!.filter((value) =>
+      $form.violations.includes(value.id),
+    );
+
+    const type = data.vehicleTypes!.find(
+      (item) => item.id === $form.vehicle_type,
+    );
+
+    $form.fine = selected.reduce(
+      (sum, fuckit) => sum + getFine(fuckit, offense, type),
+      0,
+    );
   }
 
   $: if ($message) {
@@ -140,10 +288,35 @@
   />
   <input
     type="number"
-    name="previous_offense"
+    name="fine"
+    bind:value={$form.fine}
+    id=""
     class="hidden"
-    bind:value={previous_offense}
   />
+  {#if relatedTicket}
+    <input
+      type="number"
+      name="previous_offense"
+      class="hidden"
+      bind:value={relatedTicket.id}
+    />
+    <div
+      class="bg-blue-100 border border-blue-500 text-blue-500 p-4 rounded-lg flex items-center justify-between"
+    >
+      <span>
+        Ticket #<TicketNumberColumn id={parseInt(relatedTicket.id)} /> of
+        <span class="font-bold"
+          >{relatedTicket.first_name}
+          {relatedTicket.last_name}
+        </span> has been selected as previous offense.
+      </span>
+      <button
+        class="bg-none border-none"
+        type="button"
+        on:click={() => (relatedTicket = null)}><X /></button
+      >
+    </div>
+  {/if}
   <Grid columns="grid-cols-2" gap="gap-8" classNames="my-2">
     <Divider strokeWidth={1}>
       <h2 slot="left" class="text-gray-600 text-xl">Violator Information</h2>
@@ -402,9 +575,7 @@
                 <div class="flex items-center gap-4">
                   {#if selectedVehicleType}
                     <p>
-                      {selected.fine[
-                        selectedVehicleType.big_vehicle ? "big" : "small"
-                      ][offense === 1 ? "a" : offense === 2 ? "b" : "c"]}
+                      {getFine(selected, offense, selectedVehicleType)}
                     </p>
                     <VehicleSize
                       big_vehicle={selectedVehicleType.big_vehicle}
@@ -421,6 +592,16 @@
               </div>
             {/each}
           {/if}
+        </div>
+        <div class="flex gap-2">
+          <h3 class="text-lg text-gray-600">Total Fine</h3>
+          <p class="text-lg font-bold text-red-700 text-end flex-1">
+            {#if selectedVehicleType}
+              {$form.fine}
+            {:else}
+              0
+            {/if}
+          </p>
         </div>
         <div class="flex gap-2">
           <h3 class="text-lg text-gray-600">Total Violations Selected</h3>

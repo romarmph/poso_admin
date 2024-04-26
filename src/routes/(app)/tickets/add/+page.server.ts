@@ -70,13 +70,14 @@ export const actions: Actions = {
       deleted_by: null,
       offense: formData.offense,
       previous_offense: formData.previous_offense,
+      fine: formData.fine,
     }
+
 
     const {
       data: ticketData, error: ticketError
     } = await supabase.from("tickets").insert(ticket).select();
 
-    console.log(ticketError)
 
     if (ticketError) {
       return failMessage;
