@@ -9,6 +9,7 @@
   import EnforcerColumn from "$lib/components/Customs/EnforcerColumn.svelte";
   import TicketNumberColumn from "$lib/components/Customs/TicketNumberColumn.svelte";
   import ViolationsColumn from "$lib/components/Customs/ViolationsColumn.svelte";
+  import TicketRowActions from "$lib/components/Table/Partials/TicketRowActions.svelte";
   const { open } = overlayStore;
   const { supabase } = getSupabaseContext();
   const columns: ColumnDef<Types.Ticket>[] = [
@@ -102,7 +103,8 @@
     {
       accessorKey: "id",
       cell: (info) =>
-        flexRender(RowActions, {
+        flexRender(TicketRowActions, {
+          status: info.row.original.status,
           fireEdit: () => {},
           fireView: () => {
             open({
