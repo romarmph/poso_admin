@@ -7,18 +7,11 @@
     const data = info.info as Types.Employees;
 </script>
 
-<div class="w-[500px]">
+<div class="w-[500px] h-[calc(100vh-32px)] overflow-auto pb-2">
     <div class="mb-3">
         <label for="" class="p-1 text-gray-500">Personal Details</label>
         <hr class="my-2" />
         <div>
-            <div class="mb-3">
-                <label for="" class="p-1 text-gray-500">Status</label>
-                <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
-                    <EmployeeStatus status={data.status} />
-                </div>
-            </div>
-
             <label for="" class="p-1 text-gray-500">First Name</label>
             <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
                 {data.first_name}
@@ -35,7 +28,60 @@
             <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
                 {data.suffix ?? "N/A"}
             </div>
-            <label for="" class="p-1 text-gray-500">Birthdate</label>
+            <label for="" class="p-1 text-gray-500">BIrthdate</label>
+            <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
+                {data.birthdate}
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="" class="p-1 text-gray-500">Personal Details</label>
+        <hr class="my-2" />
+        <div>
+            <label for="" class="p-1 text-gray-500">First Name</label>
+            <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
+                {data.first_name}
+            </div>
+            <label for="" class="p-1 text-gray-500">Middle Name</label>
+            <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
+                {data.middle_name ?? "N/A"}
+            </div>
+            <label for="" class="p-1 text-gray-500">Last Name</label>
+            <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
+                {data.last_name}
+            </div>
+            <label for="" class="p-1 text-gray-500">Suffix</label>
+            <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
+                {data.suffix ?? "N/A"}
+            </div>
+            <label for="" class="p-1 text-gray-500">BIrthdate</label>
+            <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
+                {data.birthdate}
+            </div>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="" class="p-1 text-gray-500">Personal Details</label>
+        <hr class="my-2" />
+        <div>
+            <label for="" class="p-1 text-gray-500">First Name</label>
+            <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
+                {data.first_name}
+            </div>
+            <label for="" class="p-1 text-gray-500">Middle Name</label>
+            <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
+                {data.middle_name ?? "N/A"}
+            </div>
+            <label for="" class="p-1 text-gray-500">Last Name</label>
+            <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
+                {data.last_name}
+            </div>
+            <label for="" class="p-1 text-gray-500">Suffix</label>
+            <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
+                {data.suffix ?? "N/A"}
+            </div>
+            <label for="" class="p-1 text-gray-500">BIrthdate</label>
             <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
                 {data.birthdate}
             </div>
@@ -49,9 +95,16 @@
         </div>
     </div>
     <hr class="my-2" />
+    <div class="mb-3">
+        <label for="" class="p-1 text-gray-500">Status</label>
+        <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
+            <EmployeeStatus status={data.status} />
+        </div>
+    </div>
+
     <hr class="my-2" />
     <div class="mb-3">
-        <label for="" class="p-1 text-gray-500 text-xl">History</label>
+        <label for="" class="p-1 text-gray-500">History</label>
         <div
             class="p-2 my-2 rounded-lg text-gray-800 text-lg bg-gray-50 flex justify-between"
         >

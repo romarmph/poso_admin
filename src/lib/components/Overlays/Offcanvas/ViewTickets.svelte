@@ -8,7 +8,7 @@
 </script>
 
 <div class="overflow-y-auto">
-  <div class="w-[500px]">
+  <div class="w-[500px] h-[calc(100vh-32px)] overflow-auto pb-2">
     <div class="mb-3">
       <div class="flex justify-between items-center">
         <label for="" class="p-1 text-gray-500">Ticket Details</label>

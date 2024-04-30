@@ -8,7 +8,7 @@
     const data = info.info as Types.VehicleTypes;
 </script>
 
-<div class="w-[500px]">
+<div class="w-[500px] h-[calc(100vh-32px)] overflow-auto pb-2">
     <div class="mb-3">
         <label for="" class="p-1 text-gray-500 text-xl">Name</label>
         <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
