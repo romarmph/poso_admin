@@ -143,7 +143,10 @@
   }
 
   async function fetchRelated() {
-    if ($form.identification_type === TicketIdentificationType.LICENSE_NO) {
+    if (
+      $form.identification_type === TicketIdentificationType.LICENSE_NO &&
+      $form.identification.length
+    ) {
       const { data } = await supabase
         .from("tickets")
         .select()
@@ -261,7 +264,7 @@
 <svelte:head><title>Update Ticket</title></svelte:head>
 
 <header class="flex items-center justify-between">
-  <h1 class="text-2xl font-bold text-gray-800">New Ticket</h1>
+  <h1 class="text-2xl font-bold text-gray-800">Update Ticket</h1>
   <!-- NOTE: ACTION BUTTONS -->
   <div class="flex justify-end gap-4 mt-4 col-span-2 row-span-1">
     <a href="/tickets">

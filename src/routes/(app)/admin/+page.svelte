@@ -175,17 +175,12 @@
     </div>
 </header>
 
-<!--Table -->
 <DataList table="employees" let:data initData={data.admin ?? []}>
     <TanTable {data} {columns}></TanTable>
 </DataList>
+
 <Overlay title="Add Admin" id="addAdmin" let:data>
-    <form
-        method="POST"
-        class="w-[500px] h-full flex flex-col"
-        action="?/add"
-        use:adminEnhance
-    >
+    <form method="POST" action="?/add" use:adminEnhance>
         <AddAdmin
             form={adminForm}
             errors={adminErrors}
@@ -196,12 +191,7 @@
 </Overlay>
 
 <Overlay title="Update Admin" id="updateAdmin" let:data>
-    <form
-        method="POST"
-        class="w-[500px] h-full flex flex-col"
-        action="?/update"
-        use:adminEnhance
-    >
+    <form method="POST" action="?/update" use:adminEnhance>
         <AddAdmin
             form={adminForm}
             errors={adminErrors}
@@ -216,7 +206,7 @@
         action="?/delete"
         method="POST"
         use:deleteEnhance
-        class="flex flex-col justify-center items-center text-red-500"
+        class="justify-center items-center text-red-500"
         on:submit={close}
     >
         <ConfirmDelete info={data} form={deleteForm} on:close={close}
