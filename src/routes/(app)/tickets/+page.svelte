@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Button, TicketStatus, TanTable, RowActions } from "$lib/Components";
+  import { Button, TicketStatus, TanTable } from "$lib/Components";
   import { DataList } from "$lib/components/Supabase/Supabase";
   import { flexRender, type ColumnDef } from "@tanstack/svelte-table";
   import { Overlay, ViewTickets } from "$lib/components/Overlays/Overlays";
@@ -11,7 +11,9 @@
   import ViolationsColumn from "$lib/components/Customs/ViolationsColumn.svelte";
   import TicketRowActions from "$lib/components/Table/Partials/TicketRowActions.svelte";
   import { goto } from "$app/navigation";
-  const { open } = overlayStore;
+  import { superForm } from "sveltekit-superforms";
+  import ConfirmDelete from "$lib/components/Overlays/Modal/Delete/ConfirmDelete.svelte";
+  const { open, close } = overlayStore;
   const { supabase } = getSupabaseContext();
   const columns: ColumnDef<Types.Ticket>[] = [
     {
@@ -117,7 +119,14 @@
               id: "viewTicket",
             });
           },
-          fireDelete: () => {},
+          fireDelete: () => {
+            open({
+              props: {
+                info: info.row.original.id,
+              },
+              id: "deleteTicket",
+            });
+          },
         }),
       header: "Actions",
       enableSorting: false,
@@ -125,6 +134,17 @@
   ];
 
   export let data;
+
+  const { form, message, enhance } = superForm(data.form, {
+    dataType: "json",
+  });
+
+  $: if ($message) {
+    close();
+    open({
+      id: $message.action,
+    });
+  }
 </script>
 
 <svelte:head><title>Tickets</title></svelte:head>
@@ -144,4 +164,16 @@
 
 <Overlay let:data title="View Ticket" id="viewTicket">
   <ViewTickets info={data} {supabase} />
+</Overlay>
+
+<Overlay let:data title="" id="deleteTicket" type="modal">
+  <form
+    action="?/delete"
+    method="POST"
+    use:enhance
+    class="flex flex-col justify-center items-center text-red-500"
+    on:submit={close}
+  >
+    <ConfirmDelete info={data} {form} on:close={close}></ConfirmDelete>
+  </form>
 </Overlay>
