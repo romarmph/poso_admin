@@ -16,13 +16,14 @@
     }
 </script>
 
-<div class="flex-1">
-    <div>
+<div class="w-[500px]">
+    <div class="h-[calc(100vh-150px)] overflow-auto pb-2">
         <label for="">Traffic Post Name</label>
         <TextInput id="name" bind:value={$form.name} required />
+
+        <h3 class="my-3">Address</h3>
+        <TextInput id="address" bind:value={$form.address} required />
     </div>
-    <h3 class="my-3">Address</h3>
-    <TextInput id="address" bind:value={$form.address} required />
 </div>
 <div class="flex justify-stretch items-center gap-4">
     <Button
