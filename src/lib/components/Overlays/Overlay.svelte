@@ -17,11 +17,11 @@
 	<div
 		{id}
 		transition:slide={{ duration: 250, axis: "x" }}
-		class={`translate-x-0 open fixed top-0 end-0 transition-all duration-300 transform h-full flex flex-col z-[80] bg-white border-s dark:bg-gray-800 dark:border-gray-700`}
+		class={`translate-x-0 open fixed top-0 end-0 transition-all duration-300 transform h-full z-[80] bg-white border-s dark:bg-gray-800 dark:border-gray-700  max-h-dvh`}
 		tabindex="-1"
 	>
 		<div
-			class="flex justify-between items-center py-3 px-4 border-b dark:border-gray-700"
+			class="flex justify-between items-center py-3 px-4 border-b dark:border-gray-700 h-[72px] box-border"
 		>
 			<h3 class="font-bold text-gray-800 dark:text-white">
 				{title}
@@ -35,7 +35,7 @@
 				<X />
 			</button>
 		</div>
-		<div class="p-4 h-full">
+		<div class="p-4">
 			<slot data={$overlayStore.props} />
 		</div>
 	</div>

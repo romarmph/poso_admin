@@ -12,7 +12,7 @@
     paid: "bg-teal-100 text-teal-800",
     overdue: "bg-red-100 text-red-800",
     unpaid: "bg-yellow-100 text-yellow-800",
-    transferred: "bg-blue-100 text-blue-800",
+    transferred: "bg-orange-100 text-orange-800",
   }[status];
 </script>
 

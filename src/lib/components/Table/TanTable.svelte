@@ -150,14 +150,14 @@
                   {#each row.getVisibleCells() as cell}
                     <td class="size-px whitespace-nowrap">
                       <div class="px-4 py-2">
-                        <label for="hs-at-with-checkboxes-1" class="flex">
+                        <p class="flex">
                           <svelte:component
                             this={flexRender(
                               cell.column.columnDef.cell,
                               cell.getContext(),
                             )}
                           />
-                        </label>
+                        </p>
                       </div>
                     </td>
                   {/each}

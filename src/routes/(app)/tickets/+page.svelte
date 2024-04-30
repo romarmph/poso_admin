@@ -5,9 +5,21 @@
   import { Overlay, ViewTickets } from "$lib/components/Overlays/Overlays";
   import { overlayStore } from "$lib/stores/overlayStore.js";
   import { getSupabaseContext } from "$lib/stores/clientStore.js";
+  import VehicleTypeColumn from "$lib/components/Customs/VehicleTypeColumn.svelte";
+  import EnforcerColumn from "$lib/components/Customs/EnforcerColumn.svelte";
+  import TicketNumberColumn from "$lib/components/Customs/TicketNumberColumn.svelte";
+  import ViolationsColumn from "$lib/components/Customs/ViolationsColumn.svelte";
+  import TicketRowActions from "$lib/components/Table/Partials/TicketRowActions.svelte";
+  import { goto } from "$app/navigation";
   const { open } = overlayStore;
   const { supabase } = getSupabaseContext();
   const columns: ColumnDef<Types.Ticket>[] = [
+    {
+      accessorKey: "id",
+      cell: (info) => flexRender(TicketNumberColumn, { id: info.getValue() }),
+      footer: (info) => info.column.id,
+      header: "Ticket No",
+    },
     {
       accessorKey: "first_name",
       cell: (info) => info.getValue(),
@@ -46,6 +58,18 @@
       header: "Status",
     },
     {
+      accessorKey: "id",
+      cell: (info) => flexRender(ViolationsColumn, { id: info.getValue() }),
+      footer: (info) => info.column.id,
+      header: "Violations",
+    },
+    {
+      accessorKey: "fine",
+      cell: (info) => info.getValue(),
+      footer: (info) => info.column.id,
+      header: "Fine",
+    },
+    {
       accessorKey: "violation_date",
       cell: (info) => info.getValue(),
       footer: (info) => info.column.id,
@@ -59,14 +83,14 @@
       header: "Violation Time",
     },
     {
-      accessorKey: "vehicle_type_id",
-      cell: (info) => info.getValue(),
+      accessorKey: "vehicle_type",
+      cell: (info) => flexRender(VehicleTypeColumn, { id: info.getValue() }),
       footer: (info) => info.column.id,
       header: "Vehicle Type",
     },
     {
-      accessorKey: "enforcer_id",
-      cell: (info) => info.getValue(),
+      accessorKey: "enforcer",
+      cell: (info) => flexRender(EnforcerColumn, { id: info.getValue() }),
       footer: (info) => info.column.id,
       header: "Enforcer",
     },
@@ -80,8 +104,11 @@
     {
       accessorKey: "id",
       cell: (info) =>
-        flexRender(RowActions, {
-          fireEdit: () => {},
+        flexRender(TicketRowActions, {
+          status: info.row.original.status,
+          fireEdit: () => {
+            goto(`/tickets/edit?id=${info.getValue()}`);
+          },
           fireView: () => {
             open({
               props: {

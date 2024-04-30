@@ -2,10 +2,17 @@ import { TicketStatus } from "$lib/Components";
 import { overlayStore } from "$lib/stores/overlayStore";
 import { flexRender, type ColumnDef } from "@tanstack/svelte-table";
 import RelatedTickesActions from "$lib/components/Table/Partials/RelatedTicketsAcionts.svelte"
+import TicketNumberColumn from "$lib/components/Customs/TicketNumberColumn.svelte";
 
 const { open } = overlayStore;
 
 export const relatedTicketColumn: ColumnDef<Types.Ticket>[] = [
+	{
+		accessorKey: "id",
+		cell: (info) => flexRender(TicketNumberColumn, { id: info.getValue() }),
+		footer: (info) => info.column.id,
+		header: "First Name",
+	},
 	{
 		accessorKey: "first_name",
 		cell: (info) => info.getValue(),
@@ -36,8 +43,8 @@ export const relatedTicketColumn: ColumnDef<Types.Ticket>[] = [
 		footer: (info) => info.column.id,
 		header: "Birth Date",
 		accessorFn: (row) => {
-			if (row.birtdate) {
-				return new Date(row.birtdate).toDateString()
+			if (row.birthdate) {
+				return new Date(row.birthdate).toDateString()
 			}
 		},
 	},
@@ -87,7 +94,7 @@ export const relatedTicketColumn: ColumnDef<Types.Ticket>[] = [
 						id: "viewRelated",
 					});
 				},
-				fireDelete: () => { },
+				fireSet: () => { console.log("Hello") },
 			}),
 		header: "Actions",
 		enableSorting: false,

@@ -111,7 +111,6 @@
             footer: (info) => info.column.id,
             header: "Employee No.",
         },
-
         {
             accessorKey: "created_at",
             cell: (info) => info.getValue(),
@@ -120,23 +119,11 @@
             accessorFn: (row) => new Date(row.created_at).toDateString(),
         },
         {
-            accessorKey: "created_by",
-            cell: (info) => info.getValue(),
-            footer: (info) => info.column.id,
-            header: "Created By",
-        },
-        {
             accessorKey: "updated_at",
             cell: (info) => info.getValue(),
             footer: (info) => info.column.id,
             header: "Updated At",
             accessorFn: (row) => new Date(row.updated_at).toDateString(),
-        },
-        {
-            accessorKey: "updated_by",
-            cell: (info) => info.getValue(),
-            footer: (info) => info.column.id,
-            header: "Updated By",
         },
         {
             accessorKey: "id",
@@ -188,17 +175,12 @@
     </div>
 </header>
 
-<!--Table -->
 <DataList table="employees" let:data initData={data.admin ?? []}>
     <TanTable {data} {columns}></TanTable>
 </DataList>
+
 <Overlay title="Add Admin" id="addAdmin" let:data>
-    <form
-        method="POST"
-        class="w-[500px] h-full flex flex-col"
-        action="?/add"
-        use:adminEnhance
-    >
+    <form method="POST" action="?/add" use:adminEnhance>
         <AddAdmin
             form={adminForm}
             errors={adminErrors}
@@ -209,12 +191,7 @@
 </Overlay>
 
 <Overlay title="Update Admin" id="updateAdmin" let:data>
-    <form
-        method="POST"
-        class="w-[500px] h-full flex flex-col"
-        action="?/update"
-        use:adminEnhance
-    >
+    <form method="POST" action="?/update" use:adminEnhance>
         <AddAdmin
             form={adminForm}
             errors={adminErrors}
@@ -229,7 +206,7 @@
         action="?/delete"
         method="POST"
         use:deleteEnhance
-        class="flex flex-col justify-center items-center text-red-500"
+        class="justify-center items-center text-red-500"
         on:submit={close}
     >
         <ConfirmDelete info={data} form={deleteForm} on:close={close}
