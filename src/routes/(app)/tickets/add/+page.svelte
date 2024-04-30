@@ -18,6 +18,7 @@
   import TicketNumberColumn from "$lib/components/Customs/TicketNumberColumn.svelte";
   import TicketStatus from "$lib/components/Base/TicketStatus.svelte";
   import { flexRender, type ColumnDef } from "@tanstack/svelte-table";
+  import ViewTickets from "$lib/components/Overlays/Offcanvas/ViewTickets.svelte";
 
   const { open, close } = overlayStore;
 
@@ -188,7 +189,7 @@
   function getFine(
     violation: Types.Violation,
     offense: number,
-    type: Types.VehicleTypes
+    type: Types.VehicleTypes,
   ) {
     const big = !type ? "big" : type.big_vehicle ? "big" : "small";
     if (offense >= 3) {
@@ -220,7 +221,7 @@
   $: $form.offense = offense;
   $: if (data.vehicleTypes) {
     selectedVehicleType = data.vehicleTypes.filter(
-      (type) => type.id == $form.vehicle_type
+      (type) => type.id == $form.vehicle_type,
     )[0];
   }
 
@@ -233,16 +234,16 @@
 
   $: {
     const selected: Types.Violation[] = data.violations!.filter((value) =>
-      $form.violations.includes(value.id)
+      $form.violations.includes(value.id),
     );
 
     const type = data.vehicleTypes!.find(
-      (item) => item.id === $form.vehicle_type
+      (item) => item.id === $form.vehicle_type,
     );
 
     $form.fine = selected.reduce(
       (sum, fuckit) => sum + getFine(fuckit, offense, type),
-      0
+      0,
     );
   }
 
@@ -689,7 +690,7 @@
 </Overlay>
 
 <Overlay id="viewRelated" title="Related Ticket" type="canvas" let:data>
-  <ViewRelatedTickets info={data} {supabase} />
+  <ViewTickets info={data} {supabase} />
 </Overlay>
 
 <style>

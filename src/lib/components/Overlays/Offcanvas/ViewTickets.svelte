@@ -2,6 +2,9 @@
   import { TicketStatus } from "$lib/Components";
   import type { SupabaseClient } from "@supabase/supabase-js";
   import { getEmployeeDetails } from "$lib/utils/employeeDetails";
+  import TicketNumberColumn from "$lib/components/Customs/TicketNumberColumn.svelte";
+  import EnforcerColumn from "$lib/components/Customs/EnforcerColumn.svelte";
+  import VehicleTypeColumn from "$lib/components/Customs/VehicleTypeColumn.svelte";
   export let info;
   export let supabase: SupabaseClient;
   const data = info.info as Types.Ticket;
@@ -15,9 +18,29 @@
         <TicketStatus status={data.status} />
       </div>
       <hr class="my-2" />
+      <label for="" class="p-1 text-gray-500">Ticket No. </label>
+      <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
+        <TicketNumberColumn id={parseInt(data.id)} />
+      </div>
+      <label for="" class="p-1 text-gray-500">Apprehendin Officer</label>
+      <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
+        <EnforcerColumn id={data.enforcer} />
+      </div>
       <label for="" class="p-1 text-gray-500">Violation </label>
       <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
         {data.violation_date ?? "N/A"}
+      </div>
+      <label for="" class="p-1 text-gray-500">Identification </label>
+      <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
+        {data.identification ?? "N/A"}
+      </div>
+      <label for="" class="p-1 text-gray-500">Identification Type </label>
+      <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
+        {data.identification_type ?? "N/A"}
+      </div>
+      <label for="" class="p-1 text-gray-500">Vehicle Type</label>
+      <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
+        <VehicleTypeColumn id={data.vehicle_type} />
       </div>
       <label for="" class="p-1 text-gray-500">Violation Date</label>
       <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
@@ -27,24 +50,9 @@
       <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
         {data.violation_time ?? "N/A"}
       </div>
-    </div>
-    <div class="mb-3">
-      <div class="flex justify-between items-center">
-        <label for="" class="p-1 text-gray-500">Ticket Details</label>
-        <TicketStatus status={data.status} />
-      </div>
-      <hr class="my-2" />
-      <label for="" class="p-1 text-gray-500">Violation </label>
+      <label for="" class="p-1 text-gray-500">Location</label>
       <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
-        {data.violation_date ?? "N/A"}
-      </div>
-      <label for="" class="p-1 text-gray-500">Violation Date</label>
-      <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
-        {data.violation_date ?? "N/A"}
-      </div>
-      <label for="" class="p-1 text-gray-500">Violation Time</label>
-      <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
-        {data.violation_time ?? "N/A"}
+        {data.violation_location ?? "N/A"}
       </div>
     </div>
     <div class="mb-3">
@@ -71,9 +79,17 @@
         <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
           {data.birthdate}
         </div>
+        <label for="" class="p-1 text-gray-500">Adress</label>
+        <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
+          {data.address}
+        </div>
       </div>
     </div>
-
+    <hr class="my-2" />
+    <label for="" class="p-1 text-gray-500">Fine </label>
+    <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
+      {data.fine ?? "N/A"}
+    </div>
     <hr class="my-2" />
     <div class="mb-3">
       <label for="" class="p-1 text-gray-500">History</label>
