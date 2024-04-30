@@ -23,7 +23,7 @@
 
   export let data;
   const pageData = data;
-  const { form, errors, enhance, message, submit } = superForm(pageData.form, {
+  const { form, errors, enhance, message, submit } = superForm(data.form, {
     dataType: "json",
   });
 
@@ -188,7 +188,7 @@
   function getFine(
     violation: Types.Violation,
     offense: number,
-    type: Types.VehicleTypes
+    type: Types.VehicleTypes,
   ) {
     const big = !type ? "big" : type.big_vehicle ? "big" : "small";
     if (offense >= 3) {
@@ -220,7 +220,7 @@
   $: $form.offense = offense;
   $: if (data.vehicleTypes) {
     selectedVehicleType = data.vehicleTypes.filter(
-      (type) => type.id == $form.vehicle_type
+      (type) => type.id == $form.vehicle_type,
     )[0];
   }
 
@@ -233,16 +233,16 @@
 
   $: {
     const selected: Types.Violation[] = data.violations!.filter((value) =>
-      $form.violations.includes(value.id)
+      $form.violations.includes(value.id),
     );
 
     const type = data.vehicleTypes!.find(
-      (item) => item.id === $form.vehicle_type
+      (item) => item.id === $form.vehicle_type,
     );
 
     $form.fine = selected.reduce(
       (sum, fuckit) => sum + getFine(fuckit, offense, type),
-      0
+      0,
     );
   }
 
@@ -258,7 +258,7 @@
   }
 </script>
 
-<svelte:head><title>Add Ticket</title></svelte:head>
+<svelte:head><title>Update Ticket</title></svelte:head>
 
 <header class="flex items-center justify-between">
   <h1 class="text-2xl font-bold text-gray-800">New Ticket</h1>
@@ -273,12 +273,12 @@
         open({
           id: "confirmAdd",
           props: {},
-        })}>Save Ticket</Button
+        })}>Update Ticket</Button
     >
   </div>
   <!-- NOTE: ACTION BUTTONS -->
 </header>
-<form action="?/create" method="POST" class="mt-4" use:enhance>
+<form action="?/update" method="POST" class="mt-4" use:enhance>
   <input
     type="number"
     name="offense"

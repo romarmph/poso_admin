@@ -47,6 +47,7 @@ export const employeeSchema = z.object({
 })
 
 export const ticketSchema = z.object({
+	id: z.number().optional(),
 	first_name: z.string().min(1, "First name is too short"),
 	middle_name: z.string(),
 	last_name: z.string().min(1, "Last name is too short"),

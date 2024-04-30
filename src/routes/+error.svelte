@@ -1,5 +1,8 @@
 <script lang="ts">
   import { page } from "$app/stores";
+  import error_404 from "$lib/assets/error_404.svg";
+  import access_denied from "$lib/assets/access_denied.svg";
+  import server_down from "$lib/assets/server_down.svg";
 </script>
 
 {#if $page.status == 404}
@@ -7,7 +10,7 @@
     <header class="mb-auto flex justify-center z-50 w-full py-4">
       <!-- svelte-ignore a11y-img-redundant-alt -->
       <img
-        src="src/lib/images/error_404.svg"
+        src={error_404}
         alt="Image description"
         class="mt-5 mx-auto"
         width="450"
@@ -35,7 +38,7 @@
     <header class="mb-auto flex justify-center z-50 w-full py-4">
       <!-- svelte-ignore a11y-img-redundant-alt -->
       <img
-        src="src/lib/images/access_denied.svg"
+        src={access_denied}
         alt="Image description"
         class="mt-5 mx-auto"
         width="450"
@@ -63,7 +66,7 @@
     <header class="mb-auto flex justify-center z-50 w-full py-4">
       <!-- svelte-ignore a11y-img-redundant-alt -->
       <img
-        src="src/lib/images/server_down.svg"
+        src={server_down}
         alt="Image description"
         class="mt-5 mx-auto"
         width="450"
