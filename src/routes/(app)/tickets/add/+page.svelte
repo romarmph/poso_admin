@@ -617,8 +617,8 @@
 
   <!-- NOTE: VIOLATION OVERLAY -->
   <Overlay title="Select Violations" type="canvas" id="violations" let:data>
-    <div class="w-[500px] h-full flex flex-col box-border pb-12">
-      <div class="flex-1 overflow-y-auto pr-3">
+    <div class="w-[500px] box-border pb-12">
+      <div class="h-full max-h-[800px] overflow-y-auto pr-3">
         {#if pageData.violations}
           {#each pageData.violations as violation}
             <div

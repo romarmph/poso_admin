@@ -81,11 +81,15 @@ export const actions: Actions = {
 			updated_by: parseInt(user!.id),
 		}
 
-		console.log(payment);
+		const { data: orNumber } = await supabase.from("ticket_payment").select().eq("or_number", form.data.or_number);
+
+		if (orNumber) {
+			return setError(form, "or_number", "OR Number already exist");
+		}
+
 		const { error } = await supabase.from("ticket_payment").insert(payment);
 
 		if (error) {
-			console.log(failMessage);
 			return failMessage;
 		}
 

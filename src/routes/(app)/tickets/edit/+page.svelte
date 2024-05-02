@@ -26,6 +26,18 @@
   const { form, errors, enhance, message, submit } = superForm(data.form, {
     dataType: "json",
   });
+  const { form: cancelForm, enhance: cancelEnhance } = superForm(
+    data.cancelForm,
+    {
+      dataType: "json",
+    },
+  );
+  const { form: undoCancelForm, enhance: undoCancelEnhance } = superForm(
+    data.undoCancelForm,
+    {
+      dataType: "json",
+    },
+  );
 
   let selectedViolations: Types.Violation[];
   const birthdateProxy = dateProxy(form, "birthdate", { format: "date" });
@@ -249,6 +261,14 @@
     );
   }
 
+  $: if ($form.id) {
+    $cancelForm.id = $form.id;
+  }
+
+  $: if ($form.id) {
+    $undoCancelForm.id = $form.id;
+  }
+
   $: if ($message) {
     if ($message.success) {
       close();
@@ -268,7 +288,7 @@
   <!-- NOTE: ACTION BUTTONS -->
   <div class="flex justify-end gap-4 mt-4 col-span-2 row-span-1">
     <a href="/tickets">
-      <Button type="button" style="soft" color="gray">Cancel</Button>
+      <Button type="button" style="soft" color="gray">Back</Button>
     </a>
     <Button
       type="submit"
@@ -278,6 +298,29 @@
           props: {},
         })}>Update Ticket</Button
     >
+    {#if $form.status !== "cancelled"}
+      <form action="?/cancel" method="POST" use:cancelEnhance>
+        <input
+          type="number"
+          name="id"
+          id=""
+          bind:value={$cancelForm.id}
+          class="hidden"
+        />
+        <Button type="submit" style="outline" color="red">Cancel Ticket</Button>
+      </form>
+    {:else}
+      <form action="?/undocancel" method="POST" use:undoCancelEnhance>
+        <input
+          type="number"
+          name="id"
+          id=""
+          bind:value={$undoCancelForm.id}
+          class="hidden"
+        />
+        <Button type="submit" style="outline" color="gray">Undo Cancel</Button>
+      </form>
+    {/if}
   </div>
   <!-- NOTE: ACTION BUTTONS -->
 </header>

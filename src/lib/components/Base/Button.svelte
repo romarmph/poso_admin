@@ -14,7 +14,7 @@
     large: "py-4 px-5",
   };
 
-  const base = `${buttonSize[size]} ${fullWidth ? "w-full" : ""} justify-center inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600`;
+  const base = `${buttonSize[size]} ${fullWidth ? "w-full" : ""} justify-center inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg  disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600`;
 </script>
 
 {#if style === "solid"}
@@ -29,7 +29,7 @@
   <button
     {...$$props}
     on:click={() => dispatcher("click")}
-    class="{base} border-gray-200 text-gray-500 hover:border-{color}-600 hover:text-{color}-600 dark:border-gray-700 dark:text-gray-400 dark:hover:text-{color}-500 dark:hover:border-{color}-600"
+    class="{base} border-2 border-{color}-400 text-{color}-500 hover:border-{color}-600 hover:text-{color}-700 hover:bg-{color}-200 dark:border-gray-700 dark:text-{color}-400 dark:hover:text-{color}-500 dark:hover:border-{color}-600"
   >
     <slot />
   </button>
