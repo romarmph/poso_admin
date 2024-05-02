@@ -45,7 +45,7 @@
       accessorKey: "id",
       cell: (info) => flexRender(TicketNumberColumn, { id: info.getValue() }),
       footer: (info) => info.column.id,
-      header: "First Name",
+      header: "Ticket No.",
     },
     {
       accessorKey: "first_name",

@@ -4,7 +4,6 @@ import { zod } from "sveltekit-superforms/adapters";
 import { paymentSchema } from "$lib/schemas/app";
 import type { Actions } from "@sveltejs/kit";
 import ActionResultModals from "$lib/enums/ActionResultModals";
-import { _ } from "$env/static/private";
 
 export const load: PageServerLoad = async ({ url, locals: { supabase } }) => {
 	const id = url.searchParams.get("id");
