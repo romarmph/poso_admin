@@ -6,4 +6,5 @@ export const routes: string[] = [
   "/traffic-post",
   "/vehicle-types",
   "/violations",
+  "/incentives"
 ];

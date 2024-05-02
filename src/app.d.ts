@@ -149,6 +149,7 @@ declare global {
       offense: number;
       previous_offense: number;
       fine: number;
+      due_date: string;
     }
 
     interface Payment extends Data {

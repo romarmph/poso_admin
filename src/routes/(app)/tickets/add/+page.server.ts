@@ -27,6 +27,7 @@ export const actions: Actions = {
       action: ActionResultModals.FailCreate,
     });
 
+
     if (!form.valid) {
       return message(form, {
         success: false,
@@ -47,6 +48,7 @@ export const actions: Actions = {
 
     const formData = form.data;
     const currentUser = await getCurrentUser();
+    const timestamp = new Date();
     const ticket = {
       first_name: formData.first_name,
       middle_name: formData.middle_name,
@@ -62,15 +64,16 @@ export const actions: Actions = {
       violation_location: formData.location,
       identification_type: formData.identification_type,
       identification: formData.identification,
-      created_at: new Date(),
+      created_at: timestamp,
       created_by: currentUser?.id,
-      updated_at: new Date(),
+      updated_at: timestamp,
       updated_by: currentUser?.id,
       deleted_at: null,
       deleted_by: null,
       offense: formData.offense,
       previous_offense: formData.previous_offense,
       fine: formData.fine,
+      due_date: new Date(timestamp.setDate(timestamp.getDate() + 7)),
     }
 
 

@@ -4,7 +4,6 @@ import { zod } from "sveltekit-superforms/adapters";
 import { paymentSchema } from "$lib/schemas/app";
 import type { Actions } from "@sveltejs/kit";
 import ActionResultModals from "$lib/enums/ActionResultModals";
-import { _ } from "$env/static/private";
 
 export const load: PageServerLoad = async ({ url, locals: { supabase } }) => {
 	const id = url.searchParams.get("id");
@@ -82,11 +81,15 @@ export const actions: Actions = {
 			updated_by: parseInt(user!.id),
 		}
 
-		console.log(payment);
+		const { data: orNumber } = await supabase.from("ticket_payment").select().eq("or_number", form.data.or_number);
+
+		if (orNumber) {
+			return setError(form, "or_number", "OR Number already exist");
+		}
+
 		const { error } = await supabase.from("ticket_payment").insert(payment);
 
 		if (error) {
-			console.log(failMessage);
 			return failMessage;
 		}
 

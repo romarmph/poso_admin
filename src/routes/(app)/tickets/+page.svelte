@@ -104,6 +104,13 @@
       accessorFn: (row) => new Date(row.created_at).toDateString(),
     },
     {
+      accessorKey: "due_date",
+      cell: (info) => info.getValue(),
+      footer: (info) => info.column.id,
+      header: "Due Date",
+      accessorFn: (row) => new Date(row.due_date).toDateString(),
+    },
+    {
       accessorKey: "id",
       cell: (info) =>
         flexRender(TicketRowActions, {

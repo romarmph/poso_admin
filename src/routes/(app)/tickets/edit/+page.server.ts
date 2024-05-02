@@ -1,7 +1,7 @@
 import { redirect, type Actions } from "@sveltejs/kit";
 import { zod } from "sveltekit-superforms/adapters";
 import { fail, message, setError, superValidate } from "sveltekit-superforms";
-import { ticketSchema } from "$lib/schemas/app";
+import { deleteSchema, ticketSchema } from "$lib/schemas/app";
 import ActionResultModals from "$lib/enums/ActionResultModals";
 import Roles from "$lib/enums/Roles";
 import type { PageServerLoad } from "../$types";
@@ -22,7 +22,10 @@ export const load: PageServerLoad = async ({ url, locals: { supabase } }) => {
     violation_date: new Date(oldTicket![0].violation_date),
     ticket_no: oldTicket![0].ticket_numbers_manual.ticket_number.toString(),
     violations: oldTicket![0].ticket_violations.map((item: { violation_id: number }) => item.violation_id),
+    status: oldTicket![0].status,
   }, zod(ticketSchema));
+  const cancelForm = await superValidate(zod(deleteSchema));
+  const undoCancelForm = await superValidate(zod(deleteSchema));
   const { data: violations } = await supabase
     .from("violations")
     .select()
@@ -42,6 +45,8 @@ export const load: PageServerLoad = async ({ url, locals: { supabase } }) => {
     violations,
     vehicleTypes,
     enforcers,
+    cancelForm,
+    undoCancelForm,
   };
 };
 
@@ -143,4 +148,48 @@ export const actions: Actions = {
 
     return redirect(302, '/tickets');
   },
+  cancel: async ({ request, locals: { supabase, getCurrentUser } }) => {
+    const form = await superValidate(request, zod(deleteSchema));
+    const user = await getCurrentUser();
+
+    const { error } = await supabase.from("tickets").update({
+      status: "cancelled",
+      updated_at: new Date(),
+      updated_by: user!.id,
+    }).eq("id", form.data.id);
+
+    if (error) {
+      return message(
+        form, {
+        action: ActionResultModals.FailUpdate,
+        success: false,
+      }
+      );
+    }
+
+    return redirect(302, "/tickets");
+  },
+  undocancel: async ({ request, locals: { supabase, getCurrentUser } }) => {
+    const form = await superValidate(request, zod(deleteSchema));
+    const user = await getCurrentUser();
+    const ticket = await supabase.from("tickets").select().eq("id", form.data.id);
+    const status = new Date(ticket.data![0].due_date) < new Date() ? "overdue" : "unpaid";
+
+    const { error } = await supabase.from("tickets").update({
+      status: status,
+      updated_at: new Date(),
+      updated_by: user!.id,
+    }).eq("id", form.data.id);
+
+    if (error) {
+      return message(
+        form, {
+        action: ActionResultModals.FailUpdate,
+        success: false,
+      }
+      );
+    }
+
+    return redirect(302, "/tickets");
+  }
 };

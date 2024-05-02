@@ -66,6 +66,7 @@ export const ticketSchema = z.object({
 	offense: z.number().default(1),
 	previous_offense: z.number().optional(),
 	fine: z.number(),
+	status: z.string().optional(),
 });
 
 export const paymentSchema = z.object({
