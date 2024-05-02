@@ -139,8 +139,10 @@
           props: {},
           id: "addViolation",
         });
-      }}>Add Violation</Button
+      }}
     >
+      Add Violation
+    </Button>
   </div>
 </header>
 

@@ -137,7 +137,7 @@ declare global {
       violation_time: string;
       vehicle_type: number;
       enforcer: number;
-      violation_location: number;
+      violation_location: string;
       identification_type: string;
       identification: string;
       created_at: string;
@@ -149,6 +149,22 @@ declare global {
       offense: number;
       previous_offense: number;
       fine: number;
+    }
+
+    interface Payment extends Data {
+      ticket_id: number;
+      or_number: number;
+      discounted: boolean;
+      discount_amount: number;
+      amount_paid: number;
+      paid_at: string;
+      cashier: number;
+      created_at: string;
+      created_by: number;
+      updated_at: string;
+      updated_by: number;
+      deleted_at: string;
+      deleted_by: number;
     }
   }
 }

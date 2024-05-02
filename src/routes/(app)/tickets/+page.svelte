@@ -127,6 +127,9 @@
               id: "deleteTicket",
             });
           },
+          firePay: () => {
+            goto(`/payment/pay?id=${info.getValue()}`);
+          },
         }),
       header: "Actions",
       enableSorting: false,
