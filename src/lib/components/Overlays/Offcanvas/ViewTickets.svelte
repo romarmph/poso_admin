@@ -8,6 +8,30 @@
   export let info;
   export let supabase: SupabaseClient;
   const data = info.info as Types.Ticket;
+
+  async function fetchViolations(id: string) {
+    const { data, error } = await supabase
+      .from("ticket_violations")
+      .select(
+        `
+				violations(*)
+			`,
+      )
+      .eq("ticket_id", id);
+
+    if (error) {
+      return null;
+    }
+
+    const violations: Types.Violation[] = data.map((item) => {
+      const violation: Types.Violation = JSON.parse(
+        JSON.stringify(item.violations),
+      );
+      return violation;
+    });
+
+    return violations;
+  }
 </script>
 
 <div class="overflow-y-auto">
@@ -86,6 +110,21 @@
       </div>
     </div>
     <hr class="my-2" />
+
+    <label for="" class="p-1 text-gray-500">Violations</label>
+    {#await fetchViolations(data.id)}
+      Loading...
+    {:then result}
+      {#if result}
+        {#each result as violation}
+          <div class="flex justify-between p-2 rounded-mg bg-gray-50 mb-2">
+            <span class="font-medium text-gray-700">
+              {violation.name}
+            </span>
+          </div>
+        {/each}
+      {/if}
+    {/await}
     <label for="" class="p-1 text-gray-500">Fine </label>
     <div class="p-2 rounded-lg text-gray-800 text-lg bg-gray-50">
       {data.fine ?? "N/A"}
