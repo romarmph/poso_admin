@@ -34,8 +34,8 @@
 </div>
 
 <Sidebar />
-<div class="w-full px-4 py-6 sm:px-6 md:px-8 lg:ps-72">
-  <div class="p-4 bg-white rounded-lg">
+<div class="w-full py-4 sm:px-6 md:px-8 lg:ps-64 lg:pe-6">
+  <div class="ps-6 bg-white rounded-lg">
     <slot />
   </div>
 </div>
