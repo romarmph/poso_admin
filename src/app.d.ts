@@ -166,6 +166,7 @@ declare global {
       updated_by: number;
       deleted_at: string;
       deleted_by: number;
+      tickets: Record<string, any>;
     }
   }
 }

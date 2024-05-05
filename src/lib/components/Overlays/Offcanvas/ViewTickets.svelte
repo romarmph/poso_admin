@@ -12,11 +12,7 @@
   async function fetchViolations(id: string) {
     const { data, error } = await supabase
       .from("ticket_violations")
-      .select(
-        `
-				violations(*)
-			`,
-      )
+      .select(`violations(*)`)
       .eq("ticket_id", id);
 
     if (error) {

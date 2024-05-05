@@ -13,7 +13,6 @@
   import ActionResultModals from "$lib/enums/ActionResultModals.js";
   import FailCreate from "$lib/components/Overlays/Modal/Create/FailCreate.svelte";
   import { getSupabaseContext } from "$lib/stores/clientStore.js";
-  import ViewRelatedTickets from "$lib/components/Overlays/Offcanvas/ViewRelatedTickets.svelte";
   import RelatedTicketsActionts from "$lib/components/Table/Partials/RelatedTicketsAcionts.svelte";
   import TicketNumberColumn from "$lib/components/Customs/TicketNumberColumn.svelte";
   import TicketStatus from "$lib/components/Base/TicketStatus.svelte";
@@ -189,7 +188,7 @@
   function getFine(
     violation: Types.Violation,
     offense: number,
-    type: Types.VehicleTypes,
+    type: Types.VehicleTypes
   ) {
     const big = !type ? "big" : type.big_vehicle ? "big" : "small";
     if (offense >= 3) {
@@ -221,7 +220,7 @@
   $: $form.offense = offense;
   $: if (data.vehicleTypes) {
     selectedVehicleType = data.vehicleTypes.filter(
-      (type) => type.id == $form.vehicle_type,
+      (type) => type.id == $form.vehicle_type
     )[0];
   }
 
@@ -234,16 +233,16 @@
 
   $: {
     const selected: Types.Violation[] = data.violations!.filter((value) =>
-      $form.violations.includes(value.id),
+      $form.violations.includes(value.id)
     );
 
     const type = data.vehicleTypes!.find(
-      (item) => item.id === $form.vehicle_type,
+      (item) => item.id === $form.vehicle_type
     );
 
     $form.fine = selected.reduce(
       (sum, fuckit) => sum + getFine(fuckit, offense, type),
-      0,
+      0
     );
   }
 
