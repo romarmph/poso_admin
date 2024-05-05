@@ -34,11 +34,14 @@ export const load: LayoutLoad = async ({ fetch, data, depends }) => {
 
   if (session) {
     const { data } = await supabase.from("employees").select().eq("user_id", session.user.id);
-    return {
-      supabase,
-      session,
-      user: data![0]
+    if (data) {
+      return {
+        supabase,
+        session,
+        user: data![0]
+      }
     }
+
   }
 
   return { supabase, session };
