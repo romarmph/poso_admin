@@ -23,8 +23,9 @@
 
   export let data: T[];
   export let columns: ColumnDef<T>[];
+  export let showGrid: boolean = false;
 
-  const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
+  export let fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
     const itemRank = rankItem(row.getValue(columnId), value);
     addMeta({ itemRank });
     return itemRank.passed;
@@ -115,7 +116,8 @@
                   {#each headerGroup.headers as header}
                     <th
                       scope="col"
-                      class="text-xs text-left font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200 text-nowrap"
+                      colspan={header.colSpan}
+                      class={`text-xs text-left font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200 text-nowrap ${showGrid ? "border" : ""}`}
                     >
                       {#if !header.isPlaceholder}
                         <button
