@@ -104,19 +104,6 @@
             {/if}
         </div>
         <div class="mb-3">
-            <label for="">Middle Name</label>
-            <TextInput
-                type="text"
-                id="middle_name"
-                bind:value={$form.middle_name}
-            />
-            {#if $errors.middle_name}
-                <span class="text-red-500 text-sm">
-                    {$errors.middle_name}
-                </span>
-            {/if}
-        </div>
-        <div class="mb-3">
             <label for="">Last Name</label>
             <TextInput
                 type="text"
@@ -139,45 +126,6 @@
             {#if $errors.middle_name}
                 <span class="text-red-500 text-sm">
                     {$errors.middle_name}
-                </span>
-            {/if}
-        </div>
-        <div class="mb-3">
-            <label for="">Last Name</label>
-            <TextInput
-                type="text"
-                id="last_name"
-                bind:value={$form.last_name}
-            />
-            {#if $errors.last_name}
-                <span class="text-red-500 text-sm">
-                    {$errors.last_name}
-                </span>
-            {/if}
-        </div>
-        <div class="mb-3">
-            <label for="">Middle Name</label>
-            <TextInput
-                type="text"
-                id="middle_name"
-                bind:value={$form.middle_name}
-            />
-            {#if $errors.middle_name}
-                <span class="text-red-500 text-sm">
-                    {$errors.middle_name}
-                </span>
-            {/if}
-        </div>
-        <div class="mb-3">
-            <label for="">Last Name</label>
-            <TextInput
-                type="text"
-                id="last_name"
-                bind:value={$form.last_name}
-            />
-            {#if $errors.last_name}
-                <span class="text-red-500 text-sm">
-                    {$errors.last_name}
                 </span>
             {/if}
         </div>

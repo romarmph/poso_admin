@@ -32,12 +32,8 @@ declare global {
     interface Eq {
       operator: string;
       value: any;
-    }    // interface Error {}
-    // interface Locals {}
-    // interface PageData {}
-    // interface PageState {}
-    // interface Platform {}
-    //
+    }
+
     namespace Superforms {
       type Message = {
         success: boolean, action: string
@@ -167,6 +163,22 @@ declare global {
       deleted_at: string;
       deleted_by: number;
       tickets: Record<string, any>;
+    }
+
+    interface Quarter {
+      total_tickets: number;
+      total_tickets_paid: number;
+      total_fine: number;
+      total_amount_paid: number;
+      incentive: number;
+    }
+    interface QuarterlyIncentive extends Data {
+      first_name: string;
+      last_name: string;
+      quarter_1: Quarter;
+      quarter_2: Quarter;
+      quarter_3: Quarter;
+      quarter_4: Quarter;
     }
   }
 }
