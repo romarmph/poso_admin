@@ -50,10 +50,7 @@ export const actions: Actions = {
     const currentUser = await getCurrentUser();
     const timestamp = new Date();
     const ticket = {
-      first_name: formData.first_name,
-      middle_name: formData.middle_name,
-      last_name: formData.last_name,
-      suffix: formData.suffix,
+      violator: formData.violator,
       address: formData.address ?? "",
       birthdate: formData.birthdate == new Date(1900, 0, 1, 12, 0, 0) ? null : formData.birthdate,
       status: "unpaid",
@@ -61,9 +58,7 @@ export const actions: Actions = {
       violation_time: formData.violation_time,
       vehicle_type: formData.vehicle_type,
       enforcer: formData.enforcer,
-      violation_location: formData.location,
-      identification_type: formData.identification_type,
-      identification: formData.identification,
+      violation_location: formData.violation_location,
       created_at: timestamp,
       created_by: currentUser?.id,
       updated_at: timestamp,
@@ -74,6 +69,11 @@ export const actions: Actions = {
       previous_offense: formData.previous_offense,
       fine: formData.fine,
       due_date: new Date(timestamp.setDate(timestamp.getDate() + 7)),
+      plate_no: formData.plate_no,
+      license_no: formData.license_no,
+      engine_no: formData.engine_no,
+      chassis_no: formData.chassis_no,
+      ticket_no: formData.ticket_no,
     }
 
 
