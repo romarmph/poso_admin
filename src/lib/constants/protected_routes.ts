@@ -3,7 +3,6 @@ export const routes: string[] = [
   "/enforcer",
   "/payment",
   "/tickets",
-  "/traffic-post",
   "/vehicle-types",
   "/violations",
   "/incentives"
