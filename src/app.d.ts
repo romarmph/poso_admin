@@ -42,26 +42,26 @@ declare global {
   namespace Types {
     interface Data {
       id: string;
+      created_at: string;
+      created_by: number;
+      updated_at: string;
+      updated_by: number;
+      deleted_at: string | null;
+      deleted_by: number | null;
+    }
+
+    interface Enforcer extends Data {
+      first_name: string;
+      last_name: string;
+      status: EmployeeStatus;
     }
 
     interface Violation extends Data {
       name: string;
-      created_at: string | Date;
-      updated_at: string | Date;
-      deleted_at: string | Date | null;
-      created_by: string;
-      updated_by: string;
-      deleted_by: string | null;
     }
 
     interface VehicleTypes extends Data {
       type: string;
-      created_at: string;
-      updated_at: string;
-      deleted_at: string | null;
-      created_by: number;
-      updated_by: number;
-      deleted_by: number | null;
     }
 
     interface Employees extends Data {
@@ -70,12 +70,6 @@ declare global {
       status: string;
       user_id: string;
       role: number;
-      created_at: string;
-      updated_at: string;
-      deleted_at: string | null;
-      created_by: number;
-      updated_by: number;
-      deleted_by: number | null;
     }
 
     interface Ticket extends Data {
@@ -98,12 +92,6 @@ declare global {
       discounted_by: string | null;
       amount_paid: number | null;
       paid_at: string | null;
-      created_at: string;
-      created_by: number;
-      updated_at: string;
-      updated_by: number;
-      deleted_at: string | null;
-      deleted_by: number | null;
     }
 
     interface Quarter {
@@ -113,7 +101,7 @@ declare global {
       total_amount_paid: number;
       incentive: number;
     }
-    interface QuarterlyIncentive extends Data {
+    interface QuarterlyIncentive {
       first_name: string;
       last_name: string;
       quarter_1: Quarter;

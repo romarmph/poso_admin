@@ -67,13 +67,6 @@
             header: "Last Name",
         },
         {
-            accessorKey: "user_id",
-            cell: (info) =>
-                flexRender(EmployeeEmailColumn, { user_id: info.getValue() }),
-            footer: (info) => info.column.id,
-            header: "Email",
-        },
-        {
             accessorKey: "status",
             cell: (info) =>
                 flexRender(EmployeeStatus, { status: info.getValue() }),
@@ -81,14 +74,6 @@
             header: "Status",
             enableSorting: false,
         },
-        {
-            accessorKey: "birthdate",
-            cell: (info) => info.getValue(),
-            footer: (info) => info.column.id,
-            header: "Birth Date",
-            accessorFn: (row) => new Date(row.birthdate).toDateString(),
-        },
-
         {
             accessorKey: "created_at",
             cell: (info) => info.getValue(),
@@ -157,13 +142,8 @@
     <TanTable {data} {columns}></TanTable>
 </DataList>
 
-<Overlay title="Add Enforcer" id="addEnforcer" let:data>
-    <form
-        method="POST"
-        class="w-[500px] h-full flex flex-col"
-        action="?/add"
-        use:enforcerEnhance
-    >
+<Overlay title="Add Enforcer" id="addEnforcer" let:data type="modal">
+    <form method="POST" action="?/add" use:enforcerEnhance>
         <AddEnforcer
             form={enforcerForm}
             errors={enforcerErrors}
@@ -173,13 +153,8 @@
     </form>
 </Overlay>
 
-<Overlay title="Update Enforcer" id="updateEnforcer" let:data>
-    <form
-        method="POST"
-        class="w-[500px] h-full flex flex-col"
-        action="?/update"
-        use:enforcerEnhance
-    >
+<Overlay title="Update Enforcer" id="updateEnforcer" let:data type="modal">
+    <form method="POST" action="?/update" use:enforcerEnhance>
         <AddEnforcer
             form={enforcerForm}
             errors={enforcerErrors}
@@ -202,6 +177,6 @@
     </form>
 </Overlay>
 
-<Overlay let:data title="View Enforcer" id="viewEnforcer">
+<Overlay let:data title="View Enforcer" id="viewEnforcer" type="modal">
     <ViewEnforcer info={data} {supabase} />
 </Overlay>
