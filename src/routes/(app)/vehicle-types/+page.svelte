@@ -132,13 +132,8 @@
     <TanTable {data} {columns}></TanTable>
 </DataList>
 
-<Overlay title="Add Vehicle Type" id="addvehicleType" let:data>
-    <form
-        method="POST"
-        class="w-[500px] h-full flex flex-col"
-        action="?/add"
-        use:vehicleTypeEnhance
-    >
+<Overlay title="Add Vehicle Type" id="addvehicleType" let:data type="modal">
+    <form method="POST" action="?/add" use:vehicleTypeEnhance>
         <AddVehicleType
             form={vehicleTypeForm}
             errors={vehicleTypeErrors}
@@ -148,13 +143,13 @@
     </form>
 </Overlay>
 
-<Overlay title="Update Vehicle Type" id="updateVehicleType" let:data>
-    <form
-        method="POST"
-        class="w-[500px] h-full flex flex-col"
-        action="?/update"
-        use:vehicleTypeEnhance
-    >
+<Overlay
+    title="Update Vehicle Type"
+    id="updateVehicleType"
+    let:data
+    type="modal"
+>
+    <form method="POST" action="?/update" use:vehicleTypeEnhance>
         <AddVehicleType
             form={vehicleTypeForm}
             errors={vehicleTypeErrors}
@@ -177,6 +172,6 @@
     </form>
 </Overlay>
 
-<Overlay let:data title="View Vehicle Type" id="ViewVehicleType">
+<Overlay let:data title="View Vehicle Type" id="ViewVehicleType" type="modal">
     <ViewVehicleTypes info={data} {supabase} />
 </Overlay>

@@ -1,11 +1,5 @@
 <script lang="ts">
-  import {
-    Button,
-    TanTable,
-    EnabledStatus,
-    RowActions,
-    ViolationFines,
-  } from "$lib/Components";
+  import { Button, TanTable, RowActions } from "$lib/Components";
   import { DataList } from "$lib/components/Supabase/Supabase";
   import { flexRender, type ColumnDef } from "@tanstack/svelte-table";
   import { overlayStore } from "$lib/stores/overlayStore";
@@ -138,13 +132,8 @@
   <TanTable {data} {columns}></TanTable>
 </DataList>
 
-<Overlay title="Add Violation" id="addViolation" let:data>
-  <form
-    method="POST"
-    class="w-[500px] h-full flex flex-col"
-    action="?/add"
-    use:violationEnhance
-  >
+<Overlay title="Add Violation" id="addViolation" let:data type="modal">
+  <form method="POST" action="?/add" use:violationEnhance>
     <ViolationAdd
       form={violationForm}
       errors={violationErrors}
@@ -154,13 +143,8 @@
   </form>
 </Overlay>
 
-<Overlay title="Update Violation" id="updateViolation" let:data>
-  <form
-    method="POST"
-    class="w-[500px] h-full flex flex-col"
-    action="?/update"
-    use:violationEnhance
-  >
+<Overlay title="Update Violation" id="updateViolation" let:data type="modal">
+  <form method="POST" action="?/update" use:violationEnhance>
     <ViolationAdd
       form={violationForm}
       errors={violationErrors}
@@ -183,6 +167,6 @@
   </form>
 </Overlay>
 
-<Overlay let:data title="View Violation" id="viewViolation">
+<Overlay let:data title="View Violation" id="viewViolation" type="modal">
   <ViewViolation info={data} {supabase} />
 </Overlay>
