@@ -1,9 +1,8 @@
-import { deleteSchema, vehicleTypesSchema, violationSchema } from "$lib/schemas/app";
-import { redirect, type Actions } from "@sveltejs/kit";
+import { deleteSchema, vehicleTypesSchema } from "$lib/schemas/app";
+import { type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { superValidate, message, fail } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import DbActions from "$lib/enums/DbActions";
 import ActionResultModals from "$lib/enums/ActionResultModals";
 
 export const load: PageServerLoad = async ({
@@ -35,7 +34,7 @@ export const actions: Actions = {
     const vehicleType = {
       type: vehicleTypeForm.data.type,
       big_vehicle: vehicleTypeForm.data.big_vehicle,
-      enabled:true,
+      enabled: true,
       created_by: user!.id,
       updated_by: user!.id,
       deleted_by: null,

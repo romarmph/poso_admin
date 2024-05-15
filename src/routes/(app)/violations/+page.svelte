@@ -66,18 +66,6 @@
       header: "Name",
     },
     {
-      accessorKey: "fine",
-      cell: (info) => flexRender(ViolationFines, { fine: info.getValue() }),
-      footer: (info) => info.column.id,
-      header: "Fine",
-    },
-    {
-      accessorKey: "enabled",
-      cell: (info) => flexRender(EnabledStatus, { enabled: info.getValue() }),
-      footer: (info) => info.column.id,
-      header: "Status",
-    },
-    {
       accessorKey: "created_at",
       cell: (info) => info.getValue(),
       footer: (info) => info.column.id,
