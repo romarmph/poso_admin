@@ -1,4 +1,4 @@
-import { deleteSchema, employeeSchema, } from "$lib/schemas/app";
+import { deleteSchema, enforcerSchema, } from "$lib/schemas/app";
 import { type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { superValidate, message, setError } from "sveltekit-superforms";
@@ -9,7 +9,7 @@ import Roles from "$lib/enums/Roles";
 export const load: PageServerLoad = async ({
   locals: { supabase },
 }) => {
-  const enforcerForm = await superValidate(zod(employeeSchema));
+  const enforcerForm = await superValidate(zod(enforcerSchema));
   const deleteForm = await superValidate(zod(deleteSchema));
   const enforcer = await supabase.from("employees").select().eq('role', Roles.ENFORCER).is('deleted_by', null);
 
@@ -22,7 +22,7 @@ export const load: PageServerLoad = async ({
 
 export const actions: Actions = {
   add: async ({ request, locals: { supabase, getCurrentUser } }) => {
-    const form = await superValidate(request, zod(employeeSchema));
+    const form = await superValidate(request, zod(enforcerSchema));
     if (!form.valid) {
       return message(form, {
         success: false,
@@ -59,7 +59,7 @@ export const actions: Actions = {
     )
   },
   update: async ({ request, locals: { supabase, getCurrentUser } }) => {
-    const form = await superValidate(request, zod(employeeSchema));
+    const form = await superValidate(request, zod(enforcerSchema));
     if (!form.valid) {
       return message(form, {
         success: false,

@@ -1,3 +1,4 @@
+import Roles from "$lib/enums/Roles";
 import { z } from "zod";
 export const deleteSchema = z.object({
 	id: z.number().or(z.string())
@@ -14,11 +15,17 @@ export const vehicleTypesSchema = z.object({
 	type: z.string(),
 })
 
-export const employeeSchema = z.object({
+export const enforcerSchema = z.object({
 	id: z.string().optional(),
 	first_name: z.string().min(1, "First name is too short"),
 	last_name: z.string().min(1, "Last name is too short"),
 	status: z.string().default("active").optional(),
+})
+
+export const adminSchema = enforcerSchema.extend({
+	role: z.number().default(Roles.STAFF),
+	email: z.string().email().optional(),
+	password: z.string().min(8).optional(),
 	user_id: z.string().optional(),
 })
 

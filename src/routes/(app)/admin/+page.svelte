@@ -1,29 +1,15 @@
 <script lang="ts">
     import {
-        Modal,
-        ModalBody,
-        ModalFooter,
-        ModalHeader,
-    } from "$lib/components/Overlays/Modal/Modal";
-
-    import {
         Button,
-        TextInput,
-        Label,
         TanTable,
         RowActions,
         EmployeeStatus,
     } from "$lib/Components";
     import { flexRender, type ColumnDef } from "@tanstack/svelte-table";
     import { DataList } from "$lib/components/Supabase/Supabase";
-    import {
-        Overlay,
-        ViewAdmin,
-        ViewEnforcer,
-    } from "$lib/components/Overlays/Overlays";
+    import { Overlay, ViewAdmin } from "$lib/components/Overlays/Overlays";
     import { overlayStore } from "$lib/stores/overlayStore.js";
     import { getSupabaseContext } from "$lib/stores/clientStore.js";
-    import AddEnforcer from "$lib/components/Overlays/Offcanvas/AddEnforcer.svelte";
     import { superForm } from "sveltekit-superforms";
     import AddAdmin from "$lib/components/Overlays/Offcanvas/AddAdmin.svelte";
     import ConfirmDelete from "$lib/components/Overlays/Modal/Delete/ConfirmDelete.svelte";
@@ -73,29 +59,10 @@
             header: "First Name",
         },
         {
-            accessorKey: "middle_name",
-            cell: (info) => info.getValue(),
-            footer: (info) => info.column.id,
-            header: "Middle Name",
-        },
-        {
             accessorKey: "last_name",
             cell: (info) => info.getValue(),
             footer: (info) => info.column.id,
             header: "Last Name",
-        },
-        {
-            accessorKey: "suffix",
-            cell: (info) => info.getValue(),
-            footer: (info) => info.column.id,
-            header: "Suffix",
-        },
-        {
-            accessorKey: "birthdate",
-            cell: (info) => info.getValue(),
-            footer: (info) => info.column.id,
-            header: "Birth Date",
-            accessorFn: (row) => new Date(row.birthdate).toDateString(),
         },
         {
             accessorKey: "status",
@@ -104,12 +71,6 @@
             footer: (info) => info.column.id,
             header: "Status",
             enableSorting: false,
-        },
-        {
-            accessorKey: "employee_no",
-            cell: (info) => info.getValue(),
-            footer: (info) => info.column.id,
-            header: "Employee No.",
         },
         {
             accessorKey: "created_at",
@@ -179,7 +140,7 @@
     <TanTable {data} {columns}></TanTable>
 </DataList>
 
-<Overlay title="Add Admin" id="addAdmin" let:data>
+<Overlay title="Add Admin" id="addAdmin" let:data type="modal">
     <form method="POST" action="?/add" use:adminEnhance>
         <AddAdmin
             form={adminForm}
@@ -190,7 +151,7 @@
     </form>
 </Overlay>
 
-<Overlay title="Update Admin" id="updateAdmin" let:data>
+<Overlay title="Update Admin" id="updateAdmin" let:data type="modal">
     <form method="POST" action="?/update" use:adminEnhance>
         <AddAdmin
             form={adminForm}
@@ -214,6 +175,6 @@
     </form>
 </Overlay>
 
-<Overlay let:data title="View Admin" id="viewAdmin">
+<Overlay let:data title="View Admin" id="viewAdmin" type="modal">
     <ViewAdmin info={data} {supabase} />
 </Overlay>

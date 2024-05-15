@@ -50,6 +50,15 @@ declare global {
       deleted_by: number | null;
     }
 
+    interface Admin extends Data {
+      first_name: string;
+      last_name: string;
+      email: string;
+      status: string;
+      user_id: string;
+      role: number;
+    }
+
     interface Enforcer extends Data {
       first_name: string;
       last_name: string;
@@ -62,14 +71,6 @@ declare global {
 
     interface VehicleTypes extends Data {
       type: string;
-    }
-
-    interface Employees extends Data {
-      first_name: string;
-      last_name: string;
-      status: string;
-      user_id: string;
-      role: number;
     }
 
     interface Ticket extends Data {
