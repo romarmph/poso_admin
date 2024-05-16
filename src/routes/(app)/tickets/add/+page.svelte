@@ -7,17 +7,10 @@
   import { X } from "lucide-svelte";
   import { dateProxy, superForm } from "sveltekit-superforms";
   import SuperDebug from "sveltekit-superforms";
-  import TicketIdentificationType from "$lib/enums/TicketIdentificationType.js";
-  import VehicleSize from "$lib/components/Base/VehicleSize.svelte";
-  import TanTable from "$lib/components/Table/TanTable.svelte";
   import ConfirmCreate from "$lib/components/Overlays/Modal/Create/ConfirmCreate.svelte";
   import ActionResultModals from "$lib/enums/ActionResultModals.js";
   import FailCreate from "$lib/components/Overlays/Modal/Create/FailCreate.svelte";
   import { getSupabaseContext } from "$lib/stores/clientStore.js";
-  import RelatedTicketsActionts from "$lib/components/Table/Partials/RelatedTicketsAcionts.svelte";
-  import TicketNumberColumn from "$lib/components/Customs/TicketNumberColumn.svelte";
-  import TicketStatus from "$lib/components/Base/TicketStatus.svelte";
-  import { flexRender, type ColumnDef } from "@tanstack/svelte-table";
   import ViewTickets from "$lib/components/Overlays/Offcanvas/ViewTickets.svelte";
 
   const { open, close } = overlayStore;
@@ -29,11 +22,9 @@
   });
 
   let selectedViolations: Types.Violation[];
-  const birthdateProxy = dateProxy(form, "birthdate", { format: "date" });
   const violationDateProxy = dateProxy(form, "violation_date", {
     format: "date",
   });
-  let violation_time = "12:00";
   let offense: number = 1;
   let selectedVehicleType: Types.VehicleTypes | null = null;
   let relatedTickets: Types.Ticket[] = [];
@@ -89,38 +80,12 @@
   //   });
   // }
 
-  function getFine(
-    violation: Types.Violation,
-    offense: number,
-    type: Types.VehicleTypes,
-  ) {
-    const big = !type ? "big" : type.big_vehicle ? "big" : "small";
-    if (offense >= 3) {
-      if (violation.fine[big].c !== 0) {
-        return violation.fine[big].c;
-      }
-
-      if (violation.fine[big].b !== 0) {
-        return violation.fine[big].b;
-      }
-      return violation.fine[big].a;
-    }
-
-    if (offense === 2) {
-      if (violation.fine[big].b !== 0) {
-        return violation.fine[big].b;
-      }
-      return violation.fine[big].a;
-    }
-    return violation.fine[big].a;
-  }
   $: {
     selectedViolations = data.violations!.filter((val) => {
       return $form.violations.includes(val.id);
     });
   }
 
-  $: $form.violation_time = violation_time;
   $: $form.offense = offense;
   $: if (data.vehicleTypes) {
     selectedVehicleType = data.vehicleTypes.filter(
@@ -133,21 +98,6 @@
     $form.previous_offense = parseInt(relatedTicket.id);
   } else {
     offense = 1;
-  }
-
-  $: {
-    const selected: Types.Violation[] = data.violations!.filter((value) =>
-      $form.violations.includes(value.id),
-    );
-
-    const type = data.vehicleTypes!.find(
-      (item) => item.id === $form.vehicle_type,
-    );
-
-    $form.fine = selected.reduce(
-      (sum, fuckit) => sum + getFine(fuckit, offense, type),
-      0,
-    );
   }
 
   $: if ($message) {
@@ -180,9 +130,8 @@
         })}>Save Ticket</Button
     >
   </div>
-  <!-- NOTE: ACTION BUTTONS -->
 </header>
-<!-- <SuperDebug data={$form} /> -->
+<SuperDebug data={$form} />
 <form action="?/create" method="POST" class="mt-4" use:enhance>
   <input
     type="number"
@@ -220,42 +169,18 @@
   <Grid columns="grid-cols-2" gap="gap-8">
     <GridCol>
       <Grid columns="grid-cols-4" gap="gap-4">
-        <GridCol colSpan="col-span-2">
+        <GridCol colSpan="col-span-4">
           <label class="text-gray-500" for="violator">Violator Name</label>
           <TextInput id="violator" type="text" bind:value={$form.violator} />
           {#if $errors.violator}
             <div class="text-red-500 text-sm">{$errors.violator}</div>
           {/if}
         </GridCol>
-        <GridCol colSpan="col-span-2">
-          <label class="text-gray-500" for="birthdate">Birthdate</label>
-          <TextInput id="birthdate" type="date" bind:value={$birthdateProxy} />
-          {#if $errors.birthdate}
-            <div class="text-red-500 text-sm">{$errors.birthdate}</div>
-          {/if}
-        </GridCol>
-        <GridCol colSpan="col-span-2">
+        <GridCol colSpan="col-span-4">
           <label class="text-gray-500" for="address">Address</label>
           <TextInput id="address" type="text" bind:value={$form.address} />
           {#if $errors.address}
             <div class="text-red-500 text-sm">{$errors.address}</div>
-          {/if}
-        </GridCol>
-        <GridCol colSpan="col-span-2">
-          <label class="text-gray-500" for="status">Status</label>
-          <select
-            class="py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
-            name="status"
-            id="status"
-            bind:value={$form.status}
-          >
-            <option selected={true} value="unpaid">Unpaid</option>
-            <option value="paid">Paid</option>
-            <option value="cancelled">Cancelled</option>
-            <option value="transffered">Transferred</option>
-          </select>
-          {#if $errors.status}
-            <div class="text-red-500 text-sm">{$errors.status}</div>
           {/if}
         </GridCol>
         <GridCol colSpan="col-span-2">
@@ -354,17 +279,6 @@
           {/if}
         </GridCol>
         <GridCol colSpan="col-span-2">
-          <label class="text-gray-500" for="location">Location</label>
-          <TextInput
-            id="location"
-            type="text"
-            bind:value={$form.violation_location}
-          />
-          {#if $errors.violation_location}
-            <div class="text-red-500 text-sm">{$errors.violation_location}</div>
-          {/if}
-        </GridCol>
-        <GridCol colSpan="col-span-2">
           <label class="text-gray-500" for="violation_date"
             >Violation Date</label
           >
@@ -379,19 +293,15 @@
             </div>
           {/if}
         </GridCol>
-        <GridCol colSpan="col-span-2">
-          <label class="text-gray-500" for="violation_date"
-            >Violation Time</label
-          >
+        <GridCol colSpan="col-span-4">
+          <label class="text-gray-500" for="location">Location</label>
           <TextInput
-            id="violation_datetime"
-            type="time"
-            bind:value={violation_time}
+            id="location"
+            type="text"
+            bind:value={$form.violation_location}
           />
-          {#if $errors.violation_time}
-            <div class="text-red-500 text-sm">
-              {$errors.violation_time}
-            </div>
+          {#if $errors.violation_location}
+            <div class="text-red-500 text-sm">{$errors.violation_location}</div>
           {/if}
         </GridCol>
         <!-- NOTE: TICKET INFORMATION -->
@@ -428,42 +338,16 @@
                     >{selected.name}</label
                   >
                 </div>
-                <div class="flex items-center gap-4">
-                  {#if selectedVehicleType}
-                    <p>
-                      {getFine(selected, offense, selectedVehicleType)}
-                    </p>
-                    <VehicleSize
-                      big_vehicle={selectedVehicleType.big_vehicle}
-                    />
-                  {/if}
-                  <button
-                    type="button"
-                    class="bg-gray-100 rounded-full p-2"
-                    on:click={() => removeViolation(index)}
-                  >
-                    <X />
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  class="bg-gray-100 rounded-full p-2"
+                  on:click={() => removeViolation(index)}
+                >
+                  <X />
+                </button>
               </div>
             {/each}
           {/if}
-        </div>
-        <div class="flex gap-2">
-          <h3 class="text-lg text-gray-600">Total Fine</h3>
-          <p class="text-lg font-bold text-red-700 text-end flex-1">
-            {#if selectedVehicleType}
-              {$form.fine}
-            {:else}
-              0
-            {/if}
-          </p>
-        </div>
-        <div class="flex gap-2">
-          <h3 class="text-lg text-gray-600">Total Violations Selected</h3>
-          <p class="text-lg font-bold text-gray-700 text-end flex-1">
-            {$form.violations.length}
-          </p>
         </div>
       </div>
     </GridCol>

@@ -49,7 +49,7 @@
     {#each maxNumberOfPages as page}
       <button
         type="button"
-        class={`min-h-[38px] min-w-[38px] flex justify-center items-center text-gray-800 hover:bg-gray-100 py-2 px-3 text-sm rounded-lg focus:outline-none disabled:opacity-50 dark:text-white ${currentPage === page ? "bg-blue-400 hover:bg-blue-500" : ""}`}
+        class={`min-h-[38px] min-w-[38px] flex justify-center items-center  py-2 px-3 text-sm rounded-lg focus:outline-none disabled:opacity-50 dark:text-white ${currentPage === page ? "bg-blue-500 hover:bg-blue-400 text-white" : "text-gray-800 hover:bg-gray-100"}`}
         aria-label={`Go to page ${page + 1}`}
         on:click={() => {
           if (currentPage !== page) setPageIndex(page);

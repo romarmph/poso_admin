@@ -31,24 +31,21 @@ export const adminSchema = enforcerSchema.extend({
 
 export const ticketSchema = z.object({
 	id: z.number().optional(),
-	violator: z.string(),
-	birthdate: z.date().default(new Date()),
+	violator: z.string().refine(val => val.length, "Violator is required"),
 	status: z.string().default("unpaid"),
 	violation_date: z.date().default(new Date()),
-	violation_time: z.string(),
-	vehicle_type: z.number(),
+	vehicle_type: z.number().default(0).refine(val => val, "Vehicle type is required"),
 	enforcer: z.number().optional(),
 	address: z.string().optional(),
 	violation_location: z.string().optional(),
 	previous_offense: z.number().optional(),
 	offense: z.number().default(1),
-	fine: z.number(),
 	plate_no: z.string().optional(),
 	license_no: z.string().optional(),
 	engine_no: z.string().optional(),
 	chassis_no: z.string().optional(),
-	ticket_no: z.string().optional(),
-	violations: z.array(z.number()).default([]),
+	ticket_no: z.string().refine(val => val.length, "Ticket number is required"),
+	violations: z.array(z.number()).default([]).refine((val) => val.length, "Please select at least one violation"),
 })
 
 export const paymentSchema = z.object({
