@@ -208,6 +208,7 @@
           </div>
 
           <Pager
+            tableOptions={table}
             pageOptions={$table.getPageOptions()}
             goToNext={$table.nextPage}
             goToPrev={$table.previousPage}
