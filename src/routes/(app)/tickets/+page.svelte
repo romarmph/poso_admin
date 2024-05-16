@@ -12,6 +12,7 @@
   import { goto } from "$app/navigation";
   import { superForm } from "sveltekit-superforms";
   import ConfirmDelete from "$lib/components/Overlays/Modal/Delete/ConfirmDelete.svelte";
+  import PayTicket from "$lib/components/Overlays/Modal/PayTicket.svelte";
   const { open, close } = overlayStore;
   const { supabase } = getSupabaseContext();
   const columns: ColumnDef<Types.Ticket>[] = [
@@ -133,7 +134,12 @@
             });
           },
           firePay: () => {
-            goto(`/payment/pay?id=${info.getValue()}`);
+            open({
+              props: {
+                info: info.row.original,
+              },
+              id: "payTicket",
+            });
           },
         }),
       header: "Actions",
@@ -184,4 +190,8 @@
   >
     <ConfirmDelete info={data} {form} on:close={close}></ConfirmDelete>
   </form>
+</Overlay>
+
+<Overlay let:data title="Pay Ticket" id="payTicket" type="modal">
+  <PayTicket info={data}></PayTicket>
 </Overlay>
