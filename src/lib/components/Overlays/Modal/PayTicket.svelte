@@ -1,50 +1,23 @@
 <script lang="ts">
 	import Button from "$lib/components/Base/Button.svelte";
 	import TextInput from "$lib/components/Forms/TextInput.svelte";
-	import { getSupabaseContext } from "$lib/stores/clientStore";
 	import { overlayStore } from "$lib/stores/overlayStore";
-	import { z } from "zod";
+	import { dateProxy } from "sveltekit-superforms";
 
 	export let info;
+	export let form;
+	export let errors;
 	const ticket: Types.Ticket = info.info as Types.Ticket;
-	const { supabase } = getSupabaseContext();
 	const { close } = overlayStore;
 
-	let orNumberAlreadyExists: boolean = false;
-	let or_number: string;
-	let amount_paid: number;
-	let paid_at: Date;
-	let discounted: boolean;
-	let discounted_by: string;
+	const proxy = dateProxy(form, "paid_at", {
+		format: "date",
+	});
 
-	async function payTicket() {
-		const { data, error } = await supabase
-			.from("tickets")
-			.update({ status: "paid" })
-			.eq("id", ticket.id);
-		if (error) {
-			console.error(error);
-		} else {
-			close();
-		}
-	}
-
-	async function checkOrNumber() {
-		const { data, error } = await supabase
-			.from("tickets")
-			.select("or_number")
-			.eq("or_number", or_number);
-		if (error) {
-			console.error(error);
-		}
-		if (data && data.length > 0 && or_number.length) {
-			orNumberAlreadyExists = true;
-		} else {
-			orNumberAlreadyExists = false;
-		}
-	}
+	$: $form.id = ticket.id;
 </script>
 
+<input type="number" class="hidden" bind:value={$form.id} />
 <div
 	class="px-2 py-3 mb-2 bg-gray-50 border border-gray-200 text-gray-400 rounded-lg flex justify-between"
 >
@@ -61,27 +34,29 @@
 	<TextInput
 		id="or_number"
 		placeholder="OR Number"
-		bind:value={or_number}
-		callback={checkOrNumber}
+		bind:value={$form.or_number}
+		required
 	/>
-	{#if orNumberAlreadyExists}
-		<p class="text-red-500">OR Number already exists</p>
+	{#if $errors.or_number}
+		<span class="text-red-500 text-sm"> {$errors.or_number} </span>
 	{/if}
 </div>
 <div class="mb-2">
-	<TextInput
+	<input
+		type="number"
 		id="amount_paid"
 		placeholder="Amount Paid"
-		type="number"
-		bind:value={amount_paid}
+		class="py-3 px-4 block border-gray-200 rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600 w-full"
+		bind:value={$form.amount_paid}
+		required
 	/>
 </div>
 <div class="mb-2">
 	<TextInput
 		id="paid_at"
-		placeholder="Amount Paid"
+		placeholder="Paid at"
 		type="date"
-		bind:value={paid_at}
+		bind:value={$proxy}
 	/>
 </div>
 <div class="relative flex items-start w-full mb-2">
@@ -92,7 +67,7 @@
 			type="checkbox"
 			class="border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
 			aria-describedby="discounted-description"
-			bind:checked={discounted}
+			bind:checked={$form.discounted}
 		/>
 	</div>
 	<label for="discounted" class="ms-3">
@@ -108,24 +83,19 @@
 	</label>
 </div>
 <div class="mb-2">
-	<TextInput id="discounted_by" placeholder="Note" bind:value={discounted_by} />
+	<TextInput
+		id="discounted_by"
+		placeholder="Note"
+		bind:value={$form.discounted_by}
+	/>
 </div>
 <div class="flex gap-3">
-	<Button color="gray" style="ghost" fullWidth={true} on:click={close}
-		>Cancel</Button
-	>
 	<Button
-		color="teal"
+		type="button"
+		color="gray"
+		style="ghost"
 		fullWidth={true}
-		on:click={() => {
-			checkOrNumber();
-			console.log({
-				or_number,
-				amount_paid,
-				paid_at,
-				discounted,
-				discounted_by,
-			});
-		}}>Pay</Button
+		on:click={close}>Cancel</Button
 	>
+	<Button color="teal" fullWidth={true}>Pay</Button>
 </div>

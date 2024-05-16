@@ -15,6 +15,21 @@
   import PayTicket from "$lib/components/Overlays/Modal/PayTicket.svelte";
   const { open, close } = overlayStore;
   const { supabase } = getSupabaseContext();
+
+  export let data;
+  const { form, message, enhance } = superForm(data.form, {
+    dataType: "json",
+  });
+
+  const {
+    form: paymentForm,
+    enhance: paymentEnhance,
+    message: paymentMessage,
+    errors: paymentErrors,
+    reset: paymentReset,
+  } = superForm(data.paymentForm, {
+    dataType: "json",
+  });
   const columns: ColumnDef<Types.Ticket>[] = [
     {
       accessorKey: "violation_date",
@@ -134,6 +149,7 @@
             });
           },
           firePay: () => {
+            paymentReset();
             open({
               props: {
                 info: info.row.original,
@@ -147,16 +163,17 @@
     },
   ];
 
-  export let data;
-
-  const { form, message, enhance } = superForm(data.form, {
-    dataType: "json",
-  });
-
   $: if ($message) {
     close();
     open({
       id: $message.action,
+    });
+  }
+
+  $: if ($paymentMessage) {
+    close();
+    open({
+      id: $paymentMessage.action,
     });
   }
 </script>
@@ -193,5 +210,8 @@
 </Overlay>
 
 <Overlay let:data title="Pay Ticket" id="payTicket" type="modal">
-  <PayTicket info={data}></PayTicket>
+  <form action="?/pay" method="POST" use:paymentEnhance>
+    <PayTicket info={data} form={paymentForm} errors={paymentErrors}
+    ></PayTicket>
+  </form>
 </Overlay>

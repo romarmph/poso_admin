@@ -49,10 +49,10 @@ export const ticketSchema = z.object({
 })
 
 export const paymentSchema = z.object({
-	ticket_id: z.number(),
-	paid_at: z.date(),
-	or_number: z.number().default(0).refine((val) => val > 0, "OR Number is required"),
-	discounted: z.boolean().default(false),
-	discount_amount: z.number().default(0),
+	id: z.number().optional(),
+	or_number: z.string().refine(val => val.length, 'OR number is required'),
 	amount_paid: z.number().default(0),
+	paid_at: z.date().default(new Date()),
+	discounted: z.boolean().default(false),
+	discounted_by: z.string().default(""),
 })

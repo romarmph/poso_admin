@@ -37,49 +37,6 @@
     $form.violations.splice(index, 1);
   }
 
-  // async function fetchRelated() {
-  //   if ($form.identification_type === TicketIdentificationType.LICENSE_NO) {
-  //     const { data } = await supabase
-  //       .from("tickets")
-  //       .select()
-  //       .ilike("identification", `%${$form.identification}%`)
-  //       .eq("identification_type", TicketIdentificationType.LICENSE_NO);
-  //     if (data) {
-  //       relatedTickets = [...data];
-  //     }
-  //   } else {
-  //     const { data: name } = await supabase
-  //       .from("tickets")
-  //       .select()
-  //       .ilike("first_name", `%${$form.first_name}%`)
-  //       .ilike("last_name", `%${$form.last_name}%`);
-  //
-  //     if (name) {
-  //       relatedTickets = [...name];
-  //     }
-  //
-  //     if ($form.identification.length) {
-  //       const { data: identification } = await supabase
-  //         .from("tickets")
-  //         .select()
-  //         .ilike("identification", `%${$form.identification}%`);
-  //
-  //       if (identification) {
-  //         relatedTickets = [...identification];
-  //
-  //         if (name) {
-  //           relatedTickets = [...identification, ...name];
-  //         }
-  //       }
-  //     }
-  //   }
-  //
-  //   relatedTickets = relatedTickets.filter((value, index, self) => {
-  //     const find = self.findIndex((t) => t.id === value.id);
-  //     return index === find;
-  //   });
-  // }
-
   $: {
     selectedViolations = data.violations!.filter((val) => {
       return $form.violations.includes(val.id);
@@ -139,13 +96,6 @@
     class="hidden"
     bind:value={$form.offense}
     id=""
-  />
-  <input
-    type="number"
-    name="fine"
-    bind:value={$form.fine}
-    id=""
-    class="hidden"
   />
   <Grid columns="grid-cols-2" gap="gap-8" classNames="my-2">
     <Divider strokeWidth={1}>
@@ -219,10 +169,6 @@
             <div class="text-red-500 text-sm">{$errors.chassis_no}</div>
           {/if}
         </GridCol>
-
-        <!-- NOTE: VIOLATOR INFORMATION -->
-
-        <!-- NOTE: TICKET INFORMATION -->
         <GridCol colSpan="col-span-4">
           <Divider strokeWidth={1}>
             <h2 slot="left" class="text-gray-600 text-xl">

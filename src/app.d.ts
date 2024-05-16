@@ -95,6 +95,14 @@ declare global {
       paid_at: string | null;
     }
 
+    interface Payment extends Data {
+      or_number: string;
+      amount_paid: number;
+      paid_at: Date;
+      discounted: boolean;
+      discounted_by: string;
+    }
+
     interface Quarter {
       total_tickets: number;
       total_tickets_paid: number;

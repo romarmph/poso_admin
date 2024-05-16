@@ -51,7 +51,7 @@
             id: $deleteMessage.action,
         });
     }
-    const columns: ColumnDef<Types.Employees>[] = [
+    const columns: ColumnDef<Types.Admin>[] = [
         {
             accessorKey: "first_name",
             cell: (info) => info.getValue(),
@@ -95,14 +95,14 @@
                         open({
                             id: "updateAdmin",
                             props: {
-                                info: info.row.original as Types.Employees,
+                                info: info.row.original as Types.Admin,
                             },
                         });
                     },
                     fireView: () => {
                         open({
                             props: {
-                                info: info.row.original as Types.Employees,
+                                info: info.row.original as Types.Admin,
                             },
                             id: "viewAdmin",
                         });

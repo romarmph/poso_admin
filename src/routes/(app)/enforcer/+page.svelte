@@ -53,7 +53,7 @@
         });
     }
 
-    const columns: ColumnDef<Types.Employees>[] = [
+    const columns: ColumnDef<Types.Enforcer>[] = [
         {
             accessorKey: "first_name",
             cell: (info) => info.getValue(),
@@ -97,14 +97,14 @@
                         open({
                             id: "updateEnforcer",
                             props: {
-                                info: info.row.original as Types.Employees,
+                                info: info.row.original as Types.Enforcer,
                             },
                         });
                     },
                     fireView: () => {
                         open({
                             props: {
-                                info: info.row.original as Types.Employees,
+                                info: info.row.original as Types.Enforcer,
                             },
                             id: "viewEnforcer",
                         });
