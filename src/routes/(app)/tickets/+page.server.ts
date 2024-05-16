@@ -45,7 +45,6 @@ export const actions: Actions = {
     const form = await superValidate(request, zod(paymentSchema));
     const user = await getCurrentUser();
 
-    console.log(form)
     if (!form.valid) {
       return message(form, {
         success: false,

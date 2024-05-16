@@ -5,8 +5,21 @@
   import PaymentsTab from "./partials/PaymentsTab.svelte";
   import type { Tab as TabI, TabView } from "$lib/components/Base/Tab/Tab";
   import Tab from "$lib/components/Base/Tab/Tab.svelte";
+  import { Overlay } from "$lib/components/Overlays/Overlays";
+  import PayTicket from "$lib/components/Overlays/Modal/PayTicket.svelte";
+  import { superForm } from "sveltekit-superforms";
+  import { overlayStore } from "$lib/stores/overlayStore";
 
+  const { open, close } = overlayStore;
   export let data;
+  const {
+    form: paymentForm,
+    enhance: paymentEnhance,
+    errors: paymentErrors,
+    message: paymentMessage,
+  } = superForm(data.paymentForm, {
+    dataType: "json",
+  });
   let tabs: TabI[] = [
     {
       index: 0,
@@ -35,6 +48,13 @@
       props: { payments: data.payments ?? [] },
     },
   ];
+
+  $: if ($paymentMessage) {
+    close();
+    open({
+      id: $paymentMessage.action,
+    });
+  }
 </script>
 
 <svelte:head>
@@ -63,3 +83,10 @@
 </div>
 
 <Tab {tabs} {tabViews} />
+
+<Overlay let:data title="Pay Ticket" id="payTicket" type="modal">
+  <form action="?/pay" method="POST" use:paymentEnhance>
+    <PayTicket info={data} form={paymentForm} errors={paymentErrors}
+    ></PayTicket>
+  </form>
+</Overlay>
