@@ -1,17 +1,26 @@
 <script lang="ts">
     import TanTable from "$lib/components/Table/TanTable.svelte";
-    import { rankItem } from "@tanstack/match-sorter-utils";
-    import { type ColumnDef, type FilterFn } from "@tanstack/svelte-table";
-    import { writable } from "svelte/store";
+    import { enhance } from "$app/forms";
+    import {
+        Select,
+        SelectTrigger,
+        SelectItem,
+        SelectValue,
+        SelectContent,
+    } from "$lib/components/ui/select";
+    import { type ColumnDef } from "@tanstack/svelte-table";
+    import { goto } from "$app/navigation";
+
     export let data;
 
-    const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
-        console.log(columnId, value);
-        const itemRank = rankItem(row.getValue(columnId), value);
-        addMeta({ itemRank });
-        return itemRank.passed;
+    let selectedYear = {
+        value: data.uniqueYears[data.uniqueYears.length - 1].year,
+        label: data.uniqueYears[data.uniqueYears.length - 1].year,
     };
-
+    let selectedQuarter = {
+        value: 1,
+        label: (1).toString(),
+    };
     const columns: ColumnDef<Types.QuarterlyIncentive>[] = [
         {
             accessorKey: "first_name",
@@ -24,155 +33,82 @@
             header: "Last Name",
         },
         {
-            header: "Quarter 1",
-            columns: [
-                {
-                    accessorKey: "total_tickets",
-                    cell: (info) => info.row.original.quarter_1.total_tickets,
-                    header: "Total Tickets",
-                },
-                {
-                    accessorKey: "total_paid_tickets",
-                    cell: (info) =>
-                        info.row.original.quarter_1.total_tickets_paid,
-                    header: "Total Paid Tickets",
-                },
-                {
-                    accessorKey: "total_fine",
-                    cell: (info) => info.row.original.quarter_1.total_fine,
-                    header: "Total Fine",
-                },
-                {
-                    accessorKey: "total_amount_paid",
-                    cell: (info) =>
-                        info.row.original.quarter_1.total_amount_paid,
-                    header: "Total Amount Paid",
-                },
-                {
-                    accessorKey: "incentive",
-                    cell: (info) => info.row.original.quarter_1.incentive,
-                    header: "Incentive",
-                },
-            ],
+            accessorKey: "total_tickets",
+            cell: (info) => info.getValue(),
+            header: "Total Tickets",
         },
         {
-            header: "Quarter 2",
-            columns: [
-                {
-                    accessorKey: "total_tickets",
-                    cell: (info) => info.row.original.quarter_2.total_tickets,
-                    header: "Total Tickets",
-                },
-                {
-                    accessorKey: "total_paid_tickets",
-                    cell: (info) =>
-                        info.row.original.quarter_2.total_tickets_paid,
-                    header: "Total Paid Tickets",
-                },
-                {
-                    accessorKey: "total_fine",
-                    cell: (info) => info.row.original.quarter_2.total_fine,
-                    header: "Total Fine",
-                },
-                {
-                    accessorKey: "total_amount_paid",
-                    cell: (info) =>
-                        info.row.original.quarter_2.total_amount_paid,
-                    header: "Total Amount Paid",
-                },
-                {
-                    accessorKey: "incentive",
-                    cell: (info) => info.row.original.quarter_2.incentive,
-                    header: "Incentive",
-                },
-            ],
+            accessorKey: "total_paid_tickets",
+            cell: (info) => info.getValue(),
+            header: "Total Paid Tickets",
         },
         {
-            header: "Quarter 3",
-            columns: [
-                {
-                    accessorKey: "total_tickets",
-                    cell: (info) => info.row.original.quarter_3.total_tickets,
-                    header: "Total Tickets",
-                },
-                {
-                    accessorKey: "total_paid_tickets",
-                    cell: (info) =>
-                        info.row.original.quarter_3.total_tickets_paid,
-                    header: "Total Paid Tickets",
-                },
-                {
-                    accessorKey: "total_fine",
-                    cell: (info) => info.row.original.quarter_3.total_fine,
-                    header: "Total Fine",
-                },
-                {
-                    accessorKey: "total_amount_paid",
-                    cell: (info) =>
-                        info.row.original.quarter_3.total_amount_paid,
-                    header: "Total Amount Paid",
-                },
-                {
-                    accessorKey: "incentive",
-                    cell: (info) => info.row.original.quarter_3.incentive,
-                    header: "Incentive",
-                },
-            ],
+            accessorKey: "total_amount_paid",
+            cell: (info) => info.getValue(),
+            header: "Total Amount Paid",
         },
         {
-            header: "Quarter 4",
-            columns: [
-                {
-                    accessorKey: "total_tickets",
-                    cell: (info) => info.row.original.quarter_4.total_tickets,
-                    header: "Total Tickets",
-                },
-                {
-                    accessorKey: "total_paid_tickets",
-                    cell: (info) =>
-                        info.row.original.quarter_4.total_tickets_paid,
-                    header: "Total Paid Tickets",
-                },
-                {
-                    accessorKey: "total_fine",
-                    cell: (info) => info.row.original.quarter_4.total_fine,
-                    header: "Total Fine",
-                },
-                {
-                    accessorKey: "total_amount_paid",
-                    cell: (info) =>
-                        info.row.original.quarter_4.total_amount_paid,
-                    header: "Total Amount Paid",
-                },
-                {
-                    accessorKey: "incentive",
-                    cell: (info) => info.row.original.quarter_4.incentive,
-                    header: "Incentive",
-                },
-            ],
+            accessorKey: "incentive",
+            cell: (info) => info.getValue(),
+            header: "Total Incentive",
         },
     ];
-
-    const store = writable(data.incentives);
-    $: $store.sort(
-        (a: Types.QuarterlyIncentive, b: Types.QuarterlyIncentive) => {
-            if (a.first_name > b.first_name) {
-                return 1;
-            } else if (a.first_name < b.first_name) {
-                return -1;
-            } else {
-                return 0;
-            }
-        },
-    );
-
-    $: $store = $store;
 </script>
 
-<svelte:head><title>Incentives</title></svelte:head>
-
+<svelte:head>
+    <title>Incentives</title>
+</svelte:head>
 <header class="flex items-center">
     <h1 class="text-2xl text-gray-700 font-bold">Incentives</h1>
 </header>
-
-<TanTable data={$store} {columns} {fuzzyFilter} showGrid={true}></TanTable>
+<TanTable data={data.employeeIncentives} {columns} showGrid={true}>
+    <Select
+        name="quarter"
+        selected={selectedQuarter}
+        onSelectedChange={(v) => {
+            if (v) {
+                selectedQuarter = {
+                    value: v?.value,
+                    label: v.label ?? "",
+                };
+            }
+            goto(
+                `/incentives?year=${selectedYear.value}&quarter=${selectedQuarter.value}`,
+            );
+        }}
+    >
+        <SelectTrigger class="w-[180px]">
+            <SelectValue placeholder="Quarter" />
+        </SelectTrigger>
+        <SelectContent>
+            <SelectItem value={1}>{1}</SelectItem>
+            <SelectItem value={2}>{2}</SelectItem>
+            <SelectItem value={3}>{3}</SelectItem>
+            <SelectItem value={4}>{4}</SelectItem>
+        </SelectContent>
+    </Select>
+    <Select
+        name="year"
+        selected={selectedYear}
+        onSelectedChange={(v) => {
+            if (v) {
+                selectedYear = {
+                    value: v?.value,
+                    label: v.label ?? "",
+                };
+            }
+            goto(
+                `/incentives?year=${selectedYear.value}&quarter=${selectedQuarter.value}`,
+            );
+        }}
+    >
+        <SelectTrigger class="w-[180px]">
+            <SelectValue placeholder="Quarter" />
+        </SelectTrigger>
+        <SelectContent>
+            {#each data.uniqueYears as year}
+                <SelectItem value={year.year}>{year.year}</SelectItem>
+            {/each}
+        </SelectContent>
+    </Select>
+</TanTable>
