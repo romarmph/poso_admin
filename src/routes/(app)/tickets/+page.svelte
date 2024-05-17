@@ -13,6 +13,9 @@
   import { superForm } from "sveltekit-superforms";
   import ConfirmDelete from "$lib/components/Overlays/Modal/Delete/ConfirmDelete.svelte";
   import PayTicket from "$lib/components/Overlays/Modal/PayTicket.svelte";
+  import EmployeeStatus from "$lib/components/Base/EmployeeStatus.svelte";
+  import { Eye, Pencil, Trash } from "lucide-svelte";
+  import RowAction from "$lib/components/Base/RowAction.svelte";
   const { open, close } = overlayStore;
   const { supabase } = getSupabaseContext();
 
@@ -126,13 +129,11 @@
     },
     {
       accessorKey: "id",
-      cell: (info) =>
-        flexRender(TicketRowActions, {
-          status: info.row.original.status,
-          fireEdit: () => {
-            goto(`/tickets/edit?id=${info.getValue()}`);
-          },
-          fireView: () => {
+      cell: (info) => {
+        const primaryAction = {
+          icon: Eye,
+          label: "View",
+          action: () => {
             open({
               props: {
                 info: info.row.original as Types.Ticket,
@@ -140,24 +141,35 @@
               id: "viewTicket",
             });
           },
-          fireDelete: () => {
-            open({
-              props: {
-                info: info.row.original.id,
-              },
-              id: "deleteTicket",
-            });
+        };
+
+        const actions = [
+          {
+            icon: Pencil,
+            label: "Edit",
+            action: () => {
+              goto(`/tickets/edit?id=${info.getValue()}`);
+            },
           },
-          firePay: () => {
-            paymentReset();
-            open({
-              props: {
-                info: info.row.original,
-              },
-              id: "payTicket",
-            });
+          {
+            icon: Trash,
+            label: "Delete",
+            action: () => {
+              open({
+                props: {
+                  info: info.row.original.id,
+                },
+                id: "deleteTicket",
+              });
+            },
           },
-        }),
+        ];
+        return flexRender(RowAction, {
+          status: info.row.original.status,
+          primaryAction,
+          actions,
+        });
+      },
       header: "Actions",
       enableSorting: false,
     },
@@ -211,7 +223,11 @@
 
 <Overlay let:data title="Pay Ticket" id="payTicket" type="modal">
   <form action="?/pay" method="POST" use:paymentEnhance>
-    <PayTicket info={data} form={paymentForm} errors={paymentErrors}
+    <PayTicket
+      info={data}
+      initData={{}}
+      form={paymentForm}
+      errors={paymentErrors}
     ></PayTicket>
   </form>
 </Overlay>

@@ -20,14 +20,10 @@ export const load: PageServerLoad = async ({
 };
 
 export const actions: Actions = {
-  delete: async ({ request, locals: { supabase, getCurrentUser } }) => {
+  delete: async ({ request, locals: { supabase } }) => {
     const form = await superValidate(request, zod(deleteSchema));
-    const user = await getCurrentUser();
 
-    const { error } = await supabase.from("tickets").update({
-      deleted_by: user!.id,
-      deleted_at: new Date(),
-    }).eq("id", form.data.id)
+    const { error } = await supabase.from("tickets").delete().eq("id", form.data.id);
 
     if (error) {
       return message(form, {

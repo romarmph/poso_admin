@@ -38,7 +38,6 @@
   });
   let offense: number = 1;
   let selectedVehicleType: Types.VehicleTypes | null = null;
-  let relatedTickets: Types.Ticket[] = [];
   const { supabase } = getSupabaseContext();
   let relatedTicket: Types.Ticket | null = null;
 
@@ -50,7 +49,6 @@
 
   $: {
     selectedViolations = data.violations!.filter((val) => {
-      console.log($form.violations);
       return $form.violations.includes(val.id);
     });
   }
@@ -131,7 +129,6 @@
     {/if}
   </div>
 </header>
-<SuperDebug data={form} />
 <form action="?/update" method="POST" class="mt-4" use:enhance>
   <input
     type="number"
@@ -140,13 +137,7 @@
     bind:value={$form.offense}
     id=""
   />
-  <input
-    type="number"
-    name="fine"
-    bind:value={$form.fine}
-    id=""
-    class="hidden"
-  />
+
   <Grid columns="grid-cols-2" gap="gap-8" classNames="my-2">
     <Divider strokeWidth={1}>
       <h2 slot="left" class="text-gray-600 text-xl">Violator Information</h2>

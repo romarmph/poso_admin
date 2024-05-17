@@ -52,6 +52,8 @@ export const actions: Actions = {
       action: ActionResultModals.FailUpdate,
     });
 
+    console.log(form);
+
     if (!form.valid) {
       return message(form, {
         success: false,
@@ -87,6 +89,7 @@ export const actions: Actions = {
       offense: formData.offense,
       previous_offense: formData.previous_offense,
       due_date: new Date(formData.violation_date.getFullYear(), formData.violation_date.getMonth(), formData.violation_date.getDate() + 7),
+      violations: formData.violations,
       plate_no: formData.plate_no,
       license_no: formData.license_no,
       engine_no: formData.engine_no,
