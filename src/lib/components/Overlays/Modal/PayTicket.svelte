@@ -7,12 +7,24 @@
 	export let info;
 	export let form;
 	export let errors;
+	export let initData;
 	const ticket: Types.Ticket = info.info as Types.Ticket;
 	const { close } = overlayStore;
 
 	const proxy = dateProxy(form, "paid_at", {
 		format: "date",
 	});
+
+	if (Object.keys(initData).length) {
+		$form = {
+			or_number: ticket.or_number,
+			amount_paid: ticket.amount_paid,
+			discounted: ticket.discounted,
+			discounted_by: ticket.discounted_by,
+		};
+
+		$proxy = ticket.violation_date;
+	}
 
 	$: $form.id = ticket.id;
 </script>

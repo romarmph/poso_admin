@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { TanTable } from "$lib/Components";
+  import { DataList } from "$lib/components/Supabase/Supabase";
+  import { CreditCard, Eye } from "lucide-svelte";
+  import { TanTable, TicketStatus } from "$lib/Components";
+  import RowAction from "$lib/components/Base/RowAction.svelte";
   import { flexRender, type ColumnDef } from "@tanstack/svelte-table";
   import ViolationsColumn from "$lib/components/Customs/ViolationsColumn.svelte";
-  import TicketStatus from "$lib/components/Base/TicketStatus.svelte";
-  import PaymentRowActions from "$lib/components/Table/Partials/PaymentRowActions.svelte";
-  import { goto } from "$app/navigation";
   import { Overlay, ViewTickets } from "$lib/components/Overlays/Overlays";
   import { overlayStore } from "$lib/stores/overlayStore.js";
   import { getSupabaseContext } from "$lib/stores/clientStore.js";
@@ -63,32 +63,44 @@
     },
     {
       accessorKey: "id",
-      cell: (info) =>
-        flexRender(PaymentRowActions, {
-          status: info.row.original.status,
-          fireView: () => {
+      cell: (info) => {
+        const mainAction = {
+          icon: Eye,
+          label: "View Ticket",
+          action: () =>
             open({
-              props: {
-                info: info.row.original as Types.Ticket,
-              },
               id: "viewTicket",
-            });
-          },
-
-          firePay: () => {
-            open({
               props: {
-                info: info.row.original as Types.Ticket,
+                info: info.row.original,
               },
-              id: "payTicket",
-            });
+            }),
+        };
+
+        const actions = [
+          {
+            icon: CreditCard,
+            hidden: info.getValue() === "paid",
+            label: "Pay Ticket",
+            action: () =>
+              open({
+                id: "payTicket",
+                props: {
+                  info: info.row.original,
+                },
+              }),
           },
-        }),
+        ];
+
+        return flexRender(RowAction, {
+          actions: actions,
+          primaryAction: mainAction,
+          id: info.row.original.id + "unpaid",
+        });
+      },
       header: "Actions",
       enableSorting: false,
     },
   ];
-  import { DataList } from "$lib/components/Supabase/Supabase";
 </script>
 
 <DataList table="tickets" let:data initData={unpaidTickets}>

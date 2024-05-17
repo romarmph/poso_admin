@@ -1,12 +1,12 @@
 <script lang="ts">
   import { TanTable } from "$lib/Components";
-  import TicketNumberColumn from "$lib/components/Customs/TicketNumberColumn.svelte";
   import { Overlay, ViewTickets } from "$lib/components/Overlays/Overlays";
   import { DataList } from "$lib/components/Supabase/Supabase";
-  import PaymentRowActions from "$lib/components/Table/Partials/PaymentRowActions.svelte";
   import { flexRender, type ColumnDef } from "@tanstack/svelte-table";
   import { overlayStore } from "$lib/stores/overlayStore.js";
   import { getSupabaseContext } from "$lib/stores/clientStore.js";
+  import { Eye, Pencil } from "lucide-svelte";
+  import RowAction from "$lib/components/Base/RowAction.svelte";
 
   const { supabase } = getSupabaseContext();
   const { open } = overlayStore;
@@ -41,6 +41,12 @@
       header: "Discounted",
     },
     {
+      accessorKey: "discounted_by",
+      cell: (info) => info.getValue(),
+      header: "Note",
+    },
+
+    {
       accessorKey: "paid_at",
       cell: (info) => info.getValue(),
       footer: (info) => info.column.id,
@@ -57,15 +63,47 @@
     {
       accessorKey: "status",
       cell: (info) => {
-        return flexRender(PaymentRowActions, {
-          status: info.getValue(),
-          fireView: () =>
+        const mainAction = {
+          icon: Eye,
+          label: "View Ticket",
+          action: () =>
             open({
               id: "viewTicket",
               props: {
                 info: info.row.original,
               },
             }),
+        };
+
+        const actions = [
+          {
+            icon: Pencil,
+            label: "Update Payment",
+            action: () =>
+              open({
+                id: "updatePayment",
+                props: {
+                  info: info.row.original,
+                },
+              }),
+          },
+          {
+            icon: Eye,
+            label: "Cancel Payment",
+            action: () =>
+              open({
+                id: "cancelPayment",
+                props: {
+                  info: info.row.original.id,
+                },
+              }),
+          },
+        ];
+
+        return flexRender(RowAction, {
+          actions: actions,
+          primaryAction: mainAction,
+          id: info.row.original.id + "paid",
         });
       },
       header: "View Ticket",

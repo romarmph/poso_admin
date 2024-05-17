@@ -91,6 +91,7 @@ declare global {
       violations: number[];
       or_number: string | null;
       discounted_by: string | null;
+      discounted: boolean | null;
       amount_paid: number | null;
       paid_at: string | null;
     }
