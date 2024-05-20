@@ -1,3 +1,4 @@
+import Roles from "$lib/enums/Roles";
 import { z } from "zod";
 export const deleteSchema = z.object({
 	id: z.number().or(z.string())
@@ -7,73 +8,51 @@ const fineSchema = z.number().min(0, { message: "Fine can't be less than zero" }
 export const violationSchema = z.object({
 	id: z.number().optional(),
 	name: z.string(),
-	big: z.object({
-		a: fineSchema,
-		b: fineSchema,
-		c: fineSchema,
-	}),
-	small: z.object({
-		a: fineSchema,
-		b: fineSchema,
-		c: fineSchema,
-	}),
-	enabled: z.boolean().default(true),
 })
 
 export const vehicleTypesSchema = z.object({
 	id: z.number().optional(),
 	type: z.string(),
-	big_vehicle: z.boolean().default(true),
 })
 
-export const trafficPostSchema = z.object({
-	id: z.number().optional(),
-	name: z.string(),
-	address: z.string(),
-})
-
-export const employeeSchema = z.object({
+export const enforcerSchema = z.object({
 	id: z.string().optional(),
-	email: z.string().email(),
-	password: z.string().min(8).max(16),
 	first_name: z.string().min(1, "First name is too short"),
-	middle_name: z.string().optional(),
 	last_name: z.string().min(1, "Last name is too short"),
-	suffix: z.string().optional(),
-	birthdate: z.date(),
-	employee_no: z.number(),
 	status: z.string().default("active").optional(),
+})
+
+export const adminSchema = enforcerSchema.extend({
+	role: z.number().default(Roles.STAFF),
+	email: z.string().email().optional(),
+	password: z.string().min(8).optional(),
 	user_id: z.string().optional(),
 })
 
 export const ticketSchema = z.object({
 	id: z.number().optional(),
-	first_name: z.string().min(1, "First name is too short"),
-	middle_name: z.string(),
-	last_name: z.string().min(1, "Last name is too short"),
-	suffix: z.string().optional(),
-	birthdate: z.date().optional().default(new Date(1900, 0, 1, 12, 0, 0)),
-	violation_date: z.date().optional().refine(val => val, { message: "Violation Date is required" }).default(new Date()),
-	violation_time: z.string().optional().refine(val => val, { message: "Violation Time is required" }),
-	vehicle_type: z.number().optional().refine(val => val, { message: "Vehicle Type is Required" }),
-	location: z.string(),
-	ticket_no: z.string().trim().refine(val => val.length, { message: "Ticket Number is required" }),
-	identification: z.string().min(1, "Identication is required"),
-	identification_type: z.string().min(1, "Please choose an identification type"),
-	violations: z.array(z.number()).min(1, "Please choose a violation"),
+	violator: z.string().refine(val => val.length, "Violator is required"),
+	status: z.string().default("unpaid"),
+	violation_date: z.date().default(new Date()),
+	vehicle_type: z.number().default(0).refine(val => val, "Vehicle type is required"),
+	enforcer: z.number().optional(),
 	address: z.string().optional(),
-	enforcer: z.number().min(1, "Please choose an enforcer").default(0),
-	offense: z.number().default(1),
+	violation_location: z.string().optional(),
 	previous_offense: z.number().optional(),
-	fine: z.number(),
-	status: z.string().optional(),
-});
+	offense: z.number().default(1),
+	plate_no: z.string().optional(),
+	license_no: z.string().optional(),
+	engine_no: z.string().optional(),
+	chassis_no: z.string().optional(),
+	ticket_no: z.string().refine(val => val.length, "Ticket number is required"),
+	violations: z.array(z.number()).default([]).refine((val) => val.length, "Please select at least one violation"),
+})
 
 export const paymentSchema = z.object({
-	ticket_id: z.number(),
-	paid_at: z.date(),
-	or_number: z.number().default(0).refine((val) => val > 0, "OR Number is required"),
-	discounted: z.boolean().default(false),
-	discount_amount: z.number().default(0),
+	id: z.number().optional(),
+	or_number: z.string().refine(val => val.length, 'OR number is required'),
 	amount_paid: z.number().default(0),
+	paid_at: z.date().default(new Date()),
+	discounted: z.boolean().default(false),
+	discounted_by: z.string().default(""),
 })

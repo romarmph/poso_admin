@@ -1,12 +1,5 @@
 <script lang="ts">
-    import {
-        Button,
-        TextInput,
-        TanTable,
-        EnabledStatus,
-        RowActions,
-        VehicleSize,
-    } from "$lib/Components";
+    import { Button, RowActions, TanTable } from "$lib/Components";
     import { DataList } from "$lib/components/Supabase/Supabase";
     import { flexRender, type ColumnDef } from "@tanstack/svelte-table";
     import {
@@ -67,23 +60,6 @@
             footer: (info) => info.column.id,
             header: "Vehicle Type",
         },
-
-        {
-            accessorKey: "big_vehicle",
-            cell: (info) =>
-                flexRender(VehicleSize, { big_vehicle: info.getValue() }),
-            footer: (info) => info.column.id,
-            header: "Vehicle Size",
-        },
-
-        {
-            accessorKey: "enabled",
-            cell: (info) =>
-                flexRender(EnabledStatus, { enabled: info.getValue() }),
-            footer: (info) => info.column.id,
-            header: "Status",
-        },
-
         {
             accessorKey: "created_at",
             cell: (info) => info.getValue(),
@@ -91,7 +67,6 @@
             header: "Created At",
             accessorFn: (row) => new Date(row.created_at).toDateString(),
         },
-
         {
             accessorKey: "updated_at",
             cell: (info) => info.getValue(),
@@ -99,7 +74,6 @@
             header: "Updated At",
             accessorFn: (row) => new Date(row.updated_at).toDateString(),
         },
-
         {
             accessorKey: "id",
             cell: (info) =>
@@ -158,13 +132,8 @@
     <TanTable {data} {columns}></TanTable>
 </DataList>
 
-<Overlay title="Add Vehicle Type" id="addvehicleType" let:data>
-    <form
-        method="POST"
-        class="w-[500px] h-full flex flex-col"
-        action="?/add"
-        use:vehicleTypeEnhance
-    >
+<Overlay title="Add Vehicle Type" id="addvehicleType" let:data type="modal">
+    <form method="POST" action="?/add" use:vehicleTypeEnhance>
         <AddVehicleType
             form={vehicleTypeForm}
             errors={vehicleTypeErrors}
@@ -174,13 +143,13 @@
     </form>
 </Overlay>
 
-<Overlay title="Update Vehicle Type" id="updateVehicleType" let:data>
-    <form
-        method="POST"
-        class="w-[500px] h-full flex flex-col"
-        action="?/update"
-        use:vehicleTypeEnhance
-    >
+<Overlay
+    title="Update Vehicle Type"
+    id="updateVehicleType"
+    let:data
+    type="modal"
+>
+    <form method="POST" action="?/update" use:vehicleTypeEnhance>
         <AddVehicleType
             form={vehicleTypeForm}
             errors={vehicleTypeErrors}
@@ -203,6 +172,6 @@
     </form>
 </Overlay>
 
-<Overlay let:data title="View Vehicle Type" id="ViewVehicleType">
+<Overlay let:data title="View Vehicle Type" id="ViewVehicleType" type="modal">
     <ViewVehicleTypes info={data} {supabase} />
 </Overlay>

@@ -103,8 +103,16 @@
       <div
         class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden dark:bg-slate-900 dark:border-gray-700"
       >
-        <div class="flex justify-between p-4">
-          <TextInput id="search" placeholder="Search" bind:value={filter} />
+        <div class="grid grid-cols-3 gap-2 p-4 justify-between">
+          <TextInput
+            id="search"
+            placeholder="Search"
+            bind:value={filter}
+            classNames="col-span-1"
+          />
+          <div class="col-span-2 flex items-center justify-end gap-2">
+            <slot />
+          </div>
         </div>
         <div class="overflow-x-auto">
           <table
@@ -208,6 +216,7 @@
           </div>
 
           <Pager
+            tableOptions={table}
             pageOptions={$table.getPageOptions()}
             goToNext={$table.nextPage}
             goToPrev={$table.previousPage}

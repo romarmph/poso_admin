@@ -74,11 +74,6 @@
           <Shapes />
         </SidebarUrl>
       </li>
-      <li>
-        <SidebarUrl name="Traffic Post" route="/traffic-post">
-          <Flag />
-        </SidebarUrl>
-      </li>
     </ul>
   </nav>
 </div>

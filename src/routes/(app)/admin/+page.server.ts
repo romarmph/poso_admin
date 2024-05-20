@@ -1,4 +1,4 @@
-import { deleteSchema, employeeSchema, } from "$lib/schemas/app";
+import { deleteSchema, adminSchema, } from "$lib/schemas/app";
 import { type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { superValidate, message, setError } from "sveltekit-superforms";
@@ -9,7 +9,7 @@ import Roles from "$lib/enums/Roles";
 export const load: PageServerLoad = async ({
   locals: { supabase },
 }) => {
-  const adminForm = await superValidate(zod(employeeSchema));
+  const adminForm = await superValidate(zod(adminSchema));
   const deleteForm = await superValidate(zod(deleteSchema));
   const admin = await supabase.from("employees").select().eq('role', Roles.STAFF).is('deleted_by', null);
   return {
@@ -21,27 +21,12 @@ export const load: PageServerLoad = async ({
 
 export const actions: Actions = {
   add: async ({ request, locals: { supabase, getCurrentUser } }) => {
-    const form = await superValidate(request, zod(employeeSchema));
-
-
+    const form = await superValidate(request, zod(adminSchema));
     if (!form.valid) {
       return message(form, {
         success: false,
         action: "",
       });
-    }
-
-    const { data: userDetails, error: detailError } = await supabase.from("employees").select().eq("employee_no", form.data.employee_no);
-    if (detailError) {
-      return message(form, {
-        success: false,
-        action: ActionResultModals.FailCreate,
-      }
-      );
-    }
-
-    if (userDetails.length > 0) {
-      return setError(form, "employee_no", "Employee number already exists")
     }
 
     const { data: userData, error: emailError } = await supabase.auth.admin.createUser({ email: form.data.email, password: form.data.password, email_confirm: true });
@@ -59,11 +44,7 @@ export const actions: Actions = {
 
     const user = {
       first_name: form.data.first_name,
-      middle_name: form.data.middle_name,
       last_name: form.data.last_name,
-      suffix: form.data.suffix,
-      birthdate: form.data.birthdate,
-      employee_no: form.data.employee_no,
       user_id: userData.user.id,
       role: Roles.STAFF,
       created_at: new Date(),
@@ -91,8 +72,8 @@ export const actions: Actions = {
     )
   },
   update: async ({ request, locals: { supabase, getCurrentUser } }) => {
-    const updateSchema = employeeSchema.extend({
-      password: employeeSchema.shape.password.optional(),
+    const updateSchema = adminSchema.extend({
+      password: adminSchema.shape.password.optional(),
     })
     const form = await superValidate(request, zod(updateSchema));
 
@@ -104,17 +85,6 @@ export const actions: Actions = {
       });
     }
 
-    const { data: userDetails, error: detailError } = await supabase.from("employees").select().eq("employee_no", form.data.employee_no);
-    if (detailError) {
-      return message(form, {
-        success: false,
-        action: ActionResultModals.FailUpdate,
-      }
-      );
-    }
-    if (userDetails.length > 0 && userDetails[0].employee_no != form.data.employee_no) {
-      return setError(form, "employee_no", "Employee number already exists")
-    }
 
     const { data: userData } = await supabase.auth.admin.getUserById(form.data.user_id!);
     if (userData.user!.email !== form.data.email) {
@@ -131,12 +101,8 @@ export const actions: Actions = {
     const author = await getCurrentUser();
     const user = {
       first_name: form.data.first_name,
-      middle_name: form.data.middle_name,
       last_name: form.data.last_name,
-      suffix: form.data.suffix,
-      birthdate: form.data.birthdate,
       status: form.data.status,
-      employee_no: form.data.employee_no,
       updated_at: new Date(),
       updated_by: author!.id,
     }
