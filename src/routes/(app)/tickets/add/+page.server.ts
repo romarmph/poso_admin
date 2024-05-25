@@ -81,7 +81,6 @@ export const actions: Actions = {
     } = await supabase.from("tickets").insert(ticket).select();
 
     if (ticketError) {
-      console.log(ticketError)
       return failMessage;
     }
 

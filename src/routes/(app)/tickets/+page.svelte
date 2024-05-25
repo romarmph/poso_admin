@@ -14,6 +14,7 @@
   import PayTicket from "$lib/components/Overlays/Modal/PayTicket.svelte";
   import { Eye, Pencil, Trash } from "lucide-svelte";
   import RowAction from "$lib/components/Base/RowAction.svelte";
+  import Spinner from "$lib/components/Base/Spinner.svelte";
   const { open, close } = overlayStore;
   const { supabase } = getSupabaseContext();
 
@@ -199,9 +200,15 @@
   </div>
 </header>
 
-<DataList table="tickets" let:data initData={data.tickets ?? []}>
-  <TanTable {data} {columns} showGrid={true}></TanTable>
-</DataList>
+{#await data.lazy.tickets}
+  <Spinner />
+{:then response}
+  <DataList table="tickets" let:data initData={response ?? []}>
+    <TanTable {data} {columns} showGrid={true}></TanTable>
+  </DataList>
+{:catch error}
+  {error}
+{/await}
 
 <Overlay let:data title="View Ticket" id="viewTicket">
   <ViewTickets info={data} {supabase} />

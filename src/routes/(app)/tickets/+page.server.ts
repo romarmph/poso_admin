@@ -4,18 +4,24 @@ import { message, setError, superValidate } from "sveltekit-superforms";
 import ActionResultModals from "$lib/enums/ActionResultModals";
 import { zod } from "sveltekit-superforms/adapters";
 import { deleteSchema, paymentSchema } from "$lib/schemas/app";
+import type { SupabaseClient } from "@supabase/supabase-js";
+
+async function fetchTickets(supabase: SupabaseClient) {
+  const { data } = await supabase.from("tickets").select().is("deleted_by", null);
+  return data;
+}
 
 export const load: PageServerLoad = async ({
   locals: { supabase },
 }) => {
-  const tickets = await supabase.from("tickets").select().is("deleted_by", null);
   const form = await superValidate(zod(deleteSchema));
   const paymentForm = await superValidate(zod(paymentSchema));
-
   return {
-    tickets: tickets.data,
     form,
     paymentForm,
+    lazy: {
+      tickets: fetchTickets(supabase),
+    }
   };
 };
 
