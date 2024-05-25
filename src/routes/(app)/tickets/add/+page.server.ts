@@ -73,10 +73,8 @@ export const actions: Actions = {
       engine_no: formData.engine_no,
       chassis_no: formData.chassis_no,
       ticket_no: formData.ticket_no,
+      violations: formData.violations,
     }
-
-    console.log("FORM", form)
-    console.log("TICKET", ticket)
 
     const {
       data: ticketData, error: ticketError

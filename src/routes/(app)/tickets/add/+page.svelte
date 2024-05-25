@@ -12,6 +12,7 @@
   import FailCreate from "$lib/components/Overlays/Modal/Create/FailCreate.svelte";
   import { getSupabaseContext } from "$lib/stores/clientStore.js";
   import ViewTickets from "$lib/components/Overlays/Offcanvas/ViewTickets.svelte";
+  import Spinner from "$lib/components/Base/Spinner.svelte";
 
   const { open, close } = overlayStore;
 
@@ -30,6 +31,7 @@
   let relatedTickets: Types.Ticket[] = [];
   const { supabase } = getSupabaseContext();
   let relatedTicket: Types.Ticket | null = null;
+  let isLoading: boolean = false;
 
   function removeViolation(index: number) {
     selectedViolations.splice(index, 1);
@@ -66,6 +68,7 @@
         id: $message.action,
       });
     }
+    isLoading = false;
   }
 </script>
 
@@ -79,17 +82,30 @@
       <Button type="button" style="soft" color="gray">Cancel</Button>
     </a>
     <Button
+      disabled={isLoading}
       type="submit"
       on:click={() =>
         open({
           id: "confirmAdd",
           props: {},
-        })}>Save Ticket</Button
+        })}
     >
+      {#if isLoading}
+        <Spinner />
+      {:else}
+        Save Ticket
+      {/if}
+    </Button>
   </div>
 </header>
 <SuperDebug data={$form} />
-<form action="?/create" method="POST" class="mt-4" use:enhance>
+<form
+  action="?/create"
+  method="POST"
+  class="mt-4"
+  use:enhance
+  on:submit={() => (isLoading = !isLoading)}
+>
   <input
     type="number"
     name="offense"
