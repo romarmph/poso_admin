@@ -11,6 +11,7 @@
   import { getSupabaseContext } from "$lib/stores/clientStore.js";
   import ViewTickets from "$lib/components/Overlays/Offcanvas/ViewTickets.svelte";
   import Spinner from "$lib/components/Base/Spinner.svelte";
+  import ConfirmCreate from "$lib/components/Overlays/Modal/Create/ConfirmCreate.svelte";
 
   const { open, close } = overlayStore;
 
@@ -51,8 +52,8 @@
   }
 
   $: if (relatedTicket) {
-    offense = relatedTicket.offense + 1;
-    $form.previous_offense = parseInt(relatedTicket.id);
+    // offense = relatedTicket ? relatedTicket.offense + 1 : 1;
+    // $form.previous_offense = parseInt(relatedTicket.id);
   } else {
     offense = 1;
   }
