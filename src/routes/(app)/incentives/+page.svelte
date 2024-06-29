@@ -1,6 +1,5 @@
 <script lang="ts">
     import TanTable from "$lib/components/Table/TanTable.svelte";
-    import { enhance } from "$app/forms";
     import {
         Select,
         SelectTrigger,
@@ -14,12 +13,12 @@
     export let data;
 
     let selectedYear = {
-        value: data.uniqueYears[data.uniqueYears.length - 1].year,
-        label: data.uniqueYears[data.uniqueYears.length - 1].year,
+        value: data.query.year,
+        label: data.query.year?.toString(),
     };
     let selectedQuarter = {
-        value: 1,
-        label: (1).toString(),
+        value: data.query.quarter,
+        label: data.query.quarter?.toString(),
     };
     const columns: ColumnDef<Types.QuarterlyIncentive>[] = [
         {

@@ -6,21 +6,47 @@ import { zod } from "sveltekit-superforms/adapters";
 import { deleteSchema, paymentSchema } from "$lib/schemas/app";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
-async function fetchTickets(supabase: SupabaseClient) {
-  const { data } = await supabase.from("tickets").select().is("deleted_by", null);
+function makeDateRangeFilter(month: number, year: number) {
+  return {
+    start: new Date(year, month, 2).toISOString().split('T')[0],
+    end: new Date(year, month + 1, 2).toISOString().split('T')[0],
+  }
+}
+
+async function fetchTickets(supabase: SupabaseClient, month: number, year: number) {
+  const dateRange = makeDateRangeFilter(month, year);
+  const { data } = await supabase.from("tickets").select().is("deleted_by", null).lt("violation_date", dateRange.end).gte("violation_date", dateRange.start).order('violation_date');
+
   return data;
 }
 
 export const load: PageServerLoad = async ({
+  url,
   locals: { supabase },
 }) => {
+  let year = new Date().getFullYear();
+  let month = new Date().getMonth();
+  if (url.search.length) {
+    year = Number(url.searchParams.get('year'));
+    month = Number(url.searchParams.get('month'));
+  }
+  const { data: months } = await supabase.rpc('get_months_with_tickets', { ticket_year: 2024 })
+  const { data: years } = await supabase.rpc('get_unique_years', { column_name: 'violation_date', table_name: 'tickets' });
   const form = await superValidate(zod(deleteSchema));
   const paymentForm = await superValidate(zod(paymentSchema));
   return {
     form,
     paymentForm,
+    filters: {
+      months: months,
+      years: years,
+    },
+    query: {
+      year,
+      month,
+    },
     lazy: {
-      tickets: fetchTickets(supabase),
+      tickets: fetchTickets(supabase, month, year),
     }
   };
 };

@@ -1,20 +1,27 @@
 <script lang="ts">
   import { Button, TicketStatus, TanTable } from "$lib/Components";
   import { DataList } from "$lib/components/Supabase/Supabase";
-  import { flexRender, type ColumnDef } from "@tanstack/svelte-table";
-  import { Overlay, ViewTickets } from "$lib/components/Overlays/Overlays";
-  import { overlayStore } from "$lib/stores/overlayStore.js";
-  import { getSupabaseContext } from "$lib/stores/clientStore.js";
   import VehicleTypeColumn from "$lib/components/Customs/VehicleTypeColumn.svelte";
   import EnforcerColumn from "$lib/components/Customs/EnforcerColumn.svelte";
   import ViolationsColumn from "$lib/components/Customs/ViolationsColumn.svelte";
-  import { goto } from "$app/navigation";
-  import { superForm } from "sveltekit-superforms";
+  import { Overlay, ViewTickets } from "$lib/components/Overlays/Overlays";
   import ConfirmDelete from "$lib/components/Overlays/Modal/Delete/ConfirmDelete.svelte";
   import PayTicket from "$lib/components/Overlays/Modal/PayTicket.svelte";
-  import { Eye, Pencil, Trash } from "lucide-svelte";
   import RowAction from "$lib/components/Base/RowAction.svelte";
   import Spinner from "$lib/components/Base/Spinner.svelte";
+  import { Eye, Pencil, Trash } from "lucide-svelte";
+  import {
+    Select,
+    SelectTrigger,
+    SelectItem,
+    SelectValue,
+    SelectContent,
+  } from "$lib/components/ui/select";
+  import { flexRender, type ColumnDef } from "@tanstack/svelte-table";
+  import { overlayStore } from "$lib/stores/overlayStore.js";
+  import { getSupabaseContext } from "$lib/stores/clientStore.js";
+  import { goto } from "$app/navigation";
+  import { superForm } from "sveltekit-superforms";
   const { open, close } = overlayStore;
   const { supabase } = getSupabaseContext();
 
@@ -28,7 +35,6 @@
     enhance: paymentEnhance,
     message: paymentMessage,
     errors: paymentErrors,
-    reset: paymentReset,
   } = superForm(data.paymentForm, {
     dataType: "json",
   });
@@ -36,7 +42,8 @@
     {
       accessorKey: "violation_date",
       cell: (info) => info.getValue(),
-      header: "Date",
+      header: "Violation Date",
+      accessorFn: (row) => new Date(row.violation_date).toDateString(),
     },
     {
       accessorKey: "ticket_no",
@@ -78,12 +85,6 @@
       cell: (info) =>
         flexRender(ViolationsColumn, { violations: info.getValue() }),
       header: "Violations",
-    },
-    {
-      accessorKey: "violation_date",
-      cell: (info) => info.getValue(),
-      header: "Violation Date",
-      accessorFn: (row) => new Date(row.violation_date).toDateString(),
     },
     {
       accessorKey: "offense",
@@ -187,6 +188,17 @@
       id: $paymentMessage.action,
     });
   }
+
+  let years = data.filters.years;
+  let months = data.filters.months;
+  let selectedYear = {
+    value: data.query.year,
+    label: "2024",
+  };
+  let selectedMonth = {
+    value: data.query.month,
+    label: months[data.query.month].month_name,
+  };
 </script>
 
 <svelte:head><title>Tickets</title></svelte:head>
@@ -204,7 +216,59 @@
   <Spinner />
 {:then response}
   <DataList table="tickets" let:data initData={response ?? []}>
-    <TanTable {data} {columns} showGrid={true}></TanTable>
+    <TanTable {data} {columns} showGrid={true}>
+      <Select
+        name="month"
+        selected={selectedMonth}
+        onSelectedChange={(v) => {
+          if (v) {
+            selectedMonth = {
+              value: v?.value,
+              label: v.label ?? "",
+            };
+          }
+          goto(
+            `/tickets?year=${selectedYear.value}&month=${selectedMonth.value}`,
+          );
+        }}
+      >
+        <SelectTrigger class="w-[180px]">
+          <SelectValue placeholder="Month" />
+        </SelectTrigger>
+        <SelectContent>
+          {#each months as month}
+            <SelectItem value={month.month_number}
+              >{month.month_name}</SelectItem
+            >
+          {/each}
+        </SelectContent>
+      </Select>
+
+      <Select
+        name="year"
+        selected={selectedYear}
+        onSelectedChange={(v) => {
+          if (v) {
+            selectedYear = {
+              value: v?.value,
+              label: v.label ?? "",
+            };
+          }
+          goto(
+            `/tickets?year=${selectedYear.value}&month=${selectedMonth.value}`,
+          );
+        }}
+      >
+        <SelectTrigger class="w-[180px]">
+          <SelectValue placeholder="Quarter" />
+        </SelectTrigger>
+        <SelectContent>
+          {#each years as year}
+            <SelectItem value={year.year}>{year.year}</SelectItem>
+          {/each}
+        </SelectContent>
+      </Select>
+    </TanTable>
   </DataList>
 {:catch error}
   {error}

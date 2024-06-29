@@ -10,15 +10,15 @@
 
   let store = dataListStore(supabase, table, initData, uid);
 
-  $: $store.sort((a, b) => {
-    if (a.id > b.id) {
-      return 1;
-    } else if (a.id < b.id) {
-      return -1;
-    } else {
-      return 0;
-    }
-  });
+  // $: $store.sort((a, b) => {
+  //   if (a.id > b.id) {
+  //     return 1;
+  //   } else if (a.id < b.id) {
+  //     return -1;
+  //   } else {
+  //     return 0;
+  //   }
+  // });
 </script>
 
 <slot data={$store} />
