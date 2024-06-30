@@ -5,12 +5,13 @@
   import Overlay from "$lib/components/Overlays/Overlay.svelte";
   import { overlayStore } from "$lib/stores/overlayStore";
   import { X } from "lucide-svelte";
-  import { dateProxy, superForm } from "sveltekit-superforms";
+  import SuperDebug, { dateProxy, superForm } from "sveltekit-superforms";
   import ConfirmCreate from "$lib/components/Overlays/Modal/Create/ConfirmCreate.svelte";
   import ActionResultModals from "$lib/enums/ActionResultModals.js";
   import FailCreate from "$lib/components/Overlays/Modal/Create/FailCreate.svelte";
   import { getSupabaseContext } from "$lib/stores/clientStore.js";
   import ViewRelatedTickets from "$lib/components/Overlays/Offcanvas/ViewRelatedTickets.svelte";
+  import ComboBox from "$lib/components/Forms/ComboBox.svelte";
 
   const { open, close } = overlayStore;
 
@@ -61,8 +62,8 @@
   }
 
   $: if (relatedTicket) {
-    offense = relatedTicket.offense + 1;
-    $form.previous_offense = parseInt(relatedTicket.id);
+    // offense = relatedTicket.offense + 1;
+    // $form.previous_offense = parseInt(relatedTicket.id);
   } else {
     offense = 1;
   }
@@ -88,7 +89,7 @@
 </script>
 
 <svelte:head><title>Update Ticket</title></svelte:head>
-
+<SuperDebug data={$form} />
 <header class="flex items-center justify-between">
   <h1 class="text-2xl font-bold text-gray-800">Update Ticket</h1>
   <!-- NOTE: ACTION BUTTONS -->
@@ -231,20 +232,19 @@
         <GridCol colSpan="col-span-2">
           <label class="text-gray-500" for="enforcer">Apprending Enforcer</label
           >
-          <select
-            class="py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
-            name="enforcer"
-            id="enforcer"
+          <ComboBox
             bind:value={$form.enforcer}
-          >
-            {#if data.enforcers}
-              {#each data.enforcers as enforcer}
-                <option value={enforcer.id}
-                  >{enforcer.first_name} {enforcer.last_name}</option
-                >
-              {/each}
-            {/if}
-          </select>
+            placeholder="Search Enforcer"
+            dataList={data.enforcers
+              ? data.enforcers.map((enforcer) => {
+                  return {
+                    value: `${enforcer.first_name} ${enforcer.last_name}:${enforcer.id}`,
+                    label: `${enforcer.first_name} ${enforcer.last_name}`,
+                  };
+                })
+              : []}
+          />
+
           {#if $errors.enforcer}
             <div class="text-red-500 text-sm">
               {$errors.enforcer}
