@@ -15,6 +15,7 @@ function makeDateRangeFilter(month: number, year: number) {
 
 async function fetchTickets(supabase: SupabaseClient, month: number, year: number) {
   const dateRange = makeDateRangeFilter(month, year);
+  console.log(dateRange);
   const { data } = await supabase.from("tickets").select().is("deleted_by", null).lt("violation_date", dateRange.end).gte("violation_date", dateRange.start).order('violation_date');
 
   return data;
@@ -25,12 +26,13 @@ export const load: PageServerLoad = async ({
   locals: { supabase },
 }) => {
   let year = new Date().getFullYear();
-  let month = new Date().getMonth();
+  let month = new Date().getMonth() - 1;
+
   if (url.search.length) {
     year = Number(url.searchParams.get('year'));
     month = Number(url.searchParams.get('month'));
   }
-  const { data: months } = await supabase.rpc('get_months_with_tickets', { ticket_year: 2024 })
+  const { data: months } = await supabase.rpc('get_months_with_tickets', { ticket_year: new Date().getFullYear() })
   const { data: years } = await supabase.rpc('get_unique_years', { column_name: 'violation_date', table_name: 'tickets' });
   const form = await superValidate(zod(deleteSchema));
   const paymentForm = await superValidate(zod(paymentSchema));

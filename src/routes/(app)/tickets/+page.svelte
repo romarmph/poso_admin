@@ -197,7 +197,10 @@
   };
   let selectedMonth = {
     value: data.query.month,
-    label: months[data.query.month].month_name,
+    label: months.find(
+      (month: { month_number: number; month_name: string }) =>
+        month.month_number === data.query.month,
+    ).month_name,
   };
 </script>
 
