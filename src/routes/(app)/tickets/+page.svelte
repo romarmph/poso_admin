@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Button, TicketStatus, TanTable } from "$lib/Components";
+  import { Button, TicketStatus, TanTable, TextInput } from "$lib/Components";
   import { DataList } from "$lib/components/Supabase/Supabase";
   import VehicleTypeColumn from "$lib/components/Customs/VehicleTypeColumn.svelte";
   import EnforcerColumn from "$lib/components/Customs/EnforcerColumn.svelte";
@@ -202,6 +202,8 @@
         month.month_number === data.query.month,
     ).month_name,
   };
+
+  let searchValue = "";
 </script>
 
 <svelte:head><title>Tickets</title></svelte:head>
@@ -220,57 +222,70 @@
 {:then response}
   <DataList table="tickets" let:data initData={response ?? []}>
     <TanTable {data} {columns} showGrid={true}>
-      <Select
-        name="month"
-        selected={selectedMonth}
-        onSelectedChange={(v) => {
-          if (v) {
-            selectedMonth = {
-              value: v?.value,
-              label: v.label ?? "",
-            };
-          }
-          goto(
-            `/tickets?year=${selectedYear.value}&month=${selectedMonth.value}`,
-          );
-        }}
-      >
-        <SelectTrigger class="w-[180px]">
-          <SelectValue placeholder="Month" />
-        </SelectTrigger>
-        <SelectContent>
-          {#each months as month}
-            <SelectItem value={month.month_number}
-              >{month.month_name}</SelectItem
-            >
-          {/each}
-        </SelectContent>
-      </Select>
+      <svelte:fragment slot="left-side">
+        <TextInput
+          id="search"
+          placeholder="Search"
+          bind:value={searchValue}
+          classNames="col-span-1"
+          callback={() => {
+            goto(`/tickets?search=${searchValue}`);
+          }}
+        />
+      </svelte:fragment>
+      <svelte:fragment slot="right-side">
+        <Select
+          name="month"
+          selected={selectedMonth}
+          onSelectedChange={(v) => {
+            if (v) {
+              selectedMonth = {
+                value: v?.value,
+                label: v.label ?? "",
+              };
+            }
+            goto(
+              `/tickets?year=${selectedYear.value}&month=${selectedMonth.value}`,
+            );
+          }}
+        >
+          <SelectTrigger class="w-[180px]">
+            <SelectValue placeholder="Month" />
+          </SelectTrigger>
+          <SelectContent>
+            {#each months as month}
+              <SelectItem value={month.month_number}
+                >{month.month_name}</SelectItem
+              >
+            {/each}
+          </SelectContent>
+        </Select>
 
-      <Select
-        name="year"
-        selected={selectedYear}
-        onSelectedChange={(v) => {
-          if (v) {
-            selectedYear = {
-              value: v?.value,
-              label: v.label ?? "",
-            };
-          }
-          goto(
-            `/tickets?year=${selectedYear.value}&month=${selectedMonth.value}`,
-          );
-        }}
-      >
-        <SelectTrigger class="w-[180px]">
-          <SelectValue placeholder="Quarter" />
-        </SelectTrigger>
-        <SelectContent>
-          {#each years as year}
-            <SelectItem value={year.year}>{year.year}</SelectItem>
-          {/each}
-        </SelectContent>
-      </Select>
+        <Select
+          name="year"
+          selected={selectedYear}
+          onSelectedChange={(v) => {
+            if (v) {
+              selectedYear = {
+                value: v?.value,
+                label: v.label ?? "",
+              };
+            }
+            goto(
+              `/tickets?year=${selectedYear.value}&month=${selectedMonth.value}`,
+            );
+          }}
+        >
+          <SelectTrigger class="w-[180px]">
+            <SelectValue placeholder="Quarter" />
+          </SelectTrigger>
+          <SelectContent>
+            {#each years as year}
+              <SelectItem value={year.year}>{year.year}</SelectItem>
+            {/each}
+          </SelectContent>
+        </Select>
+      </svelte:fragment>
     </TanTable>
   </DataList>
 {:catch error}

@@ -13,12 +13,17 @@ function makeDateRangeFilter(month: number, year: number) {
   }
 }
 
-async function fetchTickets(supabase: SupabaseClient, month: number, year: number) {
+async function fetchTickets(supabase: SupabaseClient, month: number, year: number, search: string) {
   const dateRange = makeDateRangeFilter(month, year);
-  console.log(dateRange);
-  const { data } = await supabase.from("tickets").select().is("deleted_by", null).lt("violation_date", dateRange.end).gte("violation_date", dateRange.start).order('violation_date');
 
-  return data;
+  if (search.length) {
+    const { data } = await supabase.rpc('search_tickets', { search_value: search });
+    return data;
+  } else {
+
+    let { data } = await supabase.from("tickets").select().is("deleted_by", null).lt("violation_date", dateRange.end).gte("violation_date", dateRange.start).order('violation_date');
+    return data;
+  }
 }
 
 export const load: PageServerLoad = async ({
@@ -27,10 +32,12 @@ export const load: PageServerLoad = async ({
 }) => {
   let year = new Date().getFullYear();
   let month = new Date().getMonth() - 1;
+  let search = "";
 
   if (url.search.length) {
-    year = Number(url.searchParams.get('year'));
-    month = Number(url.searchParams.get('month'));
+    year = Number(url.searchParams.get('year')) || year;
+    month = Number(url.searchParams.get('month')) || month;
+    search = url.searchParams.get('search') || search;
   }
   const { data: months } = await supabase.rpc('get_months_with_tickets', { ticket_year: new Date().getFullYear() })
   const { data: years } = await supabase.rpc('get_unique_years', { column_name: 'violation_date', table_name: 'tickets' });
@@ -48,7 +55,7 @@ export const load: PageServerLoad = async ({
       month,
     },
     lazy: {
-      tickets: fetchTickets(supabase, month, year),
+      tickets: fetchTickets(supabase, month, year, search),
     }
   };
 };
