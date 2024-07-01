@@ -9,7 +9,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 function makeDateRangeFilter(month: number, year: number) {
   return {
     start: new Date(year, month, 2).toISOString().split('T')[0],
-    end: new Date(year, month + 1, 2).toISOString().split('T')[0],
+    end: new Date(year, month + 1, 1).toISOString().split('T')[0],
   }
 }
 
@@ -21,7 +21,7 @@ async function fetchTickets(supabase: SupabaseClient, month: number, year: numbe
     return data;
   } else {
 
-    let { data } = await supabase.from("tickets").select().is("deleted_by", null).lt("violation_date", dateRange.end).gte("violation_date", dateRange.start).order('violation_date');
+    let { data } = await supabase.from("tickets").select().is("deleted_by", null).lte("violation_date", dateRange.end).gte("violation_date", dateRange.start).order('violation_date');
     return data;
   }
 }

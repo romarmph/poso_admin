@@ -193,7 +193,7 @@
   let months = data.filters.months;
   let selectedYear = {
     value: data.query.year,
-    label: "2024",
+    label: data.query.year.toString(),
   };
   let selectedMonth = {
     value: data.query.month,
