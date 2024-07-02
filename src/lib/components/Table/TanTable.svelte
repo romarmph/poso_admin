@@ -104,14 +104,16 @@
         class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden dark:bg-slate-900 dark:border-gray-700"
       >
         <div class="grid grid-cols-3 gap-2 p-4 justify-between">
-          <TextInput
-            id="search"
-            placeholder="Search"
-            bind:value={filter}
-            classNames="col-span-1"
-          />
+          <slot name="left-side">
+            <TextInput
+              id="search"
+              placeholder="Search"
+              bind:value={filter}
+              classNames="col-span-1"
+            />
+          </slot>
           <div class="col-span-2 flex items-center justify-end gap-2">
-            <slot />
+            <slot name="right-side" />
           </div>
         </div>
         <div class="overflow-x-auto">
@@ -137,7 +139,7 @@
                           <svelte:component
                             this={flexRender(
                               header.column.columnDef.header,
-                              header.getContext(),
+                              header.getContext()
                             )}
                           />
                           {#if header.column.getIsSorted().toString() === "asc"}
@@ -164,7 +166,7 @@
                           <svelte:component
                             this={flexRender(
                               cell.column.columnDef.cell,
-                              cell.getContext(),
+                              cell.getContext()
                             )}
                           />
                         </p>

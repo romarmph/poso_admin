@@ -56,8 +56,8 @@ export const actions: Actions = {
       address: formData.address ?? "",
       status: "unpaid",
       violation_date: formData.violation_date,
-      vehicle_type: formData.vehicle_type,
-      enforcer: formData.enforcer,
+      vehicle_type: Number(formData.vehicle_type.split(':')[1]),
+      enforcer: Number(formData.enforcer?.split(':')[1]),
       violation_location: formData.violation_location ?? "",
       created_at: timestamp,
       created_by: currentUser?.id,
@@ -73,17 +73,14 @@ export const actions: Actions = {
       engine_no: formData.engine_no,
       chassis_no: formData.chassis_no,
       ticket_no: formData.ticket_no,
+      violations: formData.violations,
     }
-
-    console.log("FORM", form)
-    console.log("TICKET", ticket)
 
     const {
       data: ticketData, error: ticketError
     } = await supabase.from("tickets").insert(ticket).select();
 
     if (ticketError) {
-      console.log(ticketError)
       return failMessage;
     }
 

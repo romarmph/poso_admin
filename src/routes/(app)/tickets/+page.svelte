@@ -1,21 +1,28 @@
 <script lang="ts">
-  import { Button, TicketStatus, TanTable } from "$lib/Components";
+  import { Button, TicketStatus, TanTable, TextInput } from "$lib/Components";
   import { DataList } from "$lib/components/Supabase/Supabase";
-  import { flexRender, type ColumnDef } from "@tanstack/svelte-table";
-  import { Overlay, ViewTickets } from "$lib/components/Overlays/Overlays";
-  import { overlayStore } from "$lib/stores/overlayStore.js";
-  import { getSupabaseContext } from "$lib/stores/clientStore.js";
   import VehicleTypeColumn from "$lib/components/Customs/VehicleTypeColumn.svelte";
   import EnforcerColumn from "$lib/components/Customs/EnforcerColumn.svelte";
   import ViolationsColumn from "$lib/components/Customs/ViolationsColumn.svelte";
-  import TicketRowActions from "$lib/components/Table/Partials/TicketRowActions.svelte";
-  import { goto } from "$app/navigation";
-  import { superForm } from "sveltekit-superforms";
+  import { Overlay, ViewTickets } from "$lib/components/Overlays/Overlays";
   import ConfirmDelete from "$lib/components/Overlays/Modal/Delete/ConfirmDelete.svelte";
   import PayTicket from "$lib/components/Overlays/Modal/PayTicket.svelte";
-  import EmployeeStatus from "$lib/components/Base/EmployeeStatus.svelte";
-  import { Eye, Pencil, Trash } from "lucide-svelte";
   import RowAction from "$lib/components/Base/RowAction.svelte";
+  import Spinner from "$lib/components/Base/Spinner.svelte";
+  import { Eye, Pencil, Trash } from "lucide-svelte";
+  import {
+    Select,
+    SelectTrigger,
+    SelectItem,
+    SelectValue,
+    SelectContent,
+  } from "$lib/components/ui/select";
+  import { flexRender, type ColumnDef } from "@tanstack/svelte-table";
+  import { overlayStore } from "$lib/stores/overlayStore.js";
+  import { getSupabaseContext } from "$lib/stores/clientStore.js";
+  import { goto } from "$app/navigation";
+  import { superForm } from "sveltekit-superforms";
+  import exportData from "$lib/helpers/xlxs";
   const { open, close } = overlayStore;
   const { supabase } = getSupabaseContext();
 
@@ -29,7 +36,6 @@
     enhance: paymentEnhance,
     message: paymentMessage,
     errors: paymentErrors,
-    reset: paymentReset,
   } = superForm(data.paymentForm, {
     dataType: "json",
   });
@@ -37,7 +43,8 @@
     {
       accessorKey: "violation_date",
       cell: (info) => info.getValue(),
-      header: "Date",
+      header: "Violation Date",
+      accessorFn: (row) => new Date(row.violation_date).toDateString(),
     },
     {
       accessorKey: "ticket_no",
@@ -79,12 +86,6 @@
       cell: (info) =>
         flexRender(ViolationsColumn, { violations: info.getValue() }),
       header: "Violations",
-    },
-    {
-      accessorKey: "violation_date",
-      cell: (info) => info.getValue(),
-      header: "Violation Date",
-      accessorFn: (row) => new Date(row.violation_date).toDateString(),
     },
     {
       accessorKey: "offense",
@@ -188,6 +189,20 @@
       id: $paymentMessage.action,
     });
   }
+
+  let selectedYear = {
+    value: data.query.year,
+    label: data.query.year.toString(),
+  };
+  let selectedMonth = {
+    value: data.query.month,
+    label: data.months.find(
+      (month: { month_number: number; month_name: string }) =>
+        month.month_number === data.query.month,
+    ).month_name,
+  };
+
+  let searchValue = "";
 </script>
 
 <svelte:head><title>Tickets</title></svelte:head>
@@ -201,9 +216,110 @@
   </div>
 </header>
 
-<DataList table="tickets" let:data initData={data.tickets ?? []}>
-  <TanTable {data} {columns} showGrid={true}></TanTable>
-</DataList>
+{#await data.lazy.tickets}
+  <Spinner />
+{:then response}
+  <DataList table="tickets" let:data={listData} initData={response ?? []}>
+    <TanTable data={listData} {columns} showGrid={true}>
+      <svelte:fragment slot="left-side">
+        <TextInput
+          id="search"
+          placeholder="Search"
+          bind:value={searchValue}
+          classNames="col-span-1"
+          callback={() => {
+            goto(`/tickets?search=${searchValue}`);
+          }}
+        />
+      </svelte:fragment>
+      <svelte:fragment slot="right-side">
+        <Select
+          name="month"
+          selected={selectedMonth}
+          onSelectedChange={(v) => {
+            if (v) {
+              selectedMonth = {
+                value: v?.value,
+                label: v.label ?? "",
+              };
+            }
+            goto(
+              `/tickets?year=${selectedYear.value}&month=${selectedMonth.value}`,
+            );
+          }}
+        >
+          <SelectTrigger class="w-[180px]">
+            <SelectValue placeholder="Month" />
+          </SelectTrigger>
+          <SelectContent>
+            {#each data.months as month}
+              <SelectItem value={month.month_number}
+                >{month.month_name}</SelectItem
+              >
+            {/each}
+          </SelectContent>
+        </Select>
+
+        <Select
+          name="year"
+          selected={selectedYear}
+          onSelectedChange={(v) => {
+            if (v) {
+              selectedYear = {
+                value: v?.value,
+                label: v.label ?? "",
+              };
+            }
+            goto(
+              `/tickets?year=${selectedYear.value}&month=${selectedMonth.value}`,
+            );
+          }}
+        >
+          <SelectTrigger class="w-[180px]">
+            <SelectValue placeholder="Quarter" />
+          </SelectTrigger>
+          <SelectContent>
+            {#each data.years as year}
+              <SelectItem value={year.year}>{year.year}</SelectItem>
+            {/each}
+          </SelectContent>
+        </Select>
+        <Button
+          on:click={async () => {
+            const start = new Date(selectedYear.value, selectedMonth.value, 2)
+              .toISOString()
+              .split("T")[0];
+            const end = new Date(selectedYear.value, selectedMonth.value + 1, 1)
+              .toISOString()
+              .split("T")[0];
+            console.log(start);
+            console.log(end);
+            const { data: exportable } = await data.supabase.rpc(
+              "get_tickets_in_date_range",
+              { start_date: start, end_date: end },
+            );
+            console.log(start, end);
+
+            exportData(
+              exportable.flat(1).map((item) => {
+                const e = JSON.parse(JSON.stringify(item));
+                delete e["created_at"];
+                delete e["updated_at"];
+                delete e["deleted_at"];
+                e.violations = e.violations.join();
+
+                return e;
+              }),
+              `Tickets-${selectedYear.label}-${selectedMonth.label}`,
+            );
+          }}>Export</Button
+        >
+      </svelte:fragment>
+    </TanTable>
+  </DataList>
+{:catch error}
+  {error}
+{/await}
 
 <Overlay let:data title="View Ticket" id="viewTicket">
   <ViewTickets info={data} {supabase} />

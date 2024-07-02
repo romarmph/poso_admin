@@ -4,18 +4,58 @@ import { message, setError, superValidate } from "sveltekit-superforms";
 import ActionResultModals from "$lib/enums/ActionResultModals";
 import { zod } from "sveltekit-superforms/adapters";
 import { deleteSchema, paymentSchema } from "$lib/schemas/app";
+import type { SupabaseClient } from "@supabase/supabase-js";
+
+function makeDateRangeFilter(month: number, year: number) {
+  return {
+    start: new Date(year, month, 2).toISOString().split('T')[0],
+    end: new Date(year, month + 1, 1).toISOString().split('T')[0],
+  }
+}
+
+async function fetchTickets(supabase: SupabaseClient, month: number, year: number, search: string) {
+  const dateRange = makeDateRangeFilter(month, year);
+
+  if (search.length) {
+    const { data } = await supabase.rpc('search_tickets', { search_value: search });
+    return data;
+  } else {
+
+    let { data } = await supabase.from("tickets").select().is("deleted_by", null).lte("violation_date", dateRange.end).gte("violation_date", dateRange.start).order('violation_date');
+    return data;
+  }
+}
 
 export const load: PageServerLoad = async ({
+  url,
   locals: { supabase },
 }) => {
-  const tickets = await supabase.from("tickets").select().is("deleted_by", null);
+  let year = new Date().getFullYear();
+  let month = new Date().getMonth() - 1;
+  let search = "";
+
+  if (url.search.length) {
+    let tempMonth = Number(url.searchParams.get('month'));
+    year = Number(url.searchParams.get('year')) || year;
+    month = typeof tempMonth === 'number' ? tempMonth : month;
+    search = url.searchParams.get('search') || search;
+  }
+  const { data: months } = await supabase.rpc('get_months_with_tickets', { ticket_year: year })
+  const { data: years } = await supabase.rpc('get_unique_years', { column_name: 'violation_date', table_name: 'tickets' });
   const form = await superValidate(zod(deleteSchema));
   const paymentForm = await superValidate(zod(paymentSchema));
-
   return {
-    tickets: tickets.data,
     form,
     paymentForm,
+    months: months,
+    years: years,
+    query: {
+      year,
+      month,
+    },
+    lazy: {
+      tickets: fetchTickets(supabase, month, year, search),
+    }
   };
 };
 

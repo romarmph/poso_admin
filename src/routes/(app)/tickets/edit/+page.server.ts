@@ -1,25 +1,12 @@
 import { redirect, type Actions } from "@sveltejs/kit";
 import { zod } from "sveltekit-superforms/adapters";
-import { fail, message, setError, superValidate } from "sveltekit-superforms";
+import { message, setError, superValidate } from "sveltekit-superforms";
 import { deleteSchema, ticketSchema } from "$lib/schemas/app";
 import ActionResultModals from "$lib/enums/ActionResultModals";
 import Roles from "$lib/enums/Roles";
 import type { PageServerLoad } from "../$types";
 
 export const load: PageServerLoad = async ({ url, locals: { supabase } }) => {
-  const id = url.searchParams.get("id");
-  const { data: oldTicket } = await supabase
-    .from('tickets')
-    .select().eq("id", id).single();
-  const form = await superValidate({
-    ...oldTicket!,
-    violation_date: new Date(oldTicket!.violation_date),
-    ticket_no: oldTicket!.ticket_no,
-    violations: oldTicket!.violations,
-    status: oldTicket!.status,
-  }, zod(ticketSchema));
-  const cancelForm = await superValidate(zod(deleteSchema));
-  const undoCancelForm = await superValidate(zod(deleteSchema));
   const { data: violations } = await supabase
     .from("violations")
     .select()
@@ -33,6 +20,22 @@ export const load: PageServerLoad = async ({ url, locals: { supabase } }) => {
     .select()
     .is("deleted_by", null)
     .eq("role", Roles.ENFORCER);
+  const id = url.searchParams.get("id");
+  const { data: oldTicket } = await supabase
+    .from('tickets')
+    .select().eq("id", id).single();
+  const enforcer = enforcers?.find(enforcer => enforcer.id === oldTicket.enforcer);
+  const vehicleType = vehicleTypes?.find(vehicleType => vehicleType.id === oldTicket.vehicle_type)
+  const form = await superValidate({
+    ...oldTicket!,
+    enforcer: `${enforcer.first_name} ${enforcer.last_name}:${enforcer.id}`,
+    violation_date: new Date(oldTicket!.violation_date),
+    ticket_no: oldTicket!.ticket_no,
+    violations: oldTicket!.violations,
+    status: oldTicket!.status,
+    vehicle_type: `${vehicleType.type}:${vehicleType.id}`,
+  }, zod(ticketSchema));
+  const cancelForm = await superValidate(zod(deleteSchema)); const undoCancelForm = await superValidate(zod(deleteSchema));
 
   return {
     form,
@@ -51,8 +54,6 @@ export const actions: Actions = {
       success: false,
       action: ActionResultModals.FailUpdate,
     });
-
-    console.log(form);
 
     if (!form.valid) {
       return message(form, {

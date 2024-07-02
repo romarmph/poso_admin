@@ -1,13 +1,22 @@
-<script>
+<script lang="ts">
   import primary from "$lib/assets/images/brand/1x/primary.png";
 
   import { Button, TextInput, Label } from "$lib/Components";
+  import Spinner from "$lib/components/Base/Spinner.svelte";
   import { enhance } from "$app/forms";
   import Alerts from "$lib/components/Base/Alerts.svelte";
   export let form;
+
+  let isLoading: boolean = false;
+
+  $: if (form && !form?.success) {
+    isLoading = false;
+  }
 </script>
 
-<svelte:head><title>Login</title></svelte:head>
+<svelte:head>
+  <title>Login</title>
+</svelte:head>
 
 <main class="h-screen" style="background-color: #F3F6F4;">
   <div class="flex items-center h-full py-16 bg-gray-100 dark:bg-slate-900">
@@ -28,7 +37,11 @@
             LOGIN
           </header>
 
-          <form method="POST" use:enhance>
+          <form
+            method="POST"
+            use:enhance
+            on:submit={() => (isLoading = !isLoading)}
+          >
             {#if form && !form?.success}
               <Alerts type="danger">
                 {form?.message}
@@ -68,7 +81,13 @@
               </div>
 
               <div class="w-full my-4">
-                <Button type="submit" fullWidth={true}>Log In</Button>
+                <Button type="submit" fullWidth={true} disabled={isLoading}>
+                  {#if isLoading}
+                    <Spinner />
+                  {:else}
+                    Login
+                  {/if}
+                </Button>
               </div>
             </div>
           </form>

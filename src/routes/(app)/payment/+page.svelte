@@ -98,22 +98,22 @@
   <h1 class="text-2xl text-gray-700 font-bold">Payment</h1>
 </header>
 
-<div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
-  <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-    <Card name="Total Tickets">
-      <TrendingDown />
-    </Card>
-    <Card name="Total Tickets">
-      <TrendingDown />
-    </Card>
-    <Card name="Total Tickets">
-      <TrendingDown />
-    </Card>
-    <Card name="Total Tickets">
-      <TrendingDown />
-    </Card>
-  </div>
-</div>
+<!-- <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto"> -->
+<!--   <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"> -->
+<!--     <Card name="Total Tickets"> -->
+<!--       <TrendingDown /> -->
+<!--     </Card> -->
+<!--     <Card name="Total Tickets"> -->
+<!--       <TrendingDown /> -->
+<!--     </Card> -->
+<!--     <Card name="Total Tickets"> -->
+<!--       <TrendingDown /> -->
+<!--     </Card> -->
+<!--     <Card name="Total Tickets"> -->
+<!--       <TrendingDown /> -->
+<!--     </Card> -->
+<!--   </div> -->
+<!-- </div> -->
 
 <Tab {tabs} {tabViews} />
 
