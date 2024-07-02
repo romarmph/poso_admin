@@ -35,21 +35,20 @@ export const load: PageServerLoad = async ({
   let search = "";
 
   if (url.search.length) {
+    let tempMonth = Number(url.searchParams.get('month'));
     year = Number(url.searchParams.get('year')) || year;
-    month = Number(url.searchParams.get('month')) || month;
+    month = typeof tempMonth === 'number' ? tempMonth : month;
     search = url.searchParams.get('search') || search;
   }
-  const { data: months } = await supabase.rpc('get_months_with_tickets', { ticket_year: new Date().getFullYear() })
+  const { data: months } = await supabase.rpc('get_months_with_tickets', { ticket_year: year })
   const { data: years } = await supabase.rpc('get_unique_years', { column_name: 'violation_date', table_name: 'tickets' });
   const form = await superValidate(zod(deleteSchema));
   const paymentForm = await superValidate(zod(paymentSchema));
   return {
     form,
     paymentForm,
-    filters: {
-      months: months,
-      years: years,
-    },
+    months: months,
+    years: years,
     query: {
       year,
       month,

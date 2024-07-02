@@ -10,6 +10,7 @@
     import { type ColumnDef } from "@tanstack/svelte-table";
     import { goto } from "$app/navigation";
     import { Button } from "$lib/Components.js";
+    import exportData from "$lib/helpers/xlxs.js";
 
     export let data;
 
@@ -56,6 +57,8 @@
             header: "Total Incentive",
         },
     ];
+
+    console.log(data.months);
 </script>
 
 <svelte:head>
@@ -116,6 +119,21 @@
                 {/each}
             </SelectContent>
         </Select>
-        <Button>Export</Button>
+        <Button
+            on:click={() => {
+                let fileName = `incentives-${data.query.year}-${selectedMonth.label}`;
+                let incentivesExportable = data.employeeIncentives.map(
+                    (item) => {
+                        delete item["enforcer_id"];
+                        return {
+                            first_name: item.first_name,
+                            last_name: item.last_name,
+                            ...item,
+                        };
+                    },
+                );
+                exportData(incentivesExportable, fileName);
+            }}>Export</Button
+        >
     </svelte:fragment>
 </TanTable>

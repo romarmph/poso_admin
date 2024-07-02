@@ -13,15 +13,16 @@ export const load: PageServerLoad = async ({ request, url, locals: { supabase } 
 	let search = "";
 
 	if (url.search.length) {
+		let tempMonth = Number(url.searchParams.get('month'));
 		year = Number(url.searchParams.get('year')) || year;
-		month = Number(url.searchParams.get('month')) || month;
+		month = typeof tempMonth === 'number' ? tempMonth : month;
 		search = url.searchParams.get('search') || search;
 	}
 	const dateRange = makeDateRangeFilter(month, year);
 	const { data: uniqueYears } = await supabase.rpc('get_unique_years', { column_name: 'violation_date', table_name: 'tickets' });
-	const { data: employeeIncentives } = await supabase.rpc('calculate_monthly_incentives', { start_date: dateRange.start, end_date: dateRange.end });
-	const { data: months } = await supabase.rpc('get_months_with_tickets', { ticket_year: new Date().getFullYear() })
-	console.log(employeeIncentives);
+	const { data: employeeIncentives } = await supabase.rpc('calculate_monthly_incentives_all', { start_date: dateRange.start, end_date: dateRange.end });
+	const { data: months } = await supabase.rpc('get_months_with_tickets', { ticket_year: year })
+	console.log(months);
 	return {
 		uniqueYears,
 		employeeIncentives,

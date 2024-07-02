@@ -22,6 +22,7 @@
   import { getSupabaseContext } from "$lib/stores/clientStore.js";
   import { goto } from "$app/navigation";
   import { superForm } from "sveltekit-superforms";
+  import exportData from "$lib/helpers/xlxs";
   const { open, close } = overlayStore;
   const { supabase } = getSupabaseContext();
 
@@ -189,15 +190,13 @@
     });
   }
 
-  let years = data.filters.years;
-  let months = data.filters.months;
   let selectedYear = {
     value: data.query.year,
     label: data.query.year.toString(),
   };
   let selectedMonth = {
     value: data.query.month,
-    label: months.find(
+    label: data.months.find(
       (month: { month_number: number; month_name: string }) =>
         month.month_number === data.query.month,
     ).month_name,
@@ -220,8 +219,8 @@
 {#await data.lazy.tickets}
   <Spinner />
 {:then response}
-  <DataList table="tickets" let:data initData={response ?? []}>
-    <TanTable {data} {columns} showGrid={true}>
+  <DataList table="tickets" let:data={listData} initData={response ?? []}>
+    <TanTable data={listData} {columns} showGrid={true}>
       <svelte:fragment slot="left-side">
         <TextInput
           id="search"
@@ -253,7 +252,7 @@
             <SelectValue placeholder="Month" />
           </SelectTrigger>
           <SelectContent>
-            {#each months as month}
+            {#each data.months as month}
               <SelectItem value={month.month_number}
                 >{month.month_name}</SelectItem
               >
@@ -280,11 +279,41 @@
             <SelectValue placeholder="Quarter" />
           </SelectTrigger>
           <SelectContent>
-            {#each years as year}
+            {#each data.years as year}
               <SelectItem value={year.year}>{year.year}</SelectItem>
             {/each}
           </SelectContent>
         </Select>
+        <Button
+          on:click={async () => {
+            const start = new Date(selectedYear.value, selectedMonth.value, 2)
+              .toISOString()
+              .split("T")[0];
+            const end = new Date(selectedYear.value, selectedMonth.value + 1, 1)
+              .toISOString()
+              .split("T")[0];
+            console.log(start);
+            console.log(end);
+            const { data: exportable } = await data.supabase.rpc(
+              "get_tickets_in_date_range",
+              { start_date: start, end_date: end },
+            );
+            console.log(start, end);
+
+            exportData(
+              exportable.flat(1).map((item) => {
+                const e = JSON.parse(JSON.stringify(item));
+                delete e["created_at"];
+                delete e["updated_at"];
+                delete e["deleted_at"];
+                e.violations = e.violations.join();
+
+                return e;
+              }),
+              `Tickets-${selectedYear.label}-${selectedMonth.label}`,
+            );
+          }}>Export</Button
+        >
       </svelte:fragment>
     </TanTable>
   </DataList>
