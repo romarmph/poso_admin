@@ -94,6 +94,8 @@ declare global {
       discounted: boolean | null;
       amount_paid: number | null;
       paid_at: string | null;
+      overdue: boolean;
+      alarmed: boolean;
     }
 
     interface Payment extends Data {

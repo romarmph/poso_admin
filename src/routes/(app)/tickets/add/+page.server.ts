@@ -67,7 +67,7 @@ export const actions: Actions = {
       deleted_by: null,
       offense: formData.offense,
       previous_offense: formData.previous_offense,
-      due_date: new Date(timestamp.setDate(timestamp.getDate() + 7)),
+      due_date: new Date(formData.violation_date.setDate(formData.violation_date.getDate() + 7)),
       plate_no: formData.plate_no,
       license_no: formData.license_no,
       engine_no: formData.engine_no,
