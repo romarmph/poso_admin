@@ -5,13 +5,7 @@ import ActionResultModals from "$lib/enums/ActionResultModals";
 import { zod } from "sveltekit-superforms/adapters";
 import { deleteSchema, paymentSchema } from "$lib/schemas/app";
 import type { SupabaseClient } from "@supabase/supabase-js";
-
-function makeDateRangeFilter(month: number, year: number) {
-  return {
-    start: new Date(year, month, 2).toISOString().split('T')[0],
-    end: new Date(year, month + 1, 1).toISOString().split('T')[0],
-  }
-}
+import makeDateRangeFilter from "$lib/utils/makeDateRangeFilter";
 
 async function fetchTickets(supabase: SupabaseClient, month: number, year: number, search: string) {
   const dateRange = makeDateRangeFilter(month, year);
