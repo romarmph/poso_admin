@@ -121,6 +121,23 @@ declare global {
       quarter_3: Quarter;
       quarter_4: Quarter;
     }
+
+    interface TicketsPerMonthByYear {
+      enforcer_id: number;
+      enforcer_name: string;
+      january: number;
+      february: number;
+      march: number;
+      april: number;
+      may: number;
+      june: number;
+      july: number;
+      august: number;
+      september: number;
+      october: number;
+      november: number;
+      december: number;
+    }
   }
 }
 
