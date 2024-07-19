@@ -13,6 +13,9 @@ export const load: PageServerLoad = async ({ url, locals: { supabase } }) => {
     tickets,
     filters: {
       years,
+    },
+    query: {
+      year,
     }
   };
 }

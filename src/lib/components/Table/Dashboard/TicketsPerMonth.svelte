@@ -1,8 +1,24 @@
 <script lang="ts">
   import { type ColumnDef } from "@tanstack/svelte-table";
   import TanTable from "../TanTable.svelte";
-  export let ticketsPerMonth: Types.TicketsPerMonthByYear[] = [];
+  import {
+    Select,
+    SelectTrigger,
+    SelectItem,
+    SelectValue,
+    SelectContent,
+  } from "$lib/components/ui/select";
+  import { goto } from "$app/navigation";
+  import exportData from "$lib/helpers/xlxs.js";
+  import { Button } from "$lib/Components";
 
+  export let ticketsPerMonth: Types.TicketsPerMonthByYear[] = [];
+  export let query;
+  export let filters;
+  let selectedYear = {
+    value: query.year,
+    label: query.year?.toString(),
+  };
   const columnDefs: ColumnDef<Types.TicketsPerMonthByYear>[] = [
     {
       accessorKey: "enforcer_name",
@@ -72,8 +88,42 @@
   ];
 </script>
 
-<TanTable
-  data={ticketsPerMonth}
-  columns={columnDefs}
-  showGrid={true}
-></TanTable>
+<TanTable data={ticketsPerMonth} columns={columnDefs} showGrid={true}>
+  <svelte:fragment slot="right-side">
+    <Select
+      name="year"
+      selected={selectedYear}
+      onSelectedChange={(v) => {
+        if (v) {
+          selectedYear = {
+            value: v?.value,
+            label: v.label ?? "",
+          };
+        }
+        goto(`/?year=${selectedYear.value}`);
+      }}
+    >
+      <SelectTrigger class="w-[180px]">
+        <SelectValue placeholder="Quarter" />
+      </SelectTrigger>
+      <SelectContent>
+        {#each filters.years as year}
+          <SelectItem value={year.year}>{year.year}</SelectItem>
+        {/each}
+      </SelectContent>
+    </Select>
+
+    <Button
+      on:click={() => {
+        let fileName = `total-tickets-${query.year}`;
+        let incentivesExportable = ticketsPerMonth.map((item) => {
+          delete item["enforcer_id"];
+          return {
+            ...item,
+          };
+        });
+        exportData(incentivesExportable, fileName);
+      }}>Export</Button
+    >
+  </svelte:fragment>
+</TanTable>
