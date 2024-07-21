@@ -9,8 +9,11 @@ export const load: PageServerLoad = async ({ url, locals: { supabase } }) => {
   }
 
   const { data: tickets } = await supabase.rpc('get_enforcer_tickets', { year: year });
+  const { data: incentives } = await supabase.rpc('fetch_total_overdue_and_alarmed_incentives', { year: year });
+  console.log(incentives);
   return {
     tickets,
+    incentives,
     filters: {
       years,
     },
