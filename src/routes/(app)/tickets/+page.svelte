@@ -23,6 +23,8 @@
   import { goto } from "$app/navigation";
   import { superForm } from "sveltekit-superforms";
   import exportData from "$lib/helpers/xlxs";
+  import OverdueStatus from "$lib/components/Base/OverdueStatus.svelte";
+    import AlarmedStatus from "$lib/components/Base/AlarmedStatus.svelte";
   const { open, close } = overlayStore;
   const { supabase } = getSupabaseContext();
 
@@ -101,6 +103,16 @@
       accessorKey: "status",
       cell: (info) => flexRender(TicketStatus, { status: info.getValue() }),
       header: "Status",
+    },
+    {
+      accessorKey: "overdue",
+      cell: (info) => flexRender(OverdueStatus, { value: info.getValue() }),
+      header: "Overdue",
+    },
+    {
+      accessorKey: "alarmed",
+      cell: (info) => flexRender(AlarmedStatus, { value: info.getValue() }),
+      header: "Alarmed",
     },
     {
       accessorKey: "or_number",
