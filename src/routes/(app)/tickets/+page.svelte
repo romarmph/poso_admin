@@ -9,7 +9,15 @@
   import PayTicket from "$lib/components/Overlays/Modal/PayTicket.svelte";
   import RowAction from "$lib/components/Base/RowAction.svelte";
   import Spinner from "$lib/components/Base/Spinner.svelte";
-  import { Eye, Pencil, Trash } from "lucide-svelte";
+  import {
+    Archive,
+    ArchiveX,
+    CalendarX,
+    Eye,
+    Pencil,
+    Trash,
+    Undo2,
+  } from "lucide-svelte";
   import {
     Select,
     SelectTrigger,
@@ -176,7 +184,40 @@
               });
             },
           },
+          info.row.original.alarmed
+            ? {
+                icon: Undo2,
+                label: "Undo Alarm",
+                action: async () => {
+                  await supabase
+                    .from("tickets")
+                    .update({ alarmed: false })
+                    .eq("id", info.getValue());
+                },
+              }
+            : {
+                icon: Archive,
+                label: "Set Alarm",
+                action: async () => {
+                  await supabase
+                    .from("tickets")
+                    .update({ alarmed: true })
+                    .eq("id", info.getValue());
+                },
+              },
+          info.row.original.overdue
+            ? {
+                icon: CalendarX,
+                label: "Undo Overdue",
+                action: () => {},
+              }
+            : {
+                icon: ArchiveX,
+                label: "Set Overdue",
+                action: () => {},
+              },
         ];
+
         return flexRender(RowAction, {
           status: info.row.original.status,
           primaryAction,
