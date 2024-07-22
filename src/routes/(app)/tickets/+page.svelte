@@ -32,7 +32,7 @@
   import { superForm } from "sveltekit-superforms";
   import exportData from "$lib/helpers/xlxs";
   import OverdueStatus from "$lib/components/Base/OverdueStatus.svelte";
-    import AlarmedStatus from "$lib/components/Base/AlarmedStatus.svelte";
+  import AlarmedStatus from "$lib/components/Base/AlarmedStatus.svelte";
   const { open, close } = overlayStore;
   const { supabase } = getSupabaseContext();
 
@@ -209,12 +209,22 @@
             ? {
                 icon: CalendarX,
                 label: "Undo Overdue",
-                action: () => {},
+                action: async () => {
+                  await supabase
+                    .from("tickets")
+                    .update({ overdue: false })
+                    .eq("id", info.getValue());
+                },
               }
             : {
                 icon: ArchiveX,
                 label: "Set Overdue",
-                action: () => {},
+                action: async () => {
+                  await supabase
+                    .from("tickets")
+                    .update({ overdue: true })
+                    .eq("id", info.getValue());
+                },
               },
         ];
 
