@@ -8,6 +8,7 @@
   export let info;
   export let supabase: SupabaseClient;
   const data = info.info as Types.Ticket;
+  console.log(data);
 
   let violations = writable<string[]>([]);
 

@@ -35,7 +35,8 @@ export const load: PageServerLoad = async ({ url, locals: { supabase } }) => {
     status: oldTicket!.status,
     vehicle_type: `${vehicleType.type}:${vehicleType.id}`,
   }, zod(ticketSchema));
-  const cancelForm = await superValidate(zod(deleteSchema)); const undoCancelForm = await superValidate(zod(deleteSchema));
+  const cancelForm = await superValidate(zod(deleteSchema));
+  const undoCancelForm = await superValidate(zod(deleteSchema));
 
   return {
     form,
@@ -82,14 +83,14 @@ export const actions: Actions = {
       address: formData.address ?? "",
       status: "unpaid",
       violation_date: formData.violation_date,
-      vehicle_type: formData.vehicle_type,
-      enforcer: formData.enforcer,
+      vehicle_type: Number(formData.vehicle_type!.split(":")[1]),
+      enforcer: Number(formData.enforcer!.split(":")[1]),
       violation_location: formData.violation_location ?? "",
       updated_at: new Date(),
       updated_by: currentUser?.id,
       offense: formData.offense,
       previous_offense: formData.previous_offense,
-      due_date: new Date(formData.violation_date.getFullYear(), formData.violation_date.getMonth(), formData.violation_date.getDate() + 7),
+      due_date: new Date(formData.violation_date.setDate(formData.violation_date.getDate() + 7)),
       violations: formData.violations,
       plate_no: formData.plate_no,
       license_no: formData.license_no,

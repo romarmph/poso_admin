@@ -9,7 +9,15 @@
   import PayTicket from "$lib/components/Overlays/Modal/PayTicket.svelte";
   import RowAction from "$lib/components/Base/RowAction.svelte";
   import Spinner from "$lib/components/Base/Spinner.svelte";
-  import { Eye, Pencil, Trash } from "lucide-svelte";
+  import {
+    Archive,
+    ArchiveX,
+    CalendarX,
+    Eye,
+    Pencil,
+    Trash,
+    Undo2,
+  } from "lucide-svelte";
   import {
     Select,
     SelectTrigger,
@@ -23,6 +31,8 @@
   import { goto } from "$app/navigation";
   import { superForm } from "sveltekit-superforms";
   import exportData from "$lib/helpers/xlxs";
+  import OverdueStatus from "$lib/components/Base/OverdueStatus.svelte";
+  import AlarmedStatus from "$lib/components/Base/AlarmedStatus.svelte";
   const { open, close } = overlayStore;
   const { supabase } = getSupabaseContext();
 
@@ -103,6 +113,16 @@
       header: "Status",
     },
     {
+      accessorKey: "overdue",
+      cell: (info) => flexRender(OverdueStatus, { value: info.getValue() }),
+      header: "Overdue",
+    },
+    {
+      accessorKey: "alarmed",
+      cell: (info) => flexRender(AlarmedStatus, { value: info.getValue() }),
+      header: "Alarmed",
+    },
+    {
       accessorKey: "or_number",
       cell: (info) => info.getValue(),
       header: "OR Number",
@@ -164,7 +184,50 @@
               });
             },
           },
+          info.row.original.alarmed
+            ? {
+                icon: Undo2,
+                label: "Undo Alarm",
+                action: async () => {
+                  await supabase
+                    .from("tickets")
+                    .update({ alarmed: false })
+                    .eq("id", info.getValue());
+                },
+              }
+            : {
+                icon: Archive,
+                label: "Set Alarm",
+                action: async () => {
+                  await supabase
+                    .from("tickets")
+                    .update({ alarmed: true })
+                    .eq("id", info.getValue());
+                },
+              },
+          info.row.original.overdue
+            ? {
+                icon: CalendarX,
+                label: "Undo Overdue",
+                action: async () => {
+                  await supabase
+                    .from("tickets")
+                    .update({ overdue: false })
+                    .eq("id", info.getValue());
+                },
+              }
+            : {
+                icon: ArchiveX,
+                label: "Set Overdue",
+                action: async () => {
+                  await supabase
+                    .from("tickets")
+                    .update({ overdue: true })
+                    .eq("id", info.getValue());
+                },
+              },
         ];
+
         return flexRender(RowAction, {
           status: info.row.original.status,
           primaryAction,

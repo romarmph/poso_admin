@@ -94,6 +94,8 @@ declare global {
       discounted: boolean | null;
       amount_paid: number | null;
       paid_at: string | null;
+      overdue: boolean;
+      alarmed: boolean;
     }
 
     interface Payment extends Data {
@@ -118,6 +120,38 @@ declare global {
       quarter_2: Quarter;
       quarter_3: Quarter;
       quarter_4: Quarter;
+    }
+
+    interface TicketsPerMonthByYear {
+      enforcer_id: number;
+      enforcer_name: string;
+      january: number;
+      february: number;
+      march: number;
+      april: number;
+      may: number;
+      june: number;
+      july: number;
+      august: number;
+      september: number;
+      october: number;
+      november: number;
+      december: number;
+    }
+
+    interface OverdueAndAlarmedIncentive {
+      january: number;
+      february: number;
+      march: number;
+      april: number;
+      may: number;
+      june: number;
+      july: number;
+      august: number;
+      september: number;
+      october: number;
+      november: number;
+      december: number;
     }
   }
 }
