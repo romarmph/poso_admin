@@ -11,8 +11,11 @@
     import { goto } from "$app/navigation";
     import { Button } from "$lib/Components.js";
     import exportData from "$lib/helpers/xlxs.js";
+    import CommandShortcut from "$lib/components/ui/command/command-shortcut.svelte";
 
     export let data;
+
+    console.log(data.months)
 
     let selectedYear = {
         value: data.query.year,
@@ -21,9 +24,9 @@
     let selectedMonth = {
         value: data.query.month,
         label: data.months.find(
-            (month: { month_name: string; month_number: number }) =>
-                month.month_number === data.query.month,
-        ).month_name,
+            (month: { month_name: string; month_number: number }) => {
+          return month.month_number == data.query.month
+        }).month_name,
     };
     const columns: ColumnDef<Types.QuarterlyIncentive>[] = [
         {
